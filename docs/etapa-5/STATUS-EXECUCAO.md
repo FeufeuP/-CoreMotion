@@ -140,6 +140,7 @@ docs/etapa-5/pessoa-4/README.md
 docs/etapa-5/PENDENCIAS-E-LACUNAS.md            # inventário de 76 lacunas (19/10/2026)
 docs/etapa-5/pessoa-4/apresentacao/CoreMotion-Etapa5-animado.pptx
 docs/etapa-5/pessoa-4/apresentacao/gerar-apresentacao-animada.py
+docs/etapa-5/pessoa-4/apresentacao/roteiro-apresentacao.md      # fala por slide e cuidados
 ```
 
 O deck de pendências (16 slides) foi criado no Google Slides e está registrado em
