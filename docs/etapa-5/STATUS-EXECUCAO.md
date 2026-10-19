@@ -109,6 +109,16 @@ Cada item tem dono declarado. O dono corrige e verifica sem esperar outra frente
 
 ---
 
+## 5.1 Inventário consolidado do que falta
+
+Criado em `docs/etapa-5/PENDENCIAS-E-LACUNAS.md` (19/10/2026): 76 itens lacrados por frente,
+com evidência em arquivo e linha, estado (`FALTA`, `PARCIAL`, `BLOQUEADO`, `PENDENTE`,
+`NÃO VERIFICADO`), dono e critério de aceitação. Nenhum item está concluído. A seção 4 deste
+arquivo lista os bloqueadores; o inventário lista **tudo** o que falta, inclusive os artefatos
+documentais que as pastas `pessoa-N/` ainda não contêm.
+
+---
+
 ## 6. Arquivos criados ou reorganizados nesta rodada
 
 ```
@@ -127,7 +137,16 @@ docs/etapa-5/pessoa-1/README.md
 docs/etapa-5/pessoa-2/README.md
 docs/etapa-5/pessoa-3/README.md
 docs/etapa-5/pessoa-4/README.md
+docs/etapa-5/PENDENCIAS-E-LACUNAS.md            # inventário de 76 lacunas (19/10/2026)
+docs/etapa-5/pessoa-4/apresentacao/CoreMotion-Etapa5-animado.pptx
+docs/etapa-5/pessoa-4/apresentacao/gerar-apresentacao-animada.py
 ```
+
+O deck de pendências (16 slides) foi criado no Google Slides e está registrado em
+`docs/etapa-5/PENDENCIAS-E-LACUNAS.md`, seção 6.1, com o link, o conteúdo e o que ainda falta
+nele (transições aplicadas no editor, publicação do link de leitura e o deck de defesa real).
+O PPTX da mesma pasta carrega transições e entradas por parágrafo gravadas no próprio XML —
+a API do Google Slides não expõe esses recursos, então o movimento não pôde ser aplicado lá.
 
 Os diagnósticos deixaram de ficar dentro da pasta de uma pessoa: são insumos compartilhados.
 Cada frente tem a própria pasta para registros e evidências.
