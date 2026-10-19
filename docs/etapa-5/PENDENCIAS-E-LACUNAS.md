@@ -104,9 +104,9 @@ Fora da contagem, 6 verificações permanecem `NÃO VERIFICADO` (seção 9): pod
 | `P4-05` | `backlog-falhas.md` com retestes | `FALTA` | |
 | `P4-06` | Ferramenta de teste configurada no projeto (Playwright/Vitest/Jest ausentes em `package.json`; zero arquivos `*.test.*`/`*.spec.*`) | `FALTA` | decidir e instalar na frente 4 |
 | `P4-07` | `pessoa-4/daily-scrum.md` com registros reais | `PENDENTE` | nenhum registro foi fornecido; proibido reconstruir atas de commits |
-| `P4-08` | Apresentação publicada no Google Slides ou PowerPoint Online, com link de leitura testado | `PARCIAL` | deck **de pendências** criado nesta rodada (16 slides no Google Slides + PPTX animado em `docs/etapa-5/pessoa-4/apresentacao/`); **não é o deck de defesa** — faltam resultados de teste, telas e riscos; link de leitura ainda não foi publicado nem testado em janela anônima |
+| `P4-08` | Apresentação publicada no Google Slides ou PowerPoint Online, com link de leitura testado | `PARCIAL` | dois decks nesta rodada, em `docs/etapa-5/pessoa-4/apresentacao/`: **pitch do produto** (15 slides no Google Slides, para a banca) e **deck de pendências** (16 slides no Slides + PPTX animado, anexo interno da equipe); nenhum dos dois mostra resultado de teste nem tela real; link de leitura ainda não foi publicado nem testado em janela anônima |
 
-### 6.1 Deck produzido nesta rodada (o quê, onde e o que ainda falta nele)
+### 6.1 Deck de diagnóstico (uso interno da equipe)
 
 | Item | Situação |
 |---|---|
@@ -114,8 +114,21 @@ Fora da contagem, 6 verificações permanecem `NÃO VERIFICADO` (seção 9): pod
 | Conteúdo | capa; legenda dos 5 estados e a regra de honestidade; veredito com métricas da rodada; os 7 entregáveis por estado; as 4 frentes; `P0` da credencial exposta (valor redigido); cadeia de falha de autenticação; hierarquia exigida × real; banco, migrações e RLS; catálogo, checkout, verificação e comunidade como fachada; frontend, UX, a11y e grafia; contagem das 76 lacunas por grupo; decisões `D-01…D-11` e dados `A-01…A-10`; ordem de execução em 7 passos; animações e transições; encerramento com o próximo lote |
 | Versão animada | `docs/etapa-5/pessoa-4/apresentacao/CoreMotion-Etapa5-animado.pptx` — 16 slides com transições (`fade`, `push`, `wipe`, `morph`), entrada de conteúdo por parágrafo a cada clique e notas do apresentador. Gerado por `gerar-apresentacao-animada.py` (mesma pasta), que escreve `p:transition`/`p:timing` direto no XML PresentationML |
 | Por que o PPTX existe | a API do Google Slides (v1, Apps Script e o conector usado) **não expõe** request de transição de slide nem de animação de objeto — só forma, cor, texto, tabela, vídeo, z-order e fundo. Motion no Slides precisa ser aplicado no editor ou vindo de um arquivo que já o traga |
-| Falta no deck | ① aplicar **Transições → Esmaecer 0,6 s → Aplicar a todos os slides** no editor (2 min) para o link do Slides ter o mesmo movimento; ② decidir a plataforma exigida e publicar o link de leitura, testado em janela anônima; ③ substituir este deck de diagnóstico pelo **deck de defesa**, com evidências de teste, telas reais e riscos — este aqui não deve ser apresentado como material de defesa; ④ conferir nomes, instituição, período e grafia oficial (itens `A-01…A-04`) antes de qualquer exportação |
+| Falta no deck | ① aplicar **Transições → Esmaecer 0,6 s → Aplicar a todos os slides** no editor (2 min) para o link do Slides ter o mesmo movimento; ② decidir a plataforma exigida e publicar o link de leitura, testado em janela anônima; ③ este deck passa a ser **anexo interno**: a apresentação pública da Etapa 5 é o pitch do produto (§6.2), e o deck de defesa continua devendo evidência de teste e telas reais; ④ conferir nomes, instituição, período e grafia oficial (itens `A-01…A-04`) antes de qualquer exportação |
 | Regra mantida | nenhum slide afirma que um item está concluído; toda asserção aponta arquivo e linha; e-mail pessoal mascarado e credencial redigida |
+
+### 6.2 Pitch do produto — o deck que vai para a banca
+
+| Item | Situação |
+|---|---|
+| Arquivo principal | Google Slides — `CoreMotion · Pitch — comprar, vender e viver o mesmo tênis`, 15 slides: <https://docs.google.com/presentation/d/1lcx5Dsv7ojEZM58hA5zDW_bMt6lAD_-8g2sOuvxvSBQ/edit> |
+| Objetivo | vender o site para a banca: o produto, as funções, as mecânicas de confiança e as atualizações que serão implementadas — não é um deck de pendências |
+| Conteúdo | capa com as três linhas do produto; problema (procedência, vitrine do lojista pequeno, preço de revenda, compra separada do treino); solução em quatro pilares; fluxo do comprador em 6 passos; fluxo do lojista em 5 passos; seis mecânicas de confiança; papéis (4 de hoje + supervisor como próxima onda); ecossistema (comunidade, treinadores com CREF, atletas com `sponsorship_status`, editorial); SmartScan (entrada → análise → saída); arquitetura Next.js 15/App Router, `app/api` + `app/actions` + `services`, Postgres/Supabase com RLS; três colunas **NO AR HOJE / EM CONSTRUÇÃO / PRÓXIMA ONDA**; roadmap em 3 ondas (~16 semanas); riscos e mitigação; métricas com north star; pedido à banca |
+| Regra de honestidade | função que não está no ar aparece rotulada **EM CONSTRUÇÃO** ou **PRÓXIMA ONDA**; o SmartScan é mostrado como componente pronto **fora da navegação**; nenhum número de tração existe no deck (a coluna de métricas declara a ausência de baseline); credencial citada como valor redigido e e-mail pessoal mascarado |
+| Roteiro de fala | `docs/etapa-5/pessoa-4/apresentacao/roteiro-pitch.md` — fala de abertura e tempo por slide (~11 min), as três decisões pedidas à banca e os cuidados ao apresentar |
+| Fontes | `lib/types.ts`, `components/` (`MarketplaceView`, `StoresView`, `CheckoutModal`, `CommunityView`, `CoachesView`, `SellC2CView`, `SmartScanView`, `AdminDashboard`), `app/api/`, `app/actions/` no commit `b0827ec`; estados e ondas derivados de `PENDENCIAS-E-LACUNAS.md` |
+| Falta no deck | ① aplicar transição no editor do Slides (a API não grava movimento) ou gerar o PPTX animado com o conteúdo deste pitch; ② telas reais do produto, quando houver ambiente com banco funcionando; ③ nome/orientador/banca, que dependem dos itens `A-01…A-04` |
+| Não substitui | o deck de defesa exigido pelo roteiro: sem `relatorio-testes.md` não há evidência de teste para apresentar — este pitch é a defesa do **produto**, não a da qualidade verificada |
 
 | `P4-09` | `checklist-entrega.md` e `entrega-final.md` com os campos do professor | `FALTA` | |
 | `P4-10` | Verificação dos links públicos em janela anônima (repositório, TCC, slides) | `BLOQUEADO` | depende de publicação autorizada |

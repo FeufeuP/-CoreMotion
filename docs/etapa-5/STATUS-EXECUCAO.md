@@ -141,11 +141,16 @@ docs/etapa-5/PENDENCIAS-E-LACUNAS.md            # inventário de 76 lacunas (19/
 docs/etapa-5/pessoa-4/apresentacao/CoreMotion-Etapa5-animado.pptx
 docs/etapa-5/pessoa-4/apresentacao/gerar-apresentacao-animada.py
 docs/etapa-5/pessoa-4/apresentacao/roteiro-apresentacao.md      # fala por slide e cuidados
+docs/etapa-5/pessoa-4/apresentacao/roteiro-pitch.md             # fala por slide do pitch à banca
 ```
 
-O deck de pendências (16 slides) foi criado no Google Slides e está registrado em
-`docs/etapa-5/PENDENCIAS-E-LACUNAS.md`, seção 6.1, com o link, o conteúdo e o que ainda falta
-nele (transições aplicadas no editor, publicação do link de leitura e o deck de defesa real).
+Dois decks foram criados no Google Slides e estão registrados em
+`docs/etapa-5/PENDENCIAS-E-LACUNAS.md`: o **pitch do produto** (15 slides, seção 6.2), que é a
+peça para a banca — vende o site, suas funções, mecânicas e as ondas de atualização —, e o
+**deck de pendências** (16 slides, seção 6.1), rebaixado a anexo interno da equipe, com o PPTX
+animado como portador do movimento que a API do Slides não grava. Em nenhum dos dois há
+afirmação de item concluído: o que falta aparece rotulado `FALTA`, `PARCIAL`, `EM CONSTRUÇÃO` ou
+`PRÓXIMA ONDA`, e o que depende de dados da equipe fica `PENDENTE`.
 O PPTX da mesma pasta carrega transições e entradas por parágrafo gravadas no próprio XML —
 a API do Google Slides não expõe esses recursos, então o movimento não pôde ser aplicado lá.
 
