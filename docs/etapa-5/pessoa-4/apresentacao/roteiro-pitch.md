@@ -2,6 +2,7 @@
 
 **Deck:** Google Slides · `CoreMotion · Pitch — comprar, vender e viver o mesmo tênis` · 15 slides
 **Link:** <https://docs.google.com/presentation/d/1lcx5Dsv7ojEZM58hA5zDW_bMt6lAD_-8g2sOuvxvSBQ/edit>
+**Versão animada:** `CoreMotion-Pitch-animado.pptx` (mesma pasta) — transições e entrada por bloco já gravadas no arquivo; gerador `gerar-pitch-animado.py`
 **Duração-alvo:** ~11 min corridos; ~14 min com uma pausa por bloco
 **Base factual:** `lib/types.ts`, `components/`, `app/api/` no commit `b0827ec` + `docs/etapa-5/PENDENCIAS-E-LACUNAS.md` (76 itens) · leitura de 19/10/2026
 
@@ -43,7 +44,7 @@
 - O SmartScan é apresentado como componente pronto **fora do fluxo** — não como IA em produção.
 - A credencial do banco aparece apenas como «valor redigido»; o e-mail pessoal, só mascarado (`mattheusxmljz@…`).
 - Número de tração, faturamento e percentual de mercado não existem neste deck: não há medição ainda, e a banca vai perceber se houver.
-- Se a apresentação for pelo link do Slides, aplicar antes **Transições → Esmaecer → Aplicar a todos os slides** (a API não grava movimento; o PPTX do diretório já traz o pacote de animações do deck de diagnóstico).
+- Se a apresentação for pelo link do Slides, aplicar antes **Transições → Esmaecer → Aplicar a todos os slides** — a API do Slides não grava movimento. O `CoreMotion-Pitch-animado.pptx` desta pasta já vem com transições e entrada de bloco a cada clique: é o arquivo a usar se a banca exigir PowerPoint.
 
 ## Depois de apresentar
 
