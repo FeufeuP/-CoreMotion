@@ -141,6 +141,7 @@ docs/etapa-5/PENDENCIAS-E-LACUNAS.md            # inventário de 76 lacunas (19/
 docs/etapa-5/pessoa-4/apresentacao/CoreMotion-Etapa5-animado.pptx
 docs/etapa-5/pessoa-4/apresentacao/CoreMotion-Pitch-animado.pptx
 docs/etapa-5/pessoa-4/apresentacao/gerar-pitch-animado.py
+docs/etapa-5/pessoa-4/apresentacao/gerar-preview-png.py
 docs/etapa-5/pessoa-4/apresentacao/gerar-apresentacao-animada.py
 docs/etapa-5/pessoa-4/apresentacao/roteiro-apresentacao.md      # fala por slide e cuidados
 docs/etapa-5/pessoa-4/apresentacao/roteiro-pitch.md             # fala por slide do pitch à banca

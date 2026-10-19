@@ -11,6 +11,7 @@ from __future__ import annotations
 import sys
 
 from lxml import etree
+from PIL import ImageFont
 from pptx import Presentation
 from pptx.dml.color import RGBColor
 from pptx.enum.shapes import MSO_SHAPE
@@ -54,17 +55,39 @@ def q(tag: str) -> str:
 
 
 # ----------------------------------------------------------------- primitives
+def set_alpha(shape, opacity_pct: float) -> None:
+    """Torna o preenchimento solido semitransparente (100 = opaco)."""
+    from pptx.oxml.ns import qn
+    spPr = shape._element.spPr
+    sf = spPr.find(qn('a:solidFill'))
+    if sf is None:
+        return
+    clr = sf.find(qn('a:srgbClr'))
+    if clr is None:
+        return
+    for old in clr.findall(qn('a:alpha')):
+        clr.remove(old)
+    a = clr.makeelement(qn('a:alpha'), {'val': str(int(opacity_pct * 1000))})
+    clr.append(a)
+
+
+def glow(slide, x, y, w, h, color, opacity=22):
+    g = box(slide, x, y, w, h, fill=color, shape=MSO_SHAPE.OVAL)
+    set_alpha(g, opacity)
+    return g
+
+
 def bg(slide, color: RGBColor) -> None:
     slide.background.fill.solid()
     slide.background.fill.fore_color.rgb = color
 
 
-def box(slide, x, y, w, h, fill=None, line=None, radius=None):
+def box(slide, x, y, w, h, fill=None, line=None, radius=None, shape=None):
     shape = slide.shapes.add_shape(
-        MSO_SHAPE.ROUNDED_RECTANGLE if radius is not None else MSO_SHAPE.RECTANGLE,
+        shape or (MSO_SHAPE.ROUNDED_RECTANGLE if radius is not None else MSO_SHAPE.RECTANGLE),
         Emu(int(x * EMU_IN)), Emu(int(y * EMU_IN)), Emu(int(w * EMU_IN)), Emu(int(h * EMU_IN)),
     )
-    if radius is not None:
+    if radius is not None and shape is not None and shape.shape_type != MSO_SHAPE.OVAL:
         try:
             shape.adjustments[0] = radius
         except Exception:
@@ -115,7 +138,32 @@ def kicker(slide, text, color, w=2.9):
     return chip
 
 
+_FONTCACHE = {}
+
+
+def _font(px, bold, mono=False):
+    key = (px, bold, mono)
+    if key not in _FONTCACHE:
+        fam = "DejaVuSansMono" if mono else "DejaVuSans"
+        _FONTCACHE[key] = ImageFont.truetype(
+            "/usr/share/fonts/truetype/dejavu/%s-%s.ttf" % (fam, "Bold" if bold else ""), px)
+    return _FONTCACHE[key]
+
+
+def text_in(t, pt, bold=True, mono=False):
+    """Largura aproximada do texto em polegadas, medida em DejaVu (mais largo que
+    Arial, entao o ajuste e conservador: se couber aqui, cabe no PowerPoint)."""
+    return _font(max(6, int(round(pt))), bold, mono).getlength(t) / 72.0
+
+
+def fit_size(t, size, avail_in, mono=False, minimum=17):
+    while size > minimum and text_in(t, size, True, mono) > avail_in - 0.12:
+        size -= 0.5
+    return size
+
+
 def title(slide, text, size=28, dark=False, w=12.33):
+    size = fit_size(text, size, w)          # nunca deixa o titulo quebrar linha
     t = box(slide, 0.5, 0.76, w, 0.72)
     put(t, [(text, size, True, WHITE if dark else TXT, DISPLAY, 1.0)],
         anchor=MSO_ANCHOR.MIDDLE, space_after=0, ml=0.0, mt=0.0, mb=0.0)
@@ -265,8 +313,8 @@ CW3, CW4, CW2 = 3.98, 2.96, 6.0   # larguras de grade
 
 # 1 · capa --------------------------------------------------------------
 s = new(dark=True)
-box(s, -1.7, -1.9, 6.2, 6.2, fill=VIOLET)
-box(s, 9.6, 4.4, 5.2, 5.2, fill=LIME)
+glow(s, 9.4, -2.7, 5.4, 5.4, VIOLET, 26)     # halos de canto, semi-transparentes
+glow(s, -2.5, 4.5, 5.0, 5.0, LIME, 16)
 kicker(s, "PITCH · TCC ETAPA 5 · 19/10/2026", LIME, w=3.6)
 t = box(s, 0.5, 1.30, 9.0, 1.05)
 put(t, [("CoreMotion", 50, True, WHITE, DISPLAY, 0.95)], space_after=0)
@@ -301,7 +349,7 @@ problemas = grid(s, [
                           "grupo de WhatsApp e de quem aparece primeiro."]),
     ("COMPRAR E TREINAR EM LUGARES SEPARADOS", ["A compra acontece num site, o treino e a dúvida em outro. "
                                                 "Ninguém cria raiz, e o lojista nunca vê o cliente."]),
-], 2, CW2, 1.75, y0=1.78, gap=0.33, body=12)
+], 2, CW2, 1.62, y0=1.78, gap=0.33, body=12.5)
 fecho2 = note(s, "O corredor não quer mais um checkout: quer comprar sem medo e vender sem perder dinheiro.",
               fill=VIOLET_T, line=VIOLET, y=5.62, h=0.85, size=14)
 notes(s, "Problema (60s): três dores que resolvemos — procedência, vitrine do lojista pequeno e preço "
@@ -316,13 +364,13 @@ pilares = grid(s, [
     ("B2C + C2C", ["Estoque da loja e revenda de atleta no mesmo catálogo, com condição, tamanho e cor."]),
     ("PEDIDO DE VERDADE", ["Do carrinho ao rastreio: PIX, cartão ou boleto e o ciclo pagar → separar → entregar."]),
     ("COMUNIDADE", ["Post, comentário, treinador com CREF e atleta buscando patrocínio no mesmo login."]),
-], 4, CW4, 2.35, y0=1.78, body=11)
+], 4, CW4, 2.05, y0=1.78, body=11.5)
 dif3 = strip(s, "COMO SE DIFERENCIA", [
     "Marketplace generalista não sabe o que é um tênis de corrida; grupo de WhatsApp não sabe se o par é "
     "legítimo. Aqui, condição, procedência, cotação e comunidade estão no mesmo produto."],
-    fill=VIOLET_T, line=VIOLET, y=4.42, h=1.05, body=12.5)
+    fill=VIOLET_T, line=VIOLET, y=4.15, h=1.15, body=12.5)
 note(s, "Proposta de valor: procedência antes do pagamento e preço antes da revenda.",
-     fill=CYAN_T, y=5.72, h=0.7, size=14)
+     fill=CYAN_T, y=5.55, h=0.75, size=14)
 notes(s, "Solução (60s): quatro pilares na tela única. Dizer em voz alta que nada aqui é app novo — é o "
          "produto que já existe, com a fundação que ainda falta.")
 
@@ -353,18 +401,18 @@ loj = grid(s, [
     ("PUBLICAR ANÚNCIO", ["B2C da loja ou C2C do atleta, com marca, condição, cores, tamanhos e estoque."]),
     ("GERIR ESTOQUE", ["Editar, mudar de ativo a vendido ou suspenso e acompanhar vistas e curtidas."]),
     ("RECEBER PEDIDO", ["Pedido entra no ciclo de pagamento e entrega; rating e vendas acompanham."]),
-], 5, 2.38, 2.85, y0=1.75, gap=0.11, body=11)
+], 5, 2.38, 2.75, y0=1.75, gap=0.11, body=11.5)
 strip(s, "O QUE FALTA PARA O LOJISTA DEPENDER DO SITE", [
     "Verificação aprovada pelo admin e pedido lido no servidor — ondas 1 e 2.",
     "Monetização projetada: comissão por venda B2C/C2C e destaque de vitrine, com taxa e prazo a validar com a banca.",
-], fill=VIOLET_T, line=VIOLET, y=4.85, h=1.35, body=12)
+], fill=VIOLET_T, line=VIOLET, y=4.75, h=1.5, body=12.5)
 notes(s, "Lojista (50s): venda a dor do lojista pequeno. Ele entra pela verificação e fica pelo estoque; as "
          "duas peças que faltam estão nomeadas no rodapé.")
 
 # 6 · mecânicas de confiança (dark) --------------------------------------
 s = new(dark=True)
 kicker(s, "MECÂNICAS DE CONFIANÇA", LIME, w=3.1)
-title(s, "Confiança é a funcionalidade", size=30, dark=True, w=7.5)
+title(s, "Confiança é a funcionalidade", size=30, dark=True, w=12.33)
 conf = grid(s, [
     ("SELO DE VERIFICAÇÃO", ["Loja com CNPJ e documentos passa por análise; o selo aparece na vitrine e no produto."]),
     ("CONDIÇÃO DECLARADA", ["Novo, como novo, seminovo, usado excelente ou usado bom: o estado vem no anúncio e no filtro."]),
@@ -413,7 +461,7 @@ eco = grid(s, [
     ("TREINADORES", ["Perfil com CREF, certificação, valor por hora, disponibilidade e rating: serviço ao lado do produto."]),
     ("ATLETAS", ["Conquistas e status de patrocínio (buscando ou patrocinado): ponte natural entre atleta e marca."]),
     ("EDITORIAL", ["Notícia com tempo de leitura e autor; falta ligar a view no menu — conteúdo já modelado."]),
-], 2, CW2, 1.75, y0=1.78, gap=0.33, body=12)
+], 2, CW2, 1.62, y0=1.78, gap=0.33, body=12.5)
 note(s, "Nada aqui depende de fornecedor externo: é o que separa um marketplace de um catálogo com login.",
      fill=VIOLET_T, line=VIOLET, y=5.62, h=0.8, size=14)
 notes(s, "Ecossistema (50s): o que faz o cliente voltar. A view de notícias já está modelada e falta só ligar "
@@ -422,7 +470,7 @@ notes(s, "Ecossistema (50s): o que faz o cliente voltar. A view de notícias já
 # 9 · SmartScan (dark) ----------------------------------------------------
 s = new(dark=True)
 kicker(s, "INTELIGÊNCIA DE PRODUTO", LIME, w=3.0)
-title(s, "SmartScan: do desgaste ao preço justo", size=29, dark=True, w=9.0)
+title(s, "SmartScan: do desgaste ao preço justo", size=29, dark=True, w=12.33)
 scan = grid(s, [
     ("ENTRADA", ["Modelo, preço praticado, pace do corredor e pisada: o que o atleta já sabe de cabeça."]),
     ("ANÁLISE", ["Vida útil da entressola e estado da placa de carbono, com expectativa em km e risco de lesão."]),
@@ -485,7 +533,7 @@ notes(s, "Onde estamos (60s): o slide de credibilidade. Ler a coluna do meio sem
 # 12 · roadmap (dark) -----------------------------------------------------
 s = new(dark=True)
 kicker(s, "ROADMAP", LIME, w=1.8)
-title(s, "Três ondas, uma ordem", size=30, dark=True, w=6.5)
+title(s, "Três ondas, uma ordem", size=30, dark=True, w=12.33)
 ondas = [
     ("ONDA 1 · FUNDAÇÃO SEGURA", "≈ 4 semanas", ["· Sessão em cookie httpOnly",
         "· Preço e estoque recalculados no servidor", "· public.users, RLS com WITH CHECK e GRANT",
@@ -523,12 +571,12 @@ for i, (lab, txt) in enumerate([
     ("PAGAMENTO", "PIX em sandbox, sem webhook → PSP real com estado conciliado, idempotência e reconciliação diária."),
     ("ESCALA", "Sem índice, CI ou testes → pipeline com type-check, lint e build, índice de busca e smoke de API."),
 ]):
-    y = 1.75 + i * 0.98
-    r = box(s, 0.5, y, 12.33, 0.85, fill=WHITE, line=HAIR, radius=0.03)
+    y = 1.72 + i * 1.13
+    r = box(s, 0.5, y, 12.33, 1.0, fill=WHITE, line=HAIR, radius=0.03)
     put(r, [(lab + " — " + txt, 12.5, False, TXT, BODY, 1.2)], anchor=MSO_ANCHOR.MIDDLE, space_after=0)
     riscos.append(r)
 note(s, "Nenhum dos quatro riscos é descoberto pela banca: todos estão descritos no diagnóstico com arquivo e linha.",
-     fill=LIME_T, line=LIME, y=5.9, h=0.75, size=13)
+     fill=LIME_T, line=LIME, y=6.35, h=0.62, size=13)
 notes(s, "Riscos (45s): não esconder nenhum. Fechar lembrando que os quatro já estão no inventário, com evidência.")
 
 # 14 · metricas -----------------------------------------------------------
@@ -547,15 +595,16 @@ metas14 = grid(s, [
 ], 4, CW4, 1.65, y0=2.95, body=11.5)
 note(s, "Sem baseline inventada: o site ainda não tem tráfego real, então as metas entram em vigor quando a "
         "onda 2 liga o banco. O que não sabemos fica marcado como PENDENTE no documento.",
-     fill=AMBER_T, line=AMBER, y=4.85, h=1.0, size=12.5, bold=False)
+     fill=AMBER_T, line=AMBER, y=5.15, h=1.05, size=12.5, bold=False)
 notes(s, "Métricas (40s): north star + quatro metas. Não inventar baseline; o que não existe hoje fica PENDENTE "
          "no documento e entra em vigor com a onda 2.")
 
 # 15 · pedido (dark) ------------------------------------------------------
 s = new(dark=True)
-box(s, 7.6, -2.2, 6.4, 6.4, fill=VIOLET)
+glow(s, 10.4, 4.4, 4.6, 4.6, VIOLET, 28)
+glow(s, -2.2, -2.6, 4.6, 4.6, LIME, 14)
 kicker(s, "O PEDIDO", LIME, w=1.9)
-title(s, "Agora, pedimos três coisas", size=32, dark=True, w=7.0)
+title(s, "Agora, pedimos três coisas", size=32, dark=True, w=12.33)
 ped = grid(s, [
     ("VALIDAR A ONDA 1", ["Sessão, autorização, roles e rotação da credencial antes de qualquer função nova."]),
     ("APROVAR D-01", ["Lojista é papel ou vínculo com a loja? A resposta muda tabela, permissão e verificação."]),

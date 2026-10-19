@@ -3,6 +3,7 @@
 **Deck:** Google Slides · `CoreMotion · Pitch — comprar, vender e viver o mesmo tênis` · 15 slides
 **Link:** <https://docs.google.com/presentation/d/1lcx5Dsv7ojEZM58hA5zDW_bMt6lAD_-8g2sOuvxvSBQ/edit>
 **Versão animada:** `CoreMotion-Pitch-animado.pptx` (mesma pasta) — transições e entrada por bloco já gravadas no arquivo; gerador `gerar-pitch-animado.py`
+**Preview sem PowerPoint:** `python docs/etapa-5/pessoa-4/apresentacao/gerar-preview-png.py <pptx> <dir>` renderiza 1 PNG por slide (1600 px) + um mosaico, marcando com borda vermelha qualquer caixa cujo texto estoure a chapa
 **Duração-alvo:** ~11 min corridos; ~14 min com uma pausa por bloco
 **Base factual:** `lib/types.ts`, `components/`, `app/api/` no commit `b0827ec` + `docs/etapa-5/PENDENCIAS-E-LACUNAS.md` (76 itens) · leitura de 19/10/2026
 
