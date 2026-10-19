@@ -109,6 +109,16 @@ Cada item tem dono declarado. O dono corrige e verifica sem esperar outra frente
 
 ---
 
+## 5.1 Inventário consolidado do que falta
+
+Criado em `docs/etapa-5/PENDENCIAS-E-LACUNAS.md` (19/10/2026): 76 itens lacrados por frente,
+com evidência em arquivo e linha, estado (`FALTA`, `PARCIAL`, `BLOQUEADO`, `PENDENTE`,
+`NÃO VERIFICADO`), dono e critério de aceitação. Nenhum item está concluído. A seção 4 deste
+arquivo lista os bloqueadores; o inventário lista **tudo** o que falta, inclusive os artefatos
+documentais que as pastas `pessoa-N/` ainda não contêm.
+
+---
+
 ## 6. Arquivos criados ou reorganizados nesta rodada
 
 ```
@@ -127,7 +137,24 @@ docs/etapa-5/pessoa-1/README.md
 docs/etapa-5/pessoa-2/README.md
 docs/etapa-5/pessoa-3/README.md
 docs/etapa-5/pessoa-4/README.md
+docs/etapa-5/PENDENCIAS-E-LACUNAS.md            # inventário de 76 lacunas (19/10/2026)
+docs/etapa-5/pessoa-4/apresentacao/CoreMotion-Etapa5-animado.pptx
+docs/etapa-5/pessoa-4/apresentacao/CoreMotion-Pitch-animado.pptx
+docs/etapa-5/pessoa-4/apresentacao/gerar-pitch-animado.py
+docs/etapa-5/pessoa-4/apresentacao/gerar-apresentacao-animada.py
+docs/etapa-5/pessoa-4/apresentacao/roteiro-apresentacao.md      # fala por slide e cuidados
+docs/etapa-5/pessoa-4/apresentacao/roteiro-pitch.md             # fala por slide do pitch à banca
 ```
+
+Dois decks foram criados no Google Slides e estão registrados em
+`docs/etapa-5/PENDENCIAS-E-LACUNAS.md`: o **pitch do produto** (15 slides, seção 6.2), que é a
+peça para a banca — vende o site, suas funções, mecânicas e as ondas de atualização —, e o
+**deck de pendências** (16 slides, seção 6.1), rebaixado a anexo interno da equipe, com o PPTX
+animado como portador do movimento que a API do Slides não grava. Em nenhum dos dois há
+afirmação de item concluído: o que falta aparece rotulado `FALTA`, `PARCIAL`, `EM CONSTRUÇÃO` ou
+`PRÓXIMA ONDA`, e o que depende de dados da equipe fica `PENDENTE`.
+O PPTX da mesma pasta carrega transições e entradas por parágrafo gravadas no próprio XML —
+a API do Google Slides não expõe esses recursos, então o movimento não pôde ser aplicado lá.
 
 Os diagnósticos deixaram de ficar dentro da pasta de uma pessoa: são insumos compartilhados.
 Cada frente tem a própria pasta para registros e evidências.
