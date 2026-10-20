@@ -220,6 +220,8 @@ def title_block(slide, kicker, headline, sub=None, y=1.12, size=36,
              color=kicker_color, spc=2.4)
     h = text(slide, 0.78, y + 0.30, 11.6, 0.9, headline, size=size,
              color=fg, bold=True, spc=-1.1, line=0.98)
+    name_it(k, "CM!!kick")
+    name_it(h, "CM!!head")
     out = [k, h]
     if sub:
         out.append(text(slide, 0.78, y + 1.14, sub_w, 0.5, sub, size=12.5,

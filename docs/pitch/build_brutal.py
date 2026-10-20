@@ -85,7 +85,7 @@ animate(s, cascade(art, 0, 90, "zoom", 650) +
          (brand, "rise", 180, 680), (under, "wipe", 420, 450),
          (lead, "rise", 480, 600), (meta, "fade", 700, 420),
          (foot, "rise", 800, 500), (foot_t, "fade", 900, 450)])
-transition(s, "fade", dur=800, speed="med")
+transition(s, "morph", dur=1000, speed="med")
 notes(s, (
     "ABERTURA (30s).\n"
     "• Meu nome é [nome] e o CoreMotion é um marketplace esportivo com lojas "
@@ -95,6 +95,8 @@ notes(s, (
     "• Prometer 15 minutos e seguir a agenda."
 ))
 # --- kit velocidade: bandeira, rastros, chevrons e velocímetro ---
+name_it(kick, "CM!!kick")
+name_it(brand, "CM!!head")
 d_flag = checkered(s, 0.0, 0.0, cols=20, rows=2, cell=0.26)
 d_streak = speed_streaks(s, 5.70, 0.55, 2.30, n=3, gap=0.15, color=INK,
                          alpha=18, thick=0.055)
@@ -157,7 +159,7 @@ animate(s, cascade(head, 60, 100, "rise", 520) +
         [(intro, "fade", 280, 420)] +
         cascade(ag, 340, 45, "rise", 470) +
         [(foot, "fade", 1050, 380)])
-transition(s, "push", direction="l", dur=650, speed="fast")
+transition(s, "morph", dur=1000, speed="med")
 notes(s, (
     "AGENDA (45s).\n"
     "• Quatro blocos. O primeiro é o mais importante: o problema.\n"
@@ -220,7 +222,7 @@ animate(s, [(ring, "zoom", 0, 900)] + cascade(head, 60, 110, "rise", 540) +
         cascade(pb[2:], 340, 55, "rise", 500) +
         [(band, "wipe", 1040, 620), (bt, "fade", 1180, 460),
          (b2, "fade", 1300, 400)])
-transition(s, "flash", dur=600, speed="fast")
+transition(s, "morph", dur=1000, speed="med")
 notes(s, (
     "PROBLEMA (2min).\n"
     "• Conte um caso concreto de compra frustrada, se tiver.\n"
@@ -286,7 +288,7 @@ animate(s, cascade(head, 60, 100, "rise", 520) +
         [(chart[0], "wipe", 620, 600)] +
         [(b, "wipeup", 720 + i * 90, 620) for i, b in enumerate(chart[1:])] +
         [(cap, "zoom", 1150, 450)])
-transition(s, "pan", direction="l", dur=700, speed="med")
+transition(s, "morph", dur=1000, speed="med")
 notes(s, (
     "POR QUE AGORA (1min30).\n"
     "• Três mudanças estruturais — não é tendência passageira.\n"
@@ -358,7 +360,7 @@ for i, (label, col, fg) in enumerate([("UM CATÁLOGO", WHITE, INK),
 animate(s, cascade(head, 60, 100, "rise", 520) +
         cascade(sl, 300, 45, "rise", 500) +
         cascade(chips, 1050, 80, "fade", 400))
-transition(s, "push", direction="u", dur=650, speed="fast")
+transition(s, "morph", dur=1000, speed="med")
 notes(s, (
     "SOLUÇÃO (2min).\n"
     "• Uma plataforma, uma conta, um checkout.\n"
@@ -435,7 +437,7 @@ animate(s, cascade(head, 60, 100, "rise", 520) +
         [(cust, "zoom", 900, 600)] +
         [(cl, "fade", 1000, 400), (cs, "fade", 1040, 400)] +
         cascade(fl, 1080, 60, "fade", 380))
-transition(s, "conveyor", direction="l", dur=850, speed="med")
+transition(s, "morph", dur=1000, speed="med")
 notes(s, (
     "COMO FUNCIONA (2min).\n"
     "• Passo 4 é o argumento comercial: o vendedor recebe sem risco de calote e "
@@ -532,7 +534,7 @@ animate(s, cascade(head, 60, 100, "rise", 520) +
         [(x, "fade", 420 + i * 25, 380) for i, x in enumerate([bbar] + dots + ui)] +
         cascade(ph, 640, 30, "rise", 450) +
         [(bl, "fade", 1150, 350)])
-transition(s, "zoom", direction="in", dur=700, speed="med")
+transition(s, "morph", dur=1000, speed="med")
 notes(s, (
     "PRODUTO (1min30).\n"
     "• As telas são wireframes: o objetivo é mostrar a lógica, não o visual final.\n"
@@ -611,7 +613,7 @@ animate(s, cascade(head, 60, 110, "rise", 540) +
         [(panel, "zoom", 620, 620), (pt, "fade", 740, 400)] +
         cascade(stt[2:], 780, 55, "fade", 400) +
         [(quote, "left", 1120, 560), (qsub, "fade", 1240, 420)])
-transition(s, "vortex", direction="l", dur=950, speed="slow")
+transition(s, "morph", dur=1000, speed="med")
 notes(s, (
     "DIFERENCIAL (1min30).\n"
     "• A frase-chave: confiança não é selo, é fluxo de dinheiro e de informação.\n"
@@ -680,7 +682,7 @@ for i, (v, l, col) in enumerate(STATS):
 animate(s, cascade(head, 60, 100, "rise", 520) +
         cascade(rv, 300, 50, "rise", 480) +
         [(stats, "zoom", 850, 600)] + cascade(sl[1:], 950, 50, "fade", 380))
-transition(s, "cover", direction="l", dur=700, speed="med")
+transition(s, "morph", dur=1000, speed="med")
 notes(s, (
     "MODELO (1min30).\n"
     "• Receita principal é comissão; assinatura de loja e serviços são alavancas.\n"
@@ -782,7 +784,7 @@ animate(s, cascade(head, 60, 100, "rise", 520) +
         [(tlabel, "drop", 900, 450), (target[0], "zoom", 960, 500),
          (target[1], "fade", 1050, 350)] +
         cascade(sd, 1120, 80, "left", 480))
-transition(s, "split", orient="horz", direction="out", dur=650, speed="med")
+transition(s, "morph", dur=1000, speed="med")
 notes(s, (
     "POSICIONAMENTO (1min).\n"
     "• O eixo vertical é confiança; o horizontal é alcance.\n"
@@ -835,7 +837,7 @@ for i, b in enumerate(bars):
 rest = [sh for sh in road[1:] if sh not in bars]
 anim += [(sh, "fade", 800 + i * 30, 380) for i, sh in enumerate(rest)]
 animate(s, anim)
-transition(s, "push", direction="l", dur=600, speed="fast")
+transition(s, "morph", dur=1000, speed="med")
 notes(s, (
     "ROADMAP (1min).\n"
     "• Cada fase responde uma pergunta: dá para vender? dá para confiar? dá para escalar?\n"
@@ -899,13 +901,16 @@ pr = text(s, 7.95, 4.02, 4.62, 1.45,
 note = mono(s, 7.95, 6.55, 4.6, 0.22, "// sem vanity metrics", size=7.0,
             color=RGBColor(0x88, 0x88, 0x88), spc=1.2)
 
-# cabeçalho próprio (metade clara + metade escura)
-box(s, 0.78, 0.40, 0.15, 0.15, fill=PRIMARY, border=None, shadow=False)
-mono(s, 1.04, 0.38, 3.4, 0.2, "CoreMotion", size=9.5, color=INK, spc=2.6)
-mono(s, 7.30, 0.38, 5.25, 0.2, "Onde estamos   ·   12/15", size=8,
-     color=D_MUTED, spc=2.0, align="r")
-rule(s, 0, 7.44, 7.40, 0.06, color=INK)
+# cabeçalho próprio (metade clara + metade escura) — nomes casam o morph
+name_it(box(s, 0.78, 0.40, 0.15, 0.15, fill=PRIMARY, border=None,
+            shadow=False), "CM!!dot")
+name_it(mono(s, 1.04, 0.38, 3.4, 0.2, "CoreMotion", size=9.5, color=INK,
+             spc=2.6), "CM!!brand")
+name_it(mono(s, 7.30, 0.38, 5.25, 0.2, "Onde estamos   ·   12/15", size=8,
+             color=D_MUTED, spc=2.0, align="r"), "CM!!count")
+name_it(rule(s, 0, 7.44, 7.40, 0.06, color=INK), "CM!!rule")
 rule(s, 7.40, 7.44, 5.933, 0.06, color=WHITE)
+name_it(big, "CM!!panel")
 
 animate(s, cascade(head, 60, 110, "rise", 540) +
         cascade(stt, 300, 55, "rise", 470) +
@@ -913,7 +918,7 @@ animate(s, cascade(head, 60, 110, "rise", 540) +
          (tagt, "fade", 800, 400),
          (big, "rise", 840, 560), (bigb, "wipe", 980, 420),
          (pr, "fade", 1080, 460), (note, "fade", 1240, 380)])
-transition(s, "wipe", direction="l", dur=700, speed="med")
+transition(s, "morph", dur=1000, speed="med")
 notes(s, (
     "ONDE ESTAMOS (1min).\n"
     "• Seja honesto: ainda não há tração medida.\n"
@@ -960,7 +965,7 @@ note = text(s, 0.78, 5.96, 8.0, 0.22,
 
 animate(s, cascade(head, 60, 100, "rise", 520) +
         cascade(tm, 300, 55, "rise", 500) + [(note, "fade", 1000, 380)])
-transition(s, "gallery", direction="l", dur=800, speed="med")
+transition(s, "morph", dur=1000, speed="med")
 notes(s, (
     "TIME (45s).\n"
     "• Não é 'somos quatro amigos': são quatro responsabilidades com entregáveis.\n"
@@ -1020,7 +1025,7 @@ animate(s, cascade(head, 60, 110, "rise", 540) +
         cascade(ak, 300, 55, "rise", 500) +
         [(goal, "wipe", 980, 620)] +
         [(x, "fade", 1120 + i * 60, 420) for i, x in enumerate(gt)])
-transition(s, "flash", dur=550, speed="fast")
+transition(s, "morph", dur=1000, speed="med")
 notes(s, (
     "O PEDIDO (1min30).\n"
     "• Seja direto: 5 lojas, investimento e dois conselheiros.\n"
@@ -1029,7 +1034,7 @@ notes(s, (
 ))
 # --- kit velocidade: a meta de 90 dias ---
 name_it(goal, "CM!!band")
-name_it(gk, "CM!!kick")
+name_it(gk, "CM!!goal")
 d_vghost = ghost(s, 9.85, 2.68, 3.6, 2.4, "90", size=150, color=WHITE, alpha=7)
 d_check = checkered(s, 8.92, 5.78, cols=5, rows=2, cell=0.16)
 d_streak = speed_streaks(s, 10.45, 1.24, 2.05, n=3, gap=0.15, color=WHITE,
@@ -1076,7 +1081,7 @@ animate(s, cascade(dark_shapes, 0, 90, "zoom", 700) +
         [(kick, "fade", 120, 450), (big, "rise", 200, 700),
          (sub, "rise", 420, 600), (rule2, "wipe", 600, 450),
          (contact, "fade", 720, 450), (bye, "fade", 860, 400)])
-transition(s, "morph", dur=1200, speed="slow")
+transition(s, "morph", dur=1000, speed="med")
 notes(s, (
     "FECHAMENTO (30s).\n"
     "• Pare de falar depois do 'obrigado'. Deixe a banca perguntar.\n"
@@ -1087,6 +1092,22 @@ notes(s, (
 d_band = box(s, 0, 0, 13.333, 7.5, fill=INK, border=None, shadow=False)
 name_it(d_band, "CM!!band")
 name_it(kick, "CM!!kick")
+name_it(big, "CM!!head")
+# equipe — dorsais do grupo
+EQUIPE = [("ALFEU", "N1", PRIMARY, WHITE), ("ANDRÉ", "N2", SECONDARY, INK),
+          ("BRUNO", "N3", GREEN, INK), ("MARCUS", "N18", ACCENT, WHITE),
+          ("MATTHEUS", "N22", MAGENTA, WHITE)]
+eq_kick = mono(s, 0.78, 5.32, 4.6, 0.20, "// EQUIPE · CAMISA DO PROJETO",
+               size=6.8, color=D_SECOND, spc=1.8)
+d_memb = []
+for _i, (_nm, _num, _col, _fg) in enumerate(EQUIPE):
+    _x = 0.78 + _i * 1.42
+    d_memb.append(box(s, _x, 5.56, 1.32, 0.46, fill=_col, border=INK, lw=1.8,
+                      shadow=True, shadow_px=3))
+    d_memb.append(mono(s, _x + 0.10, 5.56, 0.56, 0.46, _num, size=12.5,
+                       color=_fg, spc=0, anchor="m"))
+    d_memb.append(mono(s, _x + 0.62, 5.56, 0.64, 0.46, _nm, size=5.9,
+                       color=_fg, spc=0.6, anchor="m"))
 d_streak = speed_streaks(s, 0.82, 1.02, 3.20, n=3, gap=0.14, color=WHITE,
                          alpha=18, thick=0.055)
 d_check = checkered(s, 12.05, 0.72, cols=5, rows=2, cell=0.18)
@@ -1100,7 +1121,9 @@ animate(s, [(st, "speed", 150 + i * 70, 500) for i, st in enumerate(d_streak)] +
         [(ch, "whip", 620 + i * 70, 380) for i, ch in enumerate(d_chev)] +
         [(d_gauge[0], "zoom", 760, 480), (d_gauge[1], "zoom", 800, 480),
          (d_gauge[2], "fade", 820, 380), (d_gauge[3], "spin", 880, 520),
-         (d_gauge[4], "fade", 880, 380), (d_vghost, "fade", 980, 700)])
+         (d_gauge[4], "fade", 880, 380), (d_vghost, "fade", 980, 700),
+         (eq_kick, "fade", 1040, 420)] +
+        [(m, "drop", 1090 + i * 80, 430) for i, m in enumerate(d_memb)])
 
 chrome(s, 15, "Obrigado", dark=True, accent=D_PRIMARY)
 

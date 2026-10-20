@@ -20,11 +20,14 @@ DM Sans + Space Mono.
 O deck foi tunado para transmitir **velocidade e esporte** sem perder o tema
 neo-brutalista:
 
-- **Transições por slide** — push rápido, `flash` (p14) nos cortes de energia
-  (slides 3 e 14), `pan`/`conveyor`/`gallery`/`vortex` (p14) em blocos
-  narrativos e **`morph`** (p159, PowerPoint 2016+) no fechamento: a faixa
-  preta do slide 14 toma a tela inteira e o header desliza. Slides antigos caem
-  em fallback padrão (fade/push/cover).
+- **Transição `morph` (mesclagem) em todos os slides** — p159 (PowerPoint
+  2016+): os objetos de cada slide **se transformam nos do próximo**, de forma
+  fluida. Os pares casam por nome (`CM!!…`): kicker e manchete (`CM!!kick`/
+  `CM!!head`) deslizam entre os títulos, o chrome (ponto, marca, contador, fio)
+  permanece vivo e, no fechamento, a faixa preta "meta 90 dias" do slide 14
+  **toma a tela inteira** e vira o fundo do "Obrigado". Versões antigas caem em
+  fade. (Também dá para trocar por `flash`, `vortex`, `conveyor` etc. — o motor
+  já suporta.)
 - **Efeitos de entrada** — além de `fade/rise/zoom/wipe`, o motor tem
   `whip` (entra esticado, como rastro), `speed`/`boost` (chega freando com
   ultrapassagem), `spin` (assenta girando) e `race` (trajeto de corrida — a
@@ -34,8 +37,10 @@ neo-brutalista:
   capa, chegada do roadmap, fechamento), `speedometer` (velocímetro na capa,
   no take rate e no "obrigado") e `ghost` (palavras gigantes em 6% —
   VELOCIDADE, GO, ATRITO, 90 DIAS…).
-- **Morph pairing** — shapes com nomes `CM!!…` (chrome, faixa e kicker)
-  casam entre slides para o morph mover de verdade.
+- **Equipe no fechamento** — dorsais do grupo (Alfeu N1, André N2, Bruno N3,
+  Marcus N18, Mattheus N22) nas cores da identidade.
+- **Morph pairing** — shapes com nomes `CM!!…` casam entre slides para o morph
+  mover de verdade.
 
 Animações ficam no XML nativo de timing (`p:timing`), então abrem em qualquer
 PowerPoint 2010+; transições p14/p159 exigem PowerPoint 2010/2016+ e degradam
