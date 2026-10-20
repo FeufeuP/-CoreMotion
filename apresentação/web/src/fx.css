@@ -1,0 +1,88 @@
+/* ==========================================================================
+   FX · relevo 3D colorido
+   --------------------------------------------------------------------------
+   Decoração de fundo das cenas: tênis, camisa, boné, garrafa, mochila, medalha,
+   relógio, faixa, óculos, halter, bola e raquete — cada peça com UMA cor
+   sorteada da paleta do deck e em relevo 3D "extrudado" (a mesma cor em
+   camadas, sem gradiente).
+
+   - O sprite é montado em JS (ver `FX_ICONS` / `fxSprite` no app.js) e
+     injetado como <div class="fx3d"> dentro de cada cena, menos a última.
+   - Para acrescentar um item: adicione os `d` de um ou mais paths (viewBox
+     0 0 112 112) em `FX_ICONS`, no app.js. O relevo e o sorteio são automáticos.
+   - A cor vem de `--fx` (inline, definida por `paletteOf()` no app.js), limitada
+     a um conjunto de cores que existe em cada fundo: branco, preto, vermelho,
+     azul e a cena dividida. A opacidade base é da cena (`--fxo`) — é o que
+     mantém a decoração atrás do conteúdo.
+   - Movimento: o item (`.fx`) atravessa a cena devagar de um lado para o
+     outro; o miolo (`.fx__in`) gira em 3D, sempre devagar.
+   - Tudo pausa quando a cena não está visível e some na impressão.
+   ========================================================================== */
+
+.fx3d{
+  position:absolute;inset:0;z-index:1;overflow:hidden;pointer-events:none;
+  perspective:1200px;perspective-origin:50% 45%;
+  /* some suave nas bordas: peça cortada pela borda do slide vira degradê,
+     não uma faixa de cor */
+  -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 8%,#000 91%,transparent 100%),
+                     linear-gradient(90deg,transparent 0,#000 6%,#000 94%,transparent 100%);
+  -webkit-mask-composite:source-in;
+  mask-image:linear-gradient(180deg,transparent 0,#000 8%,#000 91%,transparent 100%),
+             linear-gradient(90deg,transparent 0,#000 6%,#000 94%,transparent 100%);
+  mask-composite:intersect;
+  --fx:#ff3333;   /* fallback; cada peça traz a própria cor */
+  --fxo:.48;      /* opacidade base, definida pelo fundo da cena */
+}
+.scene--dark .fx3d{--fxo:.58}
+.scene--red  .fx3d{--fxo:.50}
+.scene--blue .fx3d{--fxo:.50}
+.s12 .fx3d{--fxo:.48}
+.s0 .fx3d{--fxo:.45}
+
+/* a cena 12 é dividida: o texto das duas metades vive acima do fundo e a
+   decoração passa por trás do painel preto (como um cartão na frente) */
+.s12__l,.s12__r{position:relative;z-index:2}
+
+.fx{
+  position:absolute;left:var(--l,50%);top:var(--t,50%);
+  width:var(--w,120px);aspect-ratio:1;
+  color:var(--fx);
+  opacity:calc(var(--fxo) * var(--fo,1));
+  transform-style:preserve-3d;
+  /* duas animações independentes: `transform` faz a viagem lateral e
+     `translate` (propriedade separada) faz o balanço vertical */
+  animation:fxDrift var(--dur,70s) linear infinite alternate,
+            fxBob var(--bdur,9s) ease-in-out infinite alternate;
+  animation-delay:var(--del,0s),var(--bdel,0s);
+}
+.scene.on .fx{will-change:transform}
+.fx__in{
+  display:block;width:100%;height:100%;
+  transform-style:preserve-3d;
+  animation:fxTurn var(--tdur,26s) ease-in-out infinite alternate;
+  animation-delay:var(--tdel,0s);
+}
+.fx svg{display:block;width:100%;height:100%;overflow:visible;fill:currentColor}
+
+@keyframes fxDrift{
+  from{transform:translate3d(calc(var(--dx,20vw) * -.5),calc(var(--dy,6vh) * -.5),var(--z,0px))}
+  to  {transform:translate3d(calc(var(--dx,20vw) * .5),calc(var(--dy,6vh) * .5),var(--z,0px))}
+}
+@keyframes fxBob{
+  from{translate:0 calc(var(--bob,8px) * -1)}
+  to  {translate:0 var(--bob,8px)}
+}
+@keyframes fxTurn{
+  from{transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) rotateZ(var(--rz,0deg)) scaleX(var(--sx,1))}
+  to  {transform:rotateX(var(--rx2,0deg)) rotateY(var(--ry2,0deg)) rotateZ(var(--rz2,0deg)) scaleX(var(--sx,1))}
+}
+
+/* fora de tela: congela (economiza bateria durante a apresentação) */
+.js .scene:not(.on) .fx{animation-play-state:paused}
+.js .scene:not(.on) .fx__in{animation-play-state:paused}
+
+@media print{.fx3d{display:none !important}}
+
+@media (prefers-reduced-motion:reduce){
+  .fx,.fx__in{animation:none !important;transform:none !important}
+}

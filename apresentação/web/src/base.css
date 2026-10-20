@@ -28,6 +28,7 @@ html{
   scroll-behavior:smooth;
   -webkit-text-size-adjust:100%;
   background:var(--paper);
+  --hud-h:clamp(86px,12vh,128px);
 }
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
@@ -108,6 +109,11 @@ body.has-cursor button,body.has-cursor a{cursor:none}
   overflow:hidden;
   isolation:isolate;
 }
+/* palco de slide: 1 cena = 1 tela (só onde a apresentação acontece) */
+@media (min-width:1024px) and (min-aspect-ratio:4/3){
+  .scene{height:100vh;height:100svh}
+}
+
 .scene--dark{background:var(--ink);color:#fff;--bg:#000;--fg:#fff}
 .scene--red{background:var(--red);color:#fff;--bg:#ff3333;--fg:#fff}
 .scene--blue{background:var(--blue);color:#fff;--bg:#0066ff;--fg:#fff}
@@ -151,24 +157,40 @@ html:not(.js) .line>span{transform:none}
 .par--x{transform:translate3d(calc(var(--p,0) * -40px),calc(var(--p,0) * -20px),0)}
 .par--f{transform:translate3d(0,calc(var(--p,0) * -90px),0)}
 
-/* ---------- hud ---------------------------------------------------------- */
+/* ---------- hud ----------------------------------------------------------
+   Mesmo chrome do PPTX (`chrome()` em brutal_lib.py): ponto de accent +
+   marca em mono caixa-alta, seção e contador alinhados à direita, e o fio
+   inferior (que aqui também mostra o progresso da apresentação).
+   ------------------------------------------------------------------------ */
 .hud{
   position:fixed;z-index:40;inset:0 0 auto 0;
   display:flex;align-items:center;justify-content:space-between;gap:16px;
-  padding:18px var(--pad);
+  padding:20px var(--pad) 0;
   color:var(--ink);
-  transition:color .45s var(--ease),background .45s var(--ease);
+  --hud-dot:var(--red);
+  transition:color .45s var(--ease);
   pointer-events:none;
 }
 .hud>*{pointer-events:auto}
 .hud--light{color:#fff}
-.hud__brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:-.03em;font-size:clamp(14px,1.15vw,17px)}
-.hud__brand i{width:12px;height:12px;background:var(--red);display:block;transition:transform .6s var(--ease)}
+.hud--red,.hud--blue{--hud-dot:var(--yellow)}
+.hud__brand{
+  display:flex;align-items:center;gap:12px;
+  font-family:var(--mono);font-weight:700;font-size:clamp(9px,.8vw,11px);
+  letter-spacing:.26em;text-transform:uppercase;line-height:1;
+}
+.hud__brand i{
+  width:11px;height:11px;background:var(--hud-dot);display:block;flex:none;
+  transition:transform .6s var(--ease),background .45s var(--ease);
+}
 .hud:hover .hud__brand i{transform:rotate(90deg)}
-.hud__mid{display:flex;align-items:center;gap:10px;opacity:.72}
-.hud__mid em{font-style:normal;opacity:.55}
-.hud__num{font-family:var(--mono);font-weight:700;font-size:clamp(9px,.8vw,11px);letter-spacing:.16em;display:flex;align-items:baseline;gap:4px}
-.hud__num b{font-size:clamp(12px,1vw,14px)}
+.hud__count{
+  display:flex;align-items:baseline;gap:10px;
+  font-family:var(--mono);font-weight:700;font-size:clamp(9px,.8vw,11px);
+  letter-spacing:.2em;text-transform:uppercase;line-height:1;opacity:.72;
+}
+.hud__num{display:flex;align-items:baseline;gap:0}
+.hud__num b{font-size:clamp(10px,.9vw,12px)}
 .hud__menu{display:flex;gap:8px;align-items:center}
 .hud__menu button{
   font-family:var(--mono);font-weight:700;font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;
@@ -177,13 +199,14 @@ html:not(.js) .line>span{transform:none}
 .hud__menu button:hover{background:currentColor;transform:translateY(-2px)}
 .hud__menu button:hover span{color:var(--paper);mix-blend-mode:difference}
 
-.progress{position:fixed;left:0;right:0;bottom:0;height:5px;z-index:41;background:transparent;mix-blend-mode:normal}
-.progress__bar{position:absolute;inset:0;background:rgba(0,0,0,.10)}
+/* fio inferior do chrome: linha sólida de ponta a ponta, progresso em vermelho */
+.progress{position:fixed;left:0;right:0;bottom:0;height:4px;z-index:41}
+.progress__bar{position:absolute;inset:0;background:var(--ink);transition:background .45s var(--ease)}
 .progress__fill{position:absolute;left:0;top:0;bottom:0;width:0;background:var(--red);transition:width .18s linear}
-.progress__ticks{position:absolute;inset:0;display:flex}
-.progress__ticks i{flex:1;border-right:1px solid rgba(255,255,255,.55);mix-blend-mode:overlay}
-.progress__ticks i:last-child{border:0}
-.hud--light ~ .progress .progress__bar{background:rgba(255,255,255,.18)}
+.hud--light ~ .progress .progress__bar{background:#fff}
+.hud--split ~ .progress .progress__bar{background:linear-gradient(90deg,var(--ink) 0 61.9%,#fff 61.9% 100%)}
+.hud--split .hud__brand{color:var(--ink)}
+.hud--split .hud__count{color:#fff}
 
 /* ---------- cursor / grão / glow ---------------------------------------- */
 .cursor{
@@ -257,6 +280,12 @@ html:not(.js) .line>span{transform:none}
 
 /* foco visível */
 :focus-visible{outline:3px solid var(--red);outline-offset:4px}
+
+/* impressão: uma cena por página */
+@media print{
+  .scene{height:auto;min-height:0;page-break-after:always;break-after:page}
+  .scene:last-child{page-break-after:auto;break-after:auto}
+}
 
 /* sem js: tudo visível */
 html:not(.js) .rv,html:not(.js) .line>span{opacity:1 !important;transform:none !important;clip-path:none !important}

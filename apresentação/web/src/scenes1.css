@@ -12,7 +12,6 @@
 .s1__lead{font-size:clamp(18px,1.85vw,27px);line-height:1.24;letter-spacing:-.02em;font-weight:500;margin-top:clamp(18px,2.4vw,30px);max-width:24ch}
 .s1__lead b{font-weight:800}
 .s1__meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:clamp(20px,2.6vw,34px)}
-.s1__by{margin-top:clamp(18px,2.2vw,28px);opacity:.62}
 
 .s1__art{position:relative;width:100%;max-width:min(44vw,540px);aspect-ratio:1;margin-left:auto}
 .s1__art .i{position:absolute;will-change:transform}
@@ -128,3 +127,8 @@
 .pain p{font-size:clamp(13px,1.02vw,16px);line-height:1.48;max-width:34ch;color:rgba(255,255,255,.92)}
 .s3 .mq{position:absolute;left:0;right:0;bottom:0;z-index:4}
 .s3 .inner{padding-bottom:clamp(46px,6vh,70px)}
+
+/* palco escuro: componentes anteriormente brancos passam a grafite */
+html.is-stage .chip{background:#17191e!important;color:#f5f5f5!important;border-color:#f5f5f5}
+html.is-stage .ag__row::before{background:#f5f5f5}
+html.is-stage .ag__row:hover{color:#fff}

@@ -199,7 +199,18 @@ html:not(.js) .phase__stem{transform:none}
   .ag__arr{display:none}
   .ag__d{display:none}
   .s2__note{text-align:left}
-  .hud__mid{display:none}
+  .hud__brand{letter-spacing:.18em}
+  .hud__count{letter-spacing:.14em}
   .s1__title{font-size:clamp(40px,13vw,72px)}
   .s15__in{max-width:100%}
 }
+
+/* contatos reais do fechamento: e-mail e telefone como se escreve */
+.s15__contacts span{text-transform:none;letter-spacing:.05em;
+  font-size:clamp(10.5px,.84vw,12.5px);padding:10px 13px}
+
+html.is-stage .pin,html.is-stage .s9__pin,html.is-stage .member{background:#15171b!important;color:#f5f5f5!important}
+html.is-stage .s10__tag,html.is-stage .phase__tag{background:#15171b;color:#f5f5f5}
+html.is-stage .s12__r{background:#101216!important}
+html.is-stage .s13__foot,html.is-stage .s14__ask{background:#111318}
+html.is-stage .s15__contacts span{background:#15171b;color:#fff;border-color:#777}

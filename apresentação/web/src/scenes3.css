@@ -108,3 +108,12 @@ html:not(.js) .rev__bar i{transform:none}
 .econ__i{padding-left:clamp(6px,1vw,14px)}
 .econ__i b{display:block;font-size:clamp(20px,2.1vw,32px);letter-spacing:-.035em;line-height:1}
 .econ__i span{display:block;margin-top:5px;opacity:.6}
+
+html.is-stage .browser,html.is-stage .phone{background:#14161a!important;color:#f5f5f5!important;border-color:#f5f5f5;box-shadow:9px 9px 0 #000}
+html.is-stage .browser__bar{border-color:#f5f5f5}
+html.is-stage .browser__bar>i,html.is-stage .browser__url{border-color:#777}
+html.is-stage .browser__url{color:#f5f5f5}
+html.is-stage .browser__h,html.is-stage .browser__btn{background:#f5f5f5;color:#090a0d}
+html.is-stage .browser__img b{background:#14161a;color:#f5f5f5;border-color:#f5f5f5}
+html.is-stage .phone__scr{background:#202329;border-color:#555}
+html.is-stage .phone__scr .ln{background:#f5f5f5}

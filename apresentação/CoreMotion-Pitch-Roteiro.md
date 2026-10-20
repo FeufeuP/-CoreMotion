@@ -2,12 +2,15 @@
 
 **Duração alvo:** 12 a 15 minutos + 5 minutos de perguntas
 **Tipografia:** DM Sans (texto) + Space Mono (rótulos e números)
-**Formato:** 15 slides · tema neo-brutalista (branco/preto, #FF3333, #FFFF00, #0066FF) · animações em cascata
+**Formato:** 16 slides em 16:9 (HTML, `.pptx` e `.pdf`) · tema neo-brutalista escuro · animações em cascata
 **Arquivos:** `CoreMotion-Pitch-Banca.pptx` (editável) · `.pdf` (backup) · `.html` (versão web animada)
 
-> Antes de apresentar, troque os campos entre colchetes: `[seu nome]`, `[cidade]`,
-> `[seu@email.com]`, `[telefone]`, `[site]`. Ajuste também o valor do pedido (R$ 300 mil)
-> e as metas do piloto ao seu plano real.
+**Como apresentar no HTML:** abra `CoreMotion-Pitch.html` e clique em **▶ Apresentar**
+(ou `F5`). Para sair, `Esc`. Passa slide com clique, setas, espaço ou roda do mouse.
+
+**Contatos no fechamento:** alfeuvlp@gmail.com · 41 9 9893-8283.
+Antes de apresentar, ajuste o valor do pedido (R$ 300 mil) e as metas do piloto ao seu plano
+real, e preencha nomes/bios do time no slide 14.
 
 ---
 
@@ -15,16 +18,28 @@
 
 | Bloco | Slides | Tempo | Objetivo |
 |---|---|---|---|
-| Abertura | 1–2 | 1min15 | Contexto e agenda |
-| Problema | 3–4 | 3min30 | Fazer a banca sentir a dor |
-| Solução | 5–7 | 5min | Mostrar produto e o mecanismo de confiança |
-| Negócio | 8–10 | 3min | Diferencial, receita e posição |
-| Entrega | 11–14 | 3min | Roadmap, estado real e o pedido |
-| Fechamento | 15 | 30s | Silêncio e perguntas |
+| Abertura | 1–3 | 1min25 | Marca, contexto e agenda |
+| Problema | 4–5 | 3min30 | Fazer a banca sentir a dor |
+| Solução | 6–8 | 5min | Mostrar produto e o mecanismo de confiança |
+| Negócio | 9–11 | 3min | Diferencial, receita e posição |
+| Entrega | 12–15 | 3min | Roadmap, estado real e o pedido |
+| Fechamento | 16 | 30s | Silêncio e perguntas |
 
 ---
 
 ## Slide a slide
+
+### 00 · Abertura (slide 1 nos arquivos)
+**Fala:** *(deixe a logo aparecer em silêncio — 2 a 3 segundos)* “Entre em movimento. É isso
+que o CoreMotion faz: coloca o atleta em movimento — para comprar, para vender e para
+confiar em quem está do outro lado.”
+
+**Não faça:** explicar a frase, dizer “essa é a nossa logo” ou emendar a agenda antes de a
+animação terminar. Esse slide existe para ganhar o silêncio da banca.
+
+**No `.pptx`/`.pdf`:** a abertura é estática; dê a mesma pausa de 2–3 s antes de dizer o nome.
+
+---
 
 ### 01 · Capa
 **Fala:** “Boa tarde. Meu nome é [nome] e o CoreMotion é um marketplace esportivo com
@@ -207,6 +222,6 @@ suficiente para medir, e pequeno o bastante para operar manualmente no começo.
 - [ ] Valor do pedido e metas do piloto revisados
 - [ ] `CoreMotion-Pitch-Banca.pptx` aberto no modo apresentação (testar animações)
 - [ ] PDF aberto em outra aba, como plano B
-- [ ] Versão web aberta em outra aba (`CoreMotion-Pitch-Web.html`)
+- [ ] Versão web aberta em outra aba (`CoreMotion-Pitch.html`)
 - [ ] Notas do apresentador visíveis no PowerPoint (modo apresentador)
 - [ ] Celular no silencioso e água por perto

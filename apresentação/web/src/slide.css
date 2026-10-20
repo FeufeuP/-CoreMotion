@@ -1,0 +1,291 @@
+/* ==========================================================================
+   Canvas PowerPoint 16:9 + interface de edição e ajuste integral ao canvas.
+   Em modo de edição, `fitStage()` reduz o slide inteiro proporcionalmente
+   para caber na área central. Em apresentação, usa o máximo da janela 16:9.
+   Isso preserva a composição e evita que conteúdo ultrapasse a página.
+   ========================================================================== */
+
+@media (min-width:1024px) and (max-height:920px) and (min-aspect-ratio:4/3){
+  :root{
+    --top:clamp(64px,9.4vh,96px);
+    --bot:clamp(38px,5.6vh,58px);
+  }
+
+  /* 02 · Agenda */
+  .s2{padding-top:calc(var(--hud-h) + clamp(8px,1.6vh,20px))}
+  .ag{margin-top:clamp(12px,2.2vh,26px)}
+  .ag__row{padding:clamp(9px,1.5vh,16px) 0}
+  .ag__n{font-size:clamp(24px,3.2vw,46px)}
+  .ag__t{font-size:clamp(19px,2.15vw,32px)}
+
+  /* 03 · Problema */
+  .s3{padding-top:calc(var(--hud-h) + clamp(6px,1.2vh,16px))}
+  .s3__pains{margin-top:clamp(18px,3vh,36px)}
+  .s3__ring{width:min(88vw,1140px)}
+  .s3__ring2{width:min(58vw,760px)}
+
+  /* 04 · Por que agora */
+  .s4__grid{margin-top:clamp(22px,3.6vh,44px);gap:clamp(14px,1.9vw,28px)}
+  .why{min-height:clamp(186px,23vh,268px);padding:clamp(14px,1.5vw,22px);box-shadow:7px 7px 0 #000}
+  .why:nth-child(2){margin-top:clamp(8px,1.6vh,22px)}
+  .why:nth-child(3){margin-top:clamp(18px,3.2vh,46px)}
+  .why h3{padding-top:clamp(12px,1.8vh,22px)}
+  .why p{font-size:clamp(12.5px,.96vw,15px)}
+  .why__foot{margin-top:clamp(10px,1.4vh,16px);padding-top:9px}
+
+  /* 05 · Solução */
+  .layers{margin-top:clamp(14px,2.4vh,30px)}
+  .layer{padding:clamp(10px,1.6vh,18px) 0;gap:clamp(12px,2vw,30px)}
+  .layer__k{margin-bottom:7px}
+  .layer__d{margin-top:6px;font-size:clamp(12.5px,.96vw,15px)}
+  .layer__tags span{padding:5px 8px}
+  .s5__foot{margin-top:clamp(10px,1.8vh,20px)}
+
+  /* 06 · Como funciona */
+  .flow{margin-top:clamp(16px,2.8vh,34px);padding-top:34px}
+  .node__dot{margin-bottom:clamp(8px,1.4vh,16px)}
+  .s6__foot{margin-top:clamp(18px,3vh,36px);gap:clamp(14px,2.4vw,32px)}
+  .callout{padding:clamp(12px,1.5vw,20px);box-shadow:7px 7px 0 rgba(255,255,255,.92)}
+  .callout b{font-size:clamp(17px,1.7vw,23px)}
+  .custody{gap:7px}
+
+  /* 07 · Produto */
+  .s7__tags{margin-top:clamp(14px,2vh,22px)}
+
+  /* 08 · Diferencial */
+  .s8__grid{margin-top:clamp(14px,2.4vh,28px);gap:clamp(20px,3.4vw,52px)}
+  .verif{margin-top:clamp(12px,2vh,22px)}
+  .verif__i{padding:clamp(9px,1.5vh,15px) 0}
+  .verif__i p{font-size:clamp(12px,.9vw,14px);margin-top:4px}
+  .states{padding:clamp(12px,1.5vw,18px)}
+  .state{padding:clamp(7px,1.15vh,12px) 0}
+  .s8__quote{margin-top:clamp(18px,3vh,34px);padding-top:clamp(12px,1.6vh,18px)}
+  .s8__quote b{font-size:clamp(20px,2.2vw,30px)}
+
+  /* 09 · Modelo */
+  .rev{margin-top:clamp(20px,3.4vh,40px)}
+  .rev__c{padding-top:clamp(14px,2vh,22px);padding-bottom:clamp(14px,2vh,20px)}
+  .rev__n{font-size:clamp(34px,4.4vw,62px);margin-top:clamp(8px,1.4vh,16px)}
+  .rev__bar{margin-top:clamp(10px,1.6vh,16px)}
+  .econ{margin-top:clamp(16px,2.6vh,30px);padding:clamp(12px,1.6vw,20px) clamp(14px,1.8vw,24px)}
+
+  /* 10 · Posicionamento */
+  .matrix{height:min(56vh,520px)}
+
+  /* 11 · Roadmap */
+  .road{margin-top:clamp(20px,3.4vh,44px)}
+
+  /* 13 · Time */
+  .team{margin-top:clamp(18px,3vh,40px)}
+  .member{min-height:clamp(196px,25vh,272px);padding:clamp(14px,1.5vw,22px)}
+  .member h3{padding-top:clamp(12px,1.8vh,24px)}
+  .s13__foot{margin-top:clamp(12px,2vh,22px)}
+
+  /* 14 · O pedido */
+  .s14 .ask{margin-top:clamp(16px,2.6vh,32px)}
+  .ask__c{padding-top:clamp(12px,1.8vh,22px);padding-bottom:clamp(12px,1.8vh,22px)}
+  .ask__n{font-size:clamp(28px,3.8vw,54px);margin-top:clamp(8px,1.4vh,16px)}
+  .meta{margin-top:clamp(14px,2.2vh,28px);padding:clamp(10px,1.5vh,18px) clamp(14px,1.8vw,24px)}
+}
+
+
+/* ========================================================================
+   Palco PowerPoint: proporção real 16:9, uma cena visível e transição
+   discreta entre páginas. Em telas fora da proporção, barras pretas.
+   ======================================================================== */
+html.is-stage, html.is-stage body{
+  width:100%;height:100%;min-height:100%;overflow:hidden!important;
+  background:#050608!important;overscroll-behavior:none;
+}
+html.is-stage body{position:relative}
+html.is-stage #deck{
+  position:fixed;z-index:1;left:50%;top:50%;
+  width:min(100vw,177.7777778vh);height:min(100vh,56.25vw);
+  transform:translate(-50%,-50%);transform-origin:center center;
+  overflow:hidden;background:#090a0d;
+  contain:layout paint size;isolation:isolate;
+}
+html.is-stage .scene{
+  position:absolute!important;inset:0!important;
+  width:100%!important;height:100%!important;min-height:0!important;
+  display:none;overflow:hidden;
+  padding:var(--top) var(--pad) var(--bot)!important;
+  background:#090a0d!important;color:#f5f5f5!important;
+  isolation:isolate;
+}
+html.is-stage .scene.on,
+html.is-stage .scene.is-out-next,
+html.is-stage .scene.is-out-prev{display:flex}
+html.is-stage .scene.on{z-index:2}
+html.is-stage .scene.is-out-next,
+html.is-stage .scene.is-out-prev{z-index:3;pointer-events:none}
+
+@keyframes pptEnterNext{from{opacity:0;transform:translateX(2.2%) scale(.992)}to{opacity:1;transform:none}}
+@keyframes pptEnterPrev{from{opacity:0;transform:translateX(-2.2%) scale(.992)}to{opacity:1;transform:none}}
+@keyframes pptExitNext{from{opacity:1;transform:none}to{opacity:0;transform:translateX(-1.2%) scale(.996)}}
+@keyframes pptExitPrev{from{opacity:1;transform:none}to{opacity:0;transform:translateX(1.2%) scale(.996)}}
+html.is-stage .scene.is-in-next{animation:pptEnterNext .48s cubic-bezier(.2,.72,.25,1) both}
+html.is-stage .scene.is-in-prev{animation:pptEnterPrev .48s cubic-bezier(.2,.72,.25,1) both}
+html.is-stage .scene.is-out-next{animation:pptExitNext .42s ease both}
+html.is-stage .scene.is-out-prev{animation:pptExitPrev .42s ease both}
+
+/* Fundo escuro uniforme, sem retirar a cor das peças e dos acentos. */
+html.is-stage .scene--paper,
+html.is-stage .scene--dark,
+html.is-stage .scene--red,
+html.is-stage .scene--blue{background:#090a0d!important;color:#f5f5f5!important}
+html.is-stage .s12__l{background:#090a0d!important;color:#f5f5f5!important}
+html.is-stage .s12__r{background:#101216!important;color:#f5f5f5!important}
+html.is-stage .s15{background:#050608!important;color:#f5f5f5!important}
+html.is-stage .hud{z-index:40}
+html.is-stage .progress{z-index:39}
+
+@media (max-aspect-ratio:4/5){
+  html.is-stage #deck{width:100vw;height:56.25vw;}
+}
+@media (prefers-reduced-motion:reduce){
+  html.is-stage .scene.is-in-next,html.is-stage .scene.is-in-prev,
+  html.is-stage .scene.is-out-next,html.is-stage .scene.is-out-prev{animation:none}
+}
+
+/* graphic surfaces harmonized with the all-dark slide theme */
+html.is-stage .matrix{background:#14161a!important;border-color:#f5f5f5}
+html.is-stage .matrix__q:nth-child(odd){background:rgba(255,255,255,.025)}
+html.is-stage .matrix__q:nth-child(even){background:rgba(255,255,255,.055)}
+html.is-stage .matrix__ax{background:#f5f5f5;opacity:.28}
+html.is-stage .s0__rule{background:#f5f5f5}
+html.is-stage .s0__mark{border-color:#f5f5f5;box-shadow:8px 8px 0 #f5f5f5}
+html.is-stage .browser__btn{background:#f5f5f5!important;color:#090a0d!important}
+html.is-stage .member{border-color:#f5f5f5;box-shadow:8px 8px 0 #000}
+html.is-stage .member__p{-webkit-text-stroke-color:#f5f5f5}
+html.is-stage .phase__stem,html.is-stage .phase::after{background:#f5f5f5}
+html.is-stage .ask{border-color:#f5f5f5}
+html.is-stage .s10__copy p{border-color:rgba(255,255,255,.22)}
+html.is-stage .status__i{border-color:rgba(255,255,255,.22)}
+@media (max-width:767px){html.is-stage .s12__grid{min-height:100%!important;height:100%}}
+html.is-stage .s12__grid{min-height:100%!important;height:100%}
+
+/* ------------------------------------------------------------------------
+   Modo de edição: interface completa inspirada no PowerPoint antes de
+   apresentar. As ferramentas da faixa são só visual; miniaturas navegam.
+   ------------------------------------------------------------------------ */
+html.is-stage,html.is-stage body{
+  width:100%;height:100%;min-height:100%;overflow:hidden!important;
+  background:#f1f1f1!important;color:#252525;overscroll-behavior:none;
+}
+html.is-stage body{position:relative}
+.pptApp{
+  position:fixed;inset:0;z-index:5;display:flex;flex-direction:column;
+  min-width:0;overflow:hidden;background:#f3f3f3;color:#242424;
+  font-family:"Segoe UI",Arial,sans-serif;font-size:13px;line-height:1.25;
+}
+.pptTopbar{
+  height:42px;flex:none;display:flex;align-items:center;gap:11px;padding:0 14px;
+  background:#fff;border-bottom:1px solid #dedede;color:#333;white-space:nowrap;
+}
+.pptBrand{width:28px;display:grid;place-items:center;flex:none}
+.pptBrand__mark{width:22px;height:24px;display:grid;place-items:center;background:#c43e1c;color:#fff;
+  border-radius:2px;font-weight:800;font-size:17px;box-shadow:2px 2px 0 #8f2b16}
+.pptQuick{display:flex;gap:9px;color:#606060;font-size:17px;border-right:1px solid #ddd;padding-right:12px}
+.pptFile{display:flex;flex-direction:column;min-width:210px;line-height:1.05}
+.pptFile strong{font-weight:500;font-size:13px}.pptFile span{font-size:10px;color:#6c6c6c;margin-top:4px}
+.pptSearch{height:27px;width:min(30vw,390px);margin:0 auto;display:flex;align-items:center;gap:9px;
+  padding:0 10px;border:1px solid #d4d4d4;border-radius:4px;background:#fafafa;color:#666}
+.pptSearch i{font-size:18px;font-style:normal}
+.pptTopActions{display:flex;align-items:center;gap:10px;margin-left:auto}
+.pptAvatar{width:24px;height:24px;display:grid;place-items:center;background:#672d91;color:#fff;border-radius:50%;font-size:9px;font-weight:700}
+.pptTopGhost{color:#555;font-size:12px;padding:5px 7px;border:1px solid #bbb;border-radius:3px}
+.pptPresent{height:30px;padding:0 12px;display:inline-flex;align-items:center;justify-content:center;gap:7px;
+  color:#fff;background:#c43e1c;border:1px solid #a83217;border-radius:3px;font-size:12px;font-weight:600;white-space:nowrap}
+.pptPresent svg{width:12px;height:12px;fill:currentColor}
+.pptPresent:hover{background:#a83217}
+.pptShare{height:30px;padding:0 13px;display:flex;align-items:center;background:#c43e1c;color:#fff;border-radius:3px;font-weight:600}
+.pptWindowBtns{color:#666;font-size:12px;margin-left:5px}
+.pptTabs{height:34px;flex:none;display:flex;align-items:stretch;gap:0;padding:0 15px;background:#fff;border-bottom:1px solid #d9d9d9;overflow:hidden}
+.pptTab{position:relative;display:flex;align-items:center;padding:0 11px;color:#333;white-space:nowrap;font-size:12px}
+.pptTab--file{color:#c43e1c}.pptTab--active{font-weight:600}
+.pptTab--active::after{content:"";position:absolute;left:10px;right:10px;bottom:0;height:3px;background:#c43e1c}
+.pptRibbon{height:91px;flex:none;display:flex;align-items:stretch;gap:0;padding:6px 10px 3px;background:#fff;
+  border-bottom:1px solid #d0d0d0;overflow:hidden}
+.pptGroup{min-width:100px;display:flex;flex-direction:column;justify-content:space-between;position:relative;
+  padding:3px 11px 0;border-right:1px solid #e2e2e2;color:#3d3d3d}
+.pptGroup:first-child{min-width:115px}.pptGroup--font{min-width:235px}.pptGroup--slideshow{min-width:155px}
+.pptGroup>small{font-size:10px;color:#6b6b6b;text-align:center;padding:2px 0 0;white-space:nowrap}
+.pptToolRow{height:59px;display:flex;align-items:center;justify-content:center;gap:9px}
+.pptBigTool{min-width:39px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:25px;color:#555}
+.pptBigTool small{font-size:10px;color:#404040;white-space:nowrap}
+.pptToolStack{font-size:10px;line-height:1.75;color:#555;white-space:nowrap}
+.pptFontLine{height:27px;display:flex;align-items:center;gap:10px;padding:0 7px;font-size:12px;color:#333}
+.pptFontLine:first-child{border:1px solid #cfcfcf;border-radius:2px;margin-bottom:2px}
+.pptFontLine:first-child span:first-child{min-width:122px}.pptFontLine:first-child span:nth-child(2){min-width:34px}
+.pptFontLine b{font-size:14px}.pptFontLine i{font-style:italic}.pptRibbonEnd{margin-left:auto;align-self:center;color:#777;padding:0 8px}
+.pptPresent--ribbon{height:43px;background:#fff;color:#444;border:1px solid #d1d1d1;font-weight:500;padding:3px 8px;flex-direction:column}
+.pptPresent--ribbon svg{width:14px;height:14px;color:#c43e1c}.pptPresent--ribbon span{font-size:10px}
+.pptPresent--ribbon:hover{background:#f3f3f3;color:#333}
+.pptWorkspace{flex:1;min-height:0;display:grid;grid-template-columns:218px minmax(0,1fr);background:#e7e7e7}
+.pptThumbRail{min-height:0;display:flex;flex-direction:column;background:#f8f8f8;border-right:1px solid #d2d2d2;overflow:hidden}
+.pptRailHead{height:35px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 13px;color:#4a4a4a}
+.pptRailHead strong{font-size:12px;font-weight:600}.pptRailHead span{color:#777}
+.pptThumbList{list-style:none;min-height:0;overflow:auto;padding:3px 9px 12px 8px;scrollbar-color:#b7b7b7 transparent;scrollbar-width:thin}
+.pptThumbList li{margin:0 0 5px}
+.pptThumb{width:100%;min-height:75px;display:grid;grid-template-columns:25px minmax(0,1fr);grid-template-rows:1fr;align-items:center;gap:5px;
+  padding:5px 5px 5px 0;text-align:left;border:1px solid transparent;border-radius:3px;color:#444;background:transparent}
+.pptThumb:hover{background:#ededed}
+.pptThumb.is-selected{border-color:#c43e1c;background:#fff;box-shadow:0 0 0 1px #c43e1c}
+.pptThumb__num{font-size:11px;text-align:center;color:#555}
+.pptThumb__page{height:62px;aspect-ratio:16/9;position:relative;overflow:hidden;display:flex;flex-direction:column;
+  padding:7px 8px 5px;background:#0a0b0e;color:#f5f5f5;border:1px solid #555;box-shadow:0 1px 2px #bbb}
+.pptThumb__page i{position:absolute;left:8px;top:6px;width:5px;height:5px;background:var(--thumb-accent)}
+.pptThumb__page b{font-size:7px;line-height:1.1;margin-top:15px;max-width:100%;max-height:16px;overflow:hidden;font-weight:700}
+.pptThumb__page strong{font-size:4px;line-height:1.2;margin-top:3px;opacity:.55;white-space:nowrap;overflow:hidden}
+.pptThumb__page em{height:1px;background:var(--thumb-accent);margin-top:auto;width:48%;opacity:.85}
+.pptThumb__label{display:none}
+.pptEditor{min-height:0;display:grid;grid-template-rows:minmax(0,1fr) 65px;overflow:hidden}
+.pptCanvas{position:relative;min-height:0;overflow:hidden;display:grid;place-items:center;padding:12px;background:#e7e7e7}
+html.is-stage #deck{
+  position:absolute;z-index:2;left:50%;top:50%;
+  width:min(100vw,177.7777778vh);height:min(100vh,56.25vw);
+  transform:translate(-50%,-50%) scale(var(--editor-scale,.66));transform-origin:center center;
+  overflow:hidden;background:#090a0d;contain:layout paint size;isolation:isolate;
+}
+.pptNotes{min-height:0;background:#fff;border-top:1px solid #d2d2d2;padding:8px 14px;display:flex;gap:10px;color:#444}
+.pptNotes__handle{width:3px;height:100%;background:#c43e1c;opacity:.75}
+.pptNotes strong{font-size:11px;font-weight:600}.pptNotes p{margin-top:5px;color:#888;font-size:12px}
+.pptStatusbar{height:25px;flex:none;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 9px;
+  background:#f8f8f8;border-top:1px solid #d4d4d4;color:#4d4d4d;font-size:10px;white-space:nowrap;overflow:hidden}
+.pptStatusLeft,.pptStatusRight{display:flex;align-items:center;gap:14px;min-width:0}
+.pptStatusRight{gap:10px}.pptViewIcons{padding-left:8px;border-left:1px solid #ccc;color:#777;font-size:14px}
+.pptZoomTrack{width:100px;height:3px;background:#c8c8c8;position:relative}
+.pptZoomTrack i{position:absolute;left:48%;top:-4px;width:11px;height:11px;border:1px solid #777;border-radius:50%;background:#fff}
+.pptStatusPresent{width:24px;height:20px;padding:0;background:transparent;color:#555;border-color:#aaa}
+html.is-stage .present,html.is-stage .fab{display:none!important}
+html.is-presenting .pptApp{display:contents}
+html.is-presenting .pptTopbar,html.is-presenting .pptTabs,html.is-presenting .pptRibbon,
+html.is-presenting .pptThumbRail,html.is-presenting .pptNotes,html.is-presenting .pptStatusbar{display:none!important}
+html.is-presenting .pptWorkspace,html.is-presenting .pptEditor,html.is-presenting .pptCanvas{display:contents}
+html.is-presenting,html.is-presenting body{background:#050608!important;overflow:hidden!important}
+html.is-presenting #deck{
+  position:fixed;z-index:999;left:50%;top:50%;
+  width:min(100vw,177.7777778vh);height:min(100vh,56.25vw);
+  transform:translate(-50%,-50%);transform-origin:center center;
+}
+@media (max-width:1120px){
+  .pptWorkspace{grid-template-columns:190px minmax(0,1fr)}
+  .pptGroup{min-width:80px;padding-left:7px;padding-right:7px}
+  .pptGroup--font{min-width:200px}.pptSearch{width:22vw}
+}
+@media (max-width:760px){
+  .pptTopGhost,.pptQuick,.pptWindowBtns,.pptGroup--slideshow{display:none}
+  .pptFile{min-width:auto}.pptSearch{display:none}
+  .pptWorkspace{grid-template-columns:150px minmax(0,1fr)}
+  .pptGroup:nth-child(n+4){display:none}
+  .pptRibbon{height:80px}
+  .pptStatusLeft span:nth-child(n+3),.pptStatusRight>span:nth-child(2){display:none}
+}
+@media (max-height:650px){
+  .pptRibbon{height:72px}.pptGroup{padding-top:0}.pptToolRow{height:43px}.pptGroup>small{font-size:8px}
+  .pptEditor{grid-template-rows:minmax(0,1fr) 48px}.pptThumb{min-height:62px}.pptThumb__page{height:50px}
+}
+@media (prefers-reduced-motion:reduce){
+  .pptApp *{scroll-behavior:auto!important;transition:none!important}
+}

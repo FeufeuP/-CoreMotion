@@ -1,0 +1,70 @@
+<button class="fab" id="openMenu" aria-label="Abrir índice" aria-haspopup="dialog">
+  <b aria-hidden="true"><i></i><i></i><i></i></b><span>Índice</span>
+</button>
+
+<!-- ============================ APRESENTAR ============================ -->
+<button class="present" id="presentBtn" type="button" aria-label="Apresentar em tela cheia" title="Apresentar em tela cheia · F5 do começo · Shift+F5 do slide atual">
+  <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4.6 2.4 13 8l-8.4 5.6z"/></svg>
+  <span>Apresentar</span>
+</button>
+
+<!-- HUD da apresentação: a barra do PowerPoint, no canto inferior esquerdo.
+     ← e → navegam; os demais ícones são só o desenho do PowerPoint
+     (o pedido é o HUD idêntico, não as ferramentas de caneta/zoom). -->
+<div class="pshow" id="pshow" role="toolbar" aria-label="Controles da apresentação" aria-hidden="true">
+  <button class="pshow__b" type="button" data-ps="prev" aria-label="Slide anterior" title="Slide anterior  ←">
+    <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12.6 4.4 7 10l5.6 5.6"/></svg>
+  </button>
+  <button class="pshow__b" type="button" data-ps="next" aria-label="Próximo slide" title="Próximo slide  →">
+    <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7.4 4.4 13 10l-5.6 5.6"/></svg>
+  </button>
+
+  <span class="pshow__sep" aria-hidden="true"></span>
+
+  <button class="pshow__b is-inert" type="button" aria-disabled="true" tabindex="-1" aria-label="Caneta e apontador (visual do PowerPoint)" title="Caneta e apontador — visual do PowerPoint">
+    <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M13.5 3.9a1.9 1.9 0 0 1 2.6.1 1.9 1.9 0 0 1 .1 2.6l-8.4 8.3L4 16l1.1-3.8z"/><path d="M12.2 5.2 15 8"/></svg>
+  </button>
+  <button class="pshow__b is-inert" type="button" aria-disabled="true" tabindex="-1" aria-label="Ver todos os slides (visual do PowerPoint)" title="Ver todos os slides — visual do PowerPoint">
+    <svg viewBox="0 0 20 20" aria-hidden="true"><rect x="3.6" y="4.1" width="5.4" height="5" rx=".7"/><rect x="11" y="4.1" width="5.4" height="5" rx=".7"/><rect x="3.6" y="10.9" width="5.4" height="5" rx=".7"/><rect x="11" y="10.9" width="5.4" height="5" rx=".7"/></svg>
+  </button>
+  <button class="pshow__b is-inert" type="button" aria-disabled="true" tabindex="-1" aria-label="Zoom no slide (visual do PowerPoint)" title="Zoom no slide — visual do PowerPoint">
+    <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="9" cy="9" r="4.6"/><path d="M12.5 12.5 16.5 16.5M6.9 9h4.2M9 6.9v4.2"/></svg>
+  </button>
+  <button class="pshow__b is-inert" type="button" aria-disabled="true" tabindex="-1" aria-label="Legendas (visual do PowerPoint)" title="Legendas — visual do PowerPoint">
+    <svg viewBox="0 0 20 20" aria-hidden="true"><rect x="3" y="5.2" width="14" height="9.6" rx="1.4"/><path d="M8.6 8.9a2.1 2.1 0 1 0 0 2.9M14.2 8.9a2.1 2.1 0 1 0 0 2.9"/></svg>
+  </button>
+
+  <span class="pshow__sep" aria-hidden="true"></span>
+
+  <button class="pshow__b" type="button" data-ps="more" aria-label="Mais opções" aria-haspopup="menu" aria-expanded="false" title="Mais opções">
+    <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="4.6" cy="10" r="1.15" style="fill:currentColor;stroke:none"/><circle cx="10" cy="10" r="1.15" style="fill:currentColor;stroke:none"/><circle cx="15.4" cy="10" r="1.15" style="fill:currentColor;stroke:none"/></svg>
+  </button>
+</div>
+
+<div class="pshow__menu" id="pshowMenu" role="menu" aria-label="Opções da apresentação" hidden>
+  <button class="pshow__mi" type="button" data-ps="end" role="menuitem">Encerrar apresentação <kbd>Esc</kbd></button>
+</div>
+
+<div class="pshow__goto" id="pshowGoto" aria-live="polite" hidden></div>
+
+<div class="progress" aria-hidden="true">
+  <div class="progress__bar"></div>
+  <div class="progress__fill" id="progFill"></div>
+</div>
+
+</main>
+      </div>
+      <section class="pptNotes" aria-label="Anotações do apresentador">
+        <span class="pptNotes__handle" aria-hidden="true"></span>
+        <div><strong>Anotações</strong><p>Clique para adicionar anotações</p></div>
+      </section>
+    </section>
+  </div>
+  <footer class="pptStatusbar" aria-label="Barra de status">
+    <div class="pptStatusLeft"><span id="pptSlideStatus">Slide 1 de 16</span><span id="pptPageName">Abertura</span><span>Português (Brasil)</span><span>♿ Acessibilidade: investigar</span></div>
+    <div class="pptStatusRight"><span>Notas</span><span>Comentários</span><span class="pptViewIcons" aria-hidden="true">▣　▦　▤</span><span>−</span><span class="pptZoomTrack"><i></i></span><span>＋</span><span id="pptZoomValue">100%</span><button class="pptStatusPresent pptPresent" type="button" data-from="current" aria-label="Apresentar do slide atual">⛶</button></div>
+  </footer>
+</div>
+<script>/*__APP__*/</script>
+</body>
+</html>

@@ -102,3 +102,41 @@
   font-size:clamp(9px,.78vw,11px);letter-spacing:.16em;text-transform:uppercase;opacity:.75}
 .custody__row i{width:22px;height:2px;background:var(--red);display:block;flex:none}
 .custody__row.tick i{width:8px;height:8px;border-radius:50%;background:var(--red);box-shadow:0 0 0 4px rgba(255,51,51,.2)}
+
+
+/* ==========================================================================
+   Palco de slide — cenas que eram full-bleed (03 e 14) e a 06
+   --------------------------------------------------------------------------
+   No PPTX estes slides são uma "caixa" desenhada sobre o fundo, com barra de
+   título; no deck web o palco ocupa o slide inteiro, mas o conteúdo continua
+   abaixo do HUD e do fio.
+   ========================================================================== */
+.s3{padding-top:calc(var(--hud-h) + clamp(18px,3vh,34px));padding-bottom:calc(var(--bot) + 16px)}
+.s3__ring,.s3__ring2{top:46%}
+.s3__ring{width:min(96vw,1260px)}
+.s3__ring2{width:min(64vw,860px)}
+
+.s14{padding-top:calc(var(--hud-h) + clamp(16px,2.6vh,30px))}
+.s14 .ask{margin-top:clamp(22px,3vw,40px)}
+
+@media (max-height:780px){
+  .s3{padding-top:calc(var(--hud-h) + 10px)}
+  .s3__pains{margin-top:clamp(20px,3vw,40px)}
+  .s14{padding-top:calc(var(--hud-h) + 8px)}
+  .s14 .ask__n{font-size:clamp(26px,3.6vw,48px)}
+}
+
+/* 06 · destaque amarelo: texto dentro do cartão em qualquer altura de tela */
+.s6__foot{grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr)}
+.callout{display:flex;flex-direction:column;justify-content:center;min-width:0;overflow:hidden}
+.callout .mono{flex:none}
+.callout b{max-width:100%}
+@media (min-width:1024px) and (max-height:920px) and (min-aspect-ratio:4/3){
+  .callout b{font-size:clamp(15px,1.5vw,20px);line-height:1.08;max-width:22ch}
+  .callout .mono{font-size:clamp(8px,.66vw,9px)}
+}
+
+html.is-stage .why,html.is-stage .layer{background:#15171b!important;color:#f5f5f5!important;border-color:#f5f5f5}
+html.is-stage .layer__tags span{background:#202329;color:#f5f5f5}
+html.is-stage .layer__tags span:hover{background:#30343b}
+html.is-stage .s6__foot .callout{color:#08090b!important}
