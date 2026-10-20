@@ -5,14 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>CoreMotion — Pitch 2026</title>
 <meta name="description" content="CoreMotion: o ponto de encontro do esporte de alta performance. Marketplace com lojas verificadas e custódia de pagamento.">
-<meta name="color-scheme" content="light">
-<meta name="theme-color" content="#ffffff">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#090a0d">
 <script>
 document.documentElement.className = 'js';
 setTimeout(function(){
   if(!document.querySelector('.scene.on')){
-    var all = document.querySelectorAll('.scene');
-    for(var i=0;i<all.length;i++) all[i].classList.add('on');
+    var first = document.querySelector('.scene');
+    if(first) first.classList.add('on');
   }
 }, 2600);
 </script>
@@ -40,9 +40,9 @@ setTimeout(function(){
   --sans:"DM Sans",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
   --mono:"Space Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
 
-  --pad:clamp(20px,5.4vw,92px);
-  --top:clamp(88px,12vh,128px);
-  --bot:clamp(64px,9vh,96px);
+  --pad:clamp(20px,5.4cqw,92px);
+  --top:clamp(88px,12cqh,128px);
+  --bot:clamp(64px,9cqh,96px);
 
   --ease:cubic-bezier(.16,1,.3,1);
   --ease-io:cubic-bezier(.65,0,.35,1);
@@ -53,6 +53,7 @@ html{
   scroll-behavior:smooth;
   -webkit-text-size-adjust:100%;
   background:var(--paper);
+  --hud-h:clamp(86px,12cqh,128px);
 }
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
@@ -83,15 +84,15 @@ body.has-cursor button,body.has-cursor a{cursor:none}
 .mono{
   font-family:var(--mono);
   font-weight:700;
-  font-size:clamp(9px,.82vw,11.5px);
+  font-size:clamp(9px,.82cqw,11.5px);
   letter-spacing:.2em;
   text-transform:uppercase;
   line-height:1.5;
 }
-.mono--s{font-size:clamp(8px,.7vw,10px);letter-spacing:.26em}
-.mono--l{font-size:clamp(11px,1vw,14px);letter-spacing:.14em}
+.mono--s{font-size:clamp(8px,.7cqw,10px);letter-spacing:.26em}
+.mono--l{font-size:clamp(11px,1cqw,14px);letter-spacing:.14em}
 .lead{
-  font-size:clamp(16px,1.42vw,21px);
+  font-size:clamp(16px,1.42cqw,21px);
   line-height:1.5;
   font-weight:500;
   letter-spacing:-.01em;
@@ -99,21 +100,21 @@ body.has-cursor button,body.has-cursor a{cursor:none}
   text-wrap:pretty;
 }
 .h1{
-  font-size:clamp(38px,6.6vw,104px);
+  font-size:clamp(38px,6.6cqw,104px);
   line-height:.92;
   letter-spacing:-.045em;
   font-weight:800;
   text-wrap:balance;
 }
 .h2{
-  font-size:clamp(30px,4.5vw,68px);
+  font-size:clamp(30px,4.5cqw,68px);
   line-height:.96;
   letter-spacing:-.038em;
   font-weight:800;
   text-wrap:balance;
 }
 .h3{
-  font-size:clamp(19px,1.75vw,26px);
+  font-size:clamp(19px,1.75cqw,26px);
   line-height:1.14;
   letter-spacing:-.02em;
   font-weight:800;
@@ -124,7 +125,7 @@ body.has-cursor button,body.has-cursor a{cursor:none}
 /* ---------- cena --------------------------------------------------------- */
 .scene{
   position:relative;
-  min-height:100vh;
+  min-height:100cqh;
   min-height:100svh;
   display:flex;
   flex-direction:column;
@@ -133,6 +134,11 @@ body.has-cursor button,body.has-cursor a{cursor:none}
   overflow:hidden;
   isolation:isolate;
 }
+/* palco de slide: 1 cena = 1 tela (só onde a apresentação acontece) */
+@media (min-width:1024px) and (min-aspect-ratio:4/3){
+  .scene{height:100cqh;height:100svh}
+}
+
 .scene--dark{background:var(--ink);color:#fff;--bg:#000;--fg:#fff}
 .scene--red{background:var(--red);color:#fff;--bg:#ff3333;--fg:#fff}
 .scene--blue{background:var(--blue);color:#fff;--bg:#0066ff;--fg:#fff}
@@ -141,7 +147,7 @@ body.has-cursor button,body.has-cursor a{cursor:none}
 .inner{width:100%;max-width:1520px;margin:0 auto;position:relative;z-index:2}
 
 /* cabeçalho de cena */
-.eyebrow{display:flex;align-items:center;gap:12px;margin-bottom:clamp(18px,2.4vw,32px)}
+.eyebrow{display:flex;align-items:center;gap:12px;margin-bottom:clamp(18px,2.4cqw,32px)}
 .eyebrow i{width:10px;height:10px;background:var(--red);flex:none;display:block}
 .scene--red .eyebrow i,.scene--blue .eyebrow i{background:#fff}
 .eyebrow b{font-weight:700}
@@ -176,24 +182,40 @@ html:not(.js) .line>span{transform:none}
 .par--x{transform:translate3d(calc(var(--p,0) * -40px),calc(var(--p,0) * -20px),0)}
 .par--f{transform:translate3d(0,calc(var(--p,0) * -90px),0)}
 
-/* ---------- hud ---------------------------------------------------------- */
+/* ---------- hud ----------------------------------------------------------
+   Mesmo chrome do PPTX (`chrome()` em brutal_lib.py): ponto de accent +
+   marca em mono caixa-alta, seção e contador alinhados à direita, e o fio
+   inferior (que aqui também mostra o progresso da apresentação).
+   ------------------------------------------------------------------------ */
 .hud{
   position:fixed;z-index:40;inset:0 0 auto 0;
   display:flex;align-items:center;justify-content:space-between;gap:16px;
-  padding:18px var(--pad);
+  padding:20px var(--pad) 0;
   color:var(--ink);
-  transition:color .45s var(--ease),background .45s var(--ease);
+  --hud-dot:var(--red);
+  transition:color .45s var(--ease);
   pointer-events:none;
 }
 .hud>*{pointer-events:auto}
 .hud--light{color:#fff}
-.hud__brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:-.03em;font-size:clamp(14px,1.15vw,17px)}
-.hud__brand i{width:12px;height:12px;background:var(--red);display:block;transition:transform .6s var(--ease)}
+.hud--red,.hud--blue{--hud-dot:var(--yellow)}
+.hud__brand{
+  display:flex;align-items:center;gap:12px;
+  font-family:var(--mono);font-weight:700;font-size:clamp(9px,.8cqw,11px);
+  letter-spacing:.26em;text-transform:uppercase;line-height:1;
+}
+.hud__brand i{
+  width:11px;height:11px;background:var(--hud-dot);display:block;flex:none;
+  transition:transform .6s var(--ease),background .45s var(--ease);
+}
 .hud:hover .hud__brand i{transform:rotate(90deg)}
-.hud__mid{display:flex;align-items:center;gap:10px;opacity:.72}
-.hud__mid em{font-style:normal;opacity:.55}
-.hud__num{font-family:var(--mono);font-weight:700;font-size:clamp(9px,.8vw,11px);letter-spacing:.16em;display:flex;align-items:baseline;gap:4px}
-.hud__num b{font-size:clamp(12px,1vw,14px)}
+.hud__count{
+  display:flex;align-items:baseline;gap:10px;
+  font-family:var(--mono);font-weight:700;font-size:clamp(9px,.8cqw,11px);
+  letter-spacing:.2em;text-transform:uppercase;line-height:1;opacity:.72;
+}
+.hud__num{display:flex;align-items:baseline;gap:0}
+.hud__num b{font-size:clamp(10px,.9cqw,12px)}
 .hud__menu{display:flex;gap:8px;align-items:center}
 .hud__menu button{
   font-family:var(--mono);font-weight:700;font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;
@@ -202,13 +224,14 @@ html:not(.js) .line>span{transform:none}
 .hud__menu button:hover{background:currentColor;transform:translateY(-2px)}
 .hud__menu button:hover span{color:var(--paper);mix-blend-mode:difference}
 
-.progress{position:fixed;left:0;right:0;bottom:0;height:5px;z-index:41;background:transparent;mix-blend-mode:normal}
-.progress__bar{position:absolute;inset:0;background:rgba(0,0,0,.10)}
+/* fio inferior do chrome: linha sólida de ponta a ponta, progresso em vermelho */
+.progress{position:fixed;left:0;right:0;bottom:0;height:4px;z-index:41}
+.progress__bar{position:absolute;inset:0;background:var(--ink);transition:background .45s var(--ease)}
 .progress__fill{position:absolute;left:0;top:0;bottom:0;width:0;background:var(--red);transition:width .18s linear}
-.progress__ticks{position:absolute;inset:0;display:flex}
-.progress__ticks i{flex:1;border-right:1px solid rgba(255,255,255,.55);mix-blend-mode:overlay}
-.progress__ticks i:last-child{border:0}
-.hud--light ~ .progress .progress__bar{background:rgba(255,255,255,.18)}
+.hud--light ~ .progress .progress__bar{background:#fff}
+.hud--split ~ .progress .progress__bar{background:linear-gradient(90deg,var(--ink) 0 61.9%,#fff 61.9% 100%)}
+.hud--split .hud__brand{color:var(--ink)}
+.hud--split .hud__count{color:#fff}
 
 /* ---------- cursor / grão / glow ---------------------------------------- */
 .cursor{
@@ -249,7 +272,7 @@ html:not(.js) .line>span{transform:none}
 .tag{
   display:inline-flex;align-items:center;gap:8px;
   border:2px solid currentColor;padding:7px 11px;
-  font-family:var(--mono);font-weight:700;font-size:clamp(8.5px,.72vw,10.5px);
+  font-family:var(--mono);font-weight:700;font-size:clamp(8.5px,.72cqw,10.5px);
   letter-spacing:.18em;text-transform:uppercase;line-height:1;
 }
 .tag--fill{background:var(--ink);color:#fff;border-color:var(--ink)}
@@ -268,7 +291,7 @@ html:not(.js) .line>span{transform:none}
 .mq--yellow{background:var(--yellow);color:var(--ink)}
 .mq__track{display:flex;width:max-content;animation:mq 32s linear infinite}
 .mq__track span{display:flex;align-items:center;gap:34px;padding-right:34px;
-  font-family:var(--mono);font-weight:700;font-size:clamp(10px,.85vw,12px);letter-spacing:.24em;text-transform:uppercase;white-space:nowrap}
+  font-family:var(--mono);font-weight:700;font-size:clamp(10px,.85cqw,12px);letter-spacing:.24em;text-transform:uppercase;white-space:nowrap}
 .mq__track i{width:7px;height:7px;background:currentColor;display:block;flex:none}
 .mq--yellow i{background:var(--red)}
 @keyframes mq{to{transform:translateX(-50%)}}
@@ -283,8 +306,103 @@ html:not(.js) .line>span{transform:none}
 /* foco visível */
 :focus-visible{outline:3px solid var(--red);outline-offset:4px}
 
+/* impressão: uma cena por página */
+@media print{
+  .scene{height:auto;min-height:0;page-break-after:always;break-after:page}
+  .scene:last-child{page-break-after:auto;break-after:auto}
+}
+
 /* sem js: tudo visível */
 html:not(.js) .rv,html:not(.js) .line>span{opacity:1 !important;transform:none !important;clip-path:none !important}
+</style>
+<style>/* ==========================================================================
+   FX · relevo 3D colorido
+   --------------------------------------------------------------------------
+   Decoração de fundo das cenas: tênis, camisa, boné, garrafa, mochila, medalha,
+   relógio, faixa, óculos, halter, bola e raquete — cada peça com UMA cor
+   sorteada da paleta do deck e em relevo 3D "extrudado" (a mesma cor em
+   camadas, sem gradiente).
+
+   - O sprite é montado em JS (ver `FX_ICONS` / `fxSprite` no app.js) e
+     injetado como <div class="fx3d"> dentro de cada cena, menos a última.
+   - Para acrescentar um item: adicione os `d` de um ou mais paths (viewBox
+     0 0 112 112) em `FX_ICONS`, no app.js. O relevo e o sorteio são automáticos.
+   - A cor vem de `--fx` (inline, definida por `paletteOf()` no app.js), limitada
+     a um conjunto de cores que existe em cada fundo: branco, preto, vermelho,
+     azul e a cena dividida. A opacidade base é da cena (`--fxo`) — é o que
+     mantém a decoração atrás do conteúdo.
+   - Movimento: o item (`.fx`) atravessa a cena devagar de um lado para o
+     outro; o miolo (`.fx__in`) gira em 3D, sempre devagar.
+   - Tudo pausa quando a cena não está visível e some na impressão.
+   ========================================================================== */
+
+.fx3d{
+  position:absolute;inset:0;z-index:1;overflow:hidden;pointer-events:none;
+  perspective:1200px;perspective-origin:50% 45%;
+  /* some suave nas bordas: peça cortada pela borda do slide vira degradê,
+     não uma faixa de cor */
+  -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 8%,#000 91%,transparent 100%),
+                     linear-gradient(90deg,transparent 0,#000 6%,#000 94%,transparent 100%);
+  -webkit-mask-composite:source-in;
+  mask-image:linear-gradient(180deg,transparent 0,#000 8%,#000 91%,transparent 100%),
+             linear-gradient(90deg,transparent 0,#000 6%,#000 94%,transparent 100%);
+  mask-composite:intersect;
+  --fx:#ff3333;   /* fallback; cada peça traz a própria cor */
+  --fxo:.48;      /* opacidade base, definida pelo fundo da cena */
+}
+.scene--dark .fx3d{--fxo:.58}
+.scene--red  .fx3d{--fxo:.50}
+.scene--blue .fx3d{--fxo:.50}
+.s12 .fx3d{--fxo:.48}
+.s0 .fx3d{--fxo:.45}
+
+/* a cena 12 é dividida: o texto das duas metades vive acima do fundo e a
+   decoração passa por trás do painel preto (como um cartão na frente) */
+.s12__l,.s12__r{position:relative;z-index:2}
+
+.fx{
+  position:absolute;left:var(--l,50%);top:var(--t,50%);
+  width:var(--w,120px);aspect-ratio:1;
+  color:var(--fx);
+  opacity:calc(var(--fxo) * var(--fo,1));
+  transform-style:preserve-3d;
+  /* duas animações independentes: `transform` faz a viagem lateral e
+     `translate` (propriedade separada) faz o balanço vertical */
+  animation:fxDrift var(--dur,70s) linear infinite alternate,
+            fxBob var(--bdur,9s) ease-in-out infinite alternate;
+  animation-delay:var(--del,0s),var(--bdel,0s);
+}
+.scene.on .fx{will-change:transform}
+.fx__in{
+  display:block;width:100%;height:100%;
+  transform-style:preserve-3d;
+  animation:fxTurn var(--tdur,26s) ease-in-out infinite alternate;
+  animation-delay:var(--tdel,0s);
+}
+.fx svg{display:block;width:100%;height:100%;overflow:visible;fill:currentColor}
+
+@keyframes fxDrift{
+  from{transform:translate3d(calc(var(--dx,20cqw) * -.5),calc(var(--dy,6cqh) * -.5),var(--z,0px))}
+  to  {transform:translate3d(calc(var(--dx,20cqw) * .5),calc(var(--dy,6cqh) * .5),var(--z,0px))}
+}
+@keyframes fxBob{
+  from{translate:0 calc(var(--bob,8px) * -1)}
+  to  {translate:0 var(--bob,8px)}
+}
+@keyframes fxTurn{
+  from{transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) rotateZ(var(--rz,0deg)) scaleX(var(--sx,1))}
+  to  {transform:rotateX(var(--rx2,0deg)) rotateY(var(--ry2,0deg)) rotateZ(var(--rz2,0deg)) scaleX(var(--sx,1))}
+}
+
+/* fora de tela: congela (economiza bateria durante a apresentação) */
+.js .scene:not(.on) .fx{animation-play-state:paused}
+.js .scene:not(.on) .fx__in{animation-play-state:paused}
+
+@media print{.fx3d{display:none !important}}
+
+@media (prefers-reduced-motion:reduce){
+  .fx,.fx__in{animation:none !important;transform:none !important}
+}
 </style>
 <style>/* ==========================================================================
    Interface — índice, transições de cena
@@ -320,8 +438,7 @@ html:not(.js) .rv,html:not(.js) .line>span{opacity:1 !important;transform:none !
 .menu__list li.is-now .t{color:var(--red)}
 .menu__foot{display:flex;gap:22px;flex-wrap:wrap;margin-top:clamp(16px,2.6vh,32px);opacity:.4}
 
-/* cena dividida: metade clara, metade escura */
-.hud--split .hud__brand,.hud--split .hud__mid{color:#000}
+/* cena dividida: metade clara, metade escura (o resto está em base.css) */
 .hud--split .hud__num{color:#fff}
 
 /* linha de transição: aparece quando uma cena entra */
@@ -352,22 +469,136 @@ html:not(.js) .rv,html:not(.js) .line>span{opacity:1 !important;transform:none !
 }
 </style>
 <style>/* ==========================================================================
+   Cena 00 — Abertura (logo)
+   --------------------------------------------------------------------------
+   Slide de marca: logo centralizada + frase de efeito.
+   O "reveal" é montado em camadas independentes, todas disparadas por
+   `.scene.on`. Para trocar a animação depois, mexa só nos @keyframes `s0*`
+   e nos tempos de cada camada:
+
+     .s0__wipe    painel vermelho que descobre a cena (cortina)
+     .s0__mark    monograma CM
+     .s0__word    assinatura "CoreMotion."
+     .s0__rule    fio que separa a logo da frase
+     .s0__slogan  frase de efeito
+     .s0__sub     linha de apoio
+     .s0__scroll  convite para rolar
+   ========================================================================== */
+
+.s0{
+  justify-content:center;align-items:center;text-align:center;
+  padding-bottom:calc(var(--bot) + 24px);
+}
+.s0__in{
+  position:relative;z-index:2;
+  display:flex;flex-direction:column;align-items:center;
+  width:100%;max-width:1220px;
+}
+
+/* ---------- logo -------------------------------------------------------- */
+.s0__lockup{
+  display:flex;align-items:center;justify-content:center;
+  gap:clamp(12px,2cqw,28px);flex-wrap:wrap;
+}
+.s0__mark{
+  position:relative;overflow:hidden;
+  width:clamp(58px,7.2cqw,98px);aspect-ratio:1;
+  background:var(--red);color:#fff;
+  border:3px solid var(--ink);box-shadow:8px 8px 0 var(--ink);
+  display:grid;place-items:center;
+  font-weight:800;font-size:clamp(20px,2.5cqw,34px);
+  letter-spacing:-.06em;line-height:1;
+}
+.s0__mark::after{
+  content:"";position:absolute;inset:-20%;
+  background:linear-gradient(115deg,transparent 38%,rgba(255,255,255,.6) 50%,transparent 62%);
+  transform:translateX(-135%);
+}
+.s0__word{
+  font-size:clamp(34px,8.4cqw,118px);
+  font-weight:800;letter-spacing:-.06em;line-height:.86;
+  padding-bottom:.06em;margin-bottom:-.06em;
+}
+.s0__word i{font-style:normal;color:var(--red);margin-left:-.05em}
+
+/* ---------- frase ------------------------------------------------------- */
+.s0__rule{
+  width:clamp(84px,9cqw,132px);height:8px;background:var(--ink);
+  margin-top:clamp(28px,3.8cqw,46px);
+}
+.s0__slogan{
+  margin-top:clamp(26px,3.6cqw,50px);
+  font-size:clamp(23px,2.9cqw,45px);
+  line-height:1.08;letter-spacing:-.035em;font-weight:500;
+}
+.s0__slogan em{font-style:normal;font-weight:800;color:var(--red)}
+.s0__sub{margin-top:clamp(14px,1.7cqw,22px);opacity:.55}
+
+/* ---------- convite ----------------------------------------------------- */
+.s0__scroll{
+  position:absolute;left:50%;bottom:clamp(26px,5cqh,48px);z-index:5;
+  transform:translateX(-50%);
+}
+
+/* ---------- reveal ------------------------------------------------------ */
+.js .s0__reveal{display:block}
+.s0__reveal{display:none;position:absolute;inset:0;z-index:9;pointer-events:none}
+.s0__wipe{position:absolute;inset:0;background:var(--red);transform:translateY(0)}
+
+@keyframes s0Wipe{from{transform:translateY(0)}to{transform:translateY(-101%)}}
+@keyframes s0Mark{
+  from{opacity:0;transform:scale(.55) rotate(-10deg)}
+  to  {opacity:1;transform:none}
+}
+@keyframes s0Word{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+@keyframes s0Rule{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes s0Sub{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes s0Shine{from{transform:translateX(-135%)}to{transform:translateX(135%)}}
+@keyframes s0Scroll{
+  from{opacity:0;transform:translate(-50%,10px)}
+  to  {opacity:.55;transform:translate(-50%,0)}
+}
+
+.js .s0.on .s0__wipe{animation:s0Wipe 1.05s var(--ease-io) .2s both}
+.js .s0.on .s0__mark{animation:s0Mark .85s var(--ease) .62s both}
+.js .s0.on .s0__mark::after{animation:s0Shine .95s var(--ease) 1.25s both}
+.js .s0.on .s0__word{animation:s0Word .95s var(--ease) .82s both}
+.js .s0.on .s0__rule{animation:s0Rule .8s var(--ease) 1.12s both}
+.js .s0__slogan .line>span{transition-delay:1.22s}
+.js .s0.on .s0__sub{animation:s0Sub .8s var(--ease) 1.45s both}
+.js .s0.on .s0__scroll{animation:s0Scroll .9s var(--ease) 1.7s both}
+
+@media (max-width:560px){
+  .s0__lockup{gap:10px}
+  .s0__mark{box-shadow:5px 5px 0 var(--ink);border-width:2.5px}
+  .s0__rule{height:6px}
+}
+
+/* sem movimento: a cena já nasce montada, sem cortina nem espera */
+@media (prefers-reduced-motion:reduce){
+  .s0__wipe{display:none}
+  .s0__mark,.s0__mark::after,.s0__word,.s0__rule,.s0__sub,.s0__scroll{animation-delay:0s !important}
+}
+
+/* impressão: nunca imprimir a cortina */
+@media print{.s0__reveal{display:none !important}}
+</style>
+<style>/* ==========================================================================
    Cena 01 — Capa
    ========================================================================== */
-.s1{padding-bottom:clamp(96px,12vh,132px);justify-content:center}
+.s1{padding-bottom:clamp(96px,12cqh,132px);justify-content:center}
 .s1__grid{
   display:grid;grid-template-columns:1.08fr .92fr;
-  gap:clamp(20px,4vw,70px);align-items:center;width:100%;
+  gap:clamp(20px,4cqw,70px);align-items:center;width:100%;
 }
-.s1__title{font-size:clamp(46px,7.9vw,124px);line-height:.86;letter-spacing:-.055em;font-weight:800;margin-top:clamp(16px,2vw,26px)}
+.s1__title{font-size:clamp(46px,7.9cqw,124px);line-height:.86;letter-spacing:-.055em;font-weight:800;margin-top:clamp(16px,2cqw,26px)}
 .s1__title span{display:block}
-.s1__under{width:clamp(120px,15vw,210px);height:10px;background:var(--red);margin-top:clamp(14px,1.8vw,22px)}
-.s1__lead{font-size:clamp(18px,1.85vw,27px);line-height:1.24;letter-spacing:-.02em;font-weight:500;margin-top:clamp(18px,2.4vw,30px);max-width:24ch}
+.s1__under{width:clamp(120px,15cqw,210px);height:10px;background:var(--red);margin-top:clamp(14px,1.8cqw,22px)}
+.s1__lead{font-size:clamp(18px,1.85cqw,27px);line-height:1.24;letter-spacing:-.02em;font-weight:500;margin-top:clamp(18px,2.4cqw,30px);max-width:24ch}
 .s1__lead b{font-weight:800}
-.s1__meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:clamp(20px,2.6vw,34px)}
-.s1__by{margin-top:clamp(18px,2.2vw,28px);opacity:.62}
+.s1__meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:clamp(20px,2.6cqw,34px)}
 
-.s1__art{position:relative;width:100%;max-width:min(44vw,540px);aspect-ratio:1;margin-left:auto}
+.s1__art{position:relative;width:100%;max-width:min(44cqw,540px);aspect-ratio:1;margin-left:auto}
 .s1__art .i{position:absolute;will-change:transform}
 .bigdisc{
   left:10%;top:8%;width:78%;height:78%;border-radius:50%;
@@ -399,7 +630,7 @@ html:not(.js) .rv,html:not(.js) .line>span{opacity:1 !important;transform:none !
 .chip{
   position:absolute;display:inline-flex;align-items:center;gap:7px;white-space:nowrap;
   background:#fff;color:#000;border:2px solid #000;box-shadow:5px 5px 0 #000;
-  padding:8px 11px;font-family:var(--mono);font-weight:700;font-size:clamp(8px,.62vw,9.5px);
+  padding:8px 11px;font-family:var(--mono);font-weight:700;font-size:clamp(8px,.62cqw,9.5px);
   letter-spacing:.14em;text-transform:uppercase;line-height:1;
 }
 .chip i{width:7px;height:7px;display:block;flex:none;background:var(--green)}
@@ -412,7 +643,7 @@ html:not(.js) .rv,html:not(.js) .line>span{opacity:1 !important;transform:none !
 .c3{right:2%;top:66%;transform:rotate(-2deg)}
 
 .s1 .mq{position:absolute;left:0;right:0;bottom:0;z-index:4}
-.s1__scroll{position:absolute;left:var(--pad);bottom:clamp(64px,9vh,90px);z-index:5}
+.s1__scroll{position:absolute;left:var(--pad);bottom:clamp(64px,9cqh,90px);z-index:5}
 
 /* ==========================================================================
    Cena 02 — Agenda
@@ -422,11 +653,11 @@ html:not(.js) .rv,html:not(.js) .line>span{opacity:1 !important;transform:none !
 .s2__title{max-width:14ch}
 .s2__note{max-width:26ch;opacity:.66;text-align:right}
 
-.ag{margin-top:clamp(24px,3.4vw,52px);border-top:1.5px solid rgba(255,255,255,.3)}
+.ag{margin-top:clamp(24px,3.4cqw,52px);border-top:1.5px solid rgba(255,255,255,.3)}
 .ag__row{
-  position:relative;display:grid;grid-template-columns:clamp(64px,8.5vw,132px) 1fr auto;
-  gap:clamp(14px,3vw,46px);align-items:center;
-  padding:clamp(15px,2.3vw,27px) 0;
+  position:relative;display:grid;grid-template-columns:clamp(64px,8.5cqw,132px) 1fr auto;
+  gap:clamp(14px,3cqw,46px);align-items:center;
+  padding:clamp(15px,2.3cqw,27px) 0;
   border-bottom:1.5px solid rgba(255,255,255,.3);
   color:#fff;transition:color .45s var(--ease),padding .55s var(--ease);
 }
@@ -436,17 +667,17 @@ html:not(.js) .rv,html:not(.js) .line>span{opacity:1 !important;transform:none !
   transform:scaleY(0);transform-origin:bottom;
   transition:transform .55s var(--ease);
 }
-.ag__row:hover{color:#000;padding-left:clamp(10px,1.6vw,26px)}
+.ag__row:hover{color:#000;padding-left:clamp(10px,1.6cqw,26px)}
 .ag__row:hover::before{transform:scaleY(1);transform-origin:top}
 .ag__n{
-  font-size:clamp(26px,3.9vw,58px);font-weight:800;line-height:1;letter-spacing:-.04em;
+  font-size:clamp(26px,3.9cqw,58px);font-weight:800;line-height:1;letter-spacing:-.04em;
   color:transparent;-webkit-text-stroke:1.4px #fff;transition:-webkit-text-stroke-color .45s;
 }
 .ag__row:hover .ag__n{-webkit-text-stroke-color:#000}
-.ag__t{font-size:clamp(21px,2.7vw,42px);font-weight:800;letter-spacing:-.03em;line-height:1}
-.ag__d{font-size:clamp(13px,1.05vw,16px);opacity:.7;max-width:36ch;line-height:1.42}
+.ag__t{font-size:clamp(21px,2.7cqw,42px);font-weight:800;letter-spacing:-.03em;line-height:1}
+.ag__d{font-size:clamp(13px,1.05cqw,16px);opacity:.7;max-width:36ch;line-height:1.42}
 .ag__row:hover .ag__d{opacity:.8}
-.ag__arr{width:clamp(26px,3vw,44px);height:clamp(26px,3vw,44px);border:2px solid currentColor;
+.ag__arr{width:clamp(26px,3cqw,44px);height:clamp(26px,3cqw,44px);border:2px solid currentColor;
   display:grid;place-items:center;transition:transform .5s var(--ease),background .4s,color .4s}
 .ag__arr svg{width:45%;height:45%;overflow:visible}
 .ag__arr svg path{stroke:currentColor;stroke-width:2.2;fill:none}
@@ -455,14 +686,14 @@ html:not(.js) .rv,html:not(.js) .line>span{opacity:1 !important;transform:none !
 /* ==========================================================================
    Cena 03 — Problema
    ========================================================================== */
-.s3{padding-bottom:clamp(70px,9vh,100px)}
+.s3{padding-bottom:clamp(70px,9cqh,100px)}
 .s3__ring{
-  position:absolute;left:50%;top:50%;width:min(112vw,1500px);aspect-ratio:1;
+  position:absolute;left:50%;top:50%;width:min(112cqw,1500px);aspect-ratio:1;
   transform:translate(-50%,-50%);border:2px dashed rgba(0,0,0,.28);border-radius:50%;
   animation:spinSlow 90s linear infinite;z-index:0;pointer-events:none;
 }
 .s3__ring2{
-  position:absolute;left:50%;top:50%;width:min(74vw,980px);aspect-ratio:1;
+  position:absolute;left:50%;top:50%;width:min(74cqw,980px);aspect-ratio:1;
   transform:translate(-50%,-50%);border:2px solid rgba(0,0,0,.18);border-radius:50%;
   z-index:0;pointer-events:none;
 }
@@ -473,51 +704,56 @@ html:not(.js) .rv,html:not(.js) .line>span{opacity:1 !important;transform:none !
 }
 .s3__pains{
   position:relative;z-index:2;display:grid;grid-template-columns:repeat(3,1fr);
-  gap:clamp(18px,2.6vw,44px);margin-top:clamp(34px,5vw,72px);
+  gap:clamp(18px,2.6cqw,44px);margin-top:clamp(34px,5cqw,72px);
 }
-.pain{border-top:2px solid rgba(0,0,0,.75);padding-top:clamp(12px,1.4vw,20px)}
+.pain{border-top:2px solid rgba(0,0,0,.75);padding-top:clamp(12px,1.4cqw,20px)}
 .pain__n{color:rgba(0,0,0,.6)}
-.pain h3{margin:clamp(10px,1.2vw,16px) 0 8px;color:#fff}
-.pain p{font-size:clamp(13px,1.02vw,16px);line-height:1.48;max-width:34ch;color:rgba(255,255,255,.92)}
+.pain h3{margin:clamp(10px,1.2cqw,16px) 0 8px;color:#fff}
+.pain p{font-size:clamp(13px,1.02cqw,16px);line-height:1.48;max-width:34ch;color:rgba(255,255,255,.92)}
 .s3 .mq{position:absolute;left:0;right:0;bottom:0;z-index:4}
-.s3 .inner{padding-bottom:clamp(46px,6vh,70px)}
+.s3 .inner{padding-bottom:clamp(46px,6cqh,70px)}
+
+/* palco escuro: componentes anteriormente brancos passam a grafite */
+html.is-stage .chip{background:#17191e!important;color:#f5f5f5!important;border-color:#f5f5f5}
+html.is-stage .ag__row::before{background:#f5f5f5}
+html.is-stage .ag__row:hover{color:#fff}
 </style>
 <style>/* ==========================================================================
    Cena 04 — Por que agora
    ========================================================================== */
-.s4__head{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:clamp(20px,4vw,64px);align-items:end}
+.s4__head{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:clamp(20px,4cqw,64px);align-items:end}
 .s4__aside{justify-self:end;max-width:34ch;padding-bottom:6px}
 .s4__grid{
   display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:clamp(16px,2.2vw,34px);margin-top:clamp(44px,6.5vw,96px);
+  gap:clamp(16px,2.2cqw,34px);margin-top:clamp(44px,6.5cqw,96px);
 }
 .why{
   position:relative;background:#fff;color:#000;border:2.5px solid #000;
-  box-shadow:9px 9px 0 #000;padding:clamp(18px,2vw,30px);
+  box-shadow:9px 9px 0 #000;padding:clamp(18px,2cqw,30px);
   transition:transform .55s var(--ease),box-shadow .55s var(--ease);
-  display:flex;flex-direction:column;min-height:clamp(240px,26vw,330px);
+  display:flex;flex-direction:column;min-height:clamp(240px,26cqw,330px);
 }
-.why:nth-child(2){margin-top:clamp(18px,3vw,48px)}
-.why:nth-child(3){margin-top:clamp(36px,6vw,96px)}
+.why:nth-child(2){margin-top:clamp(18px,3cqw,48px)}
+.why:nth-child(3){margin-top:clamp(36px,6cqw,96px)}
 .why::before{content:"";position:absolute;left:-2.5px;right:-2.5px;top:-2.5px;height:10px;background:var(--red)}
 .why:nth-child(2)::before{background:var(--yellow)}
 .why:nth-child(3)::before{background:var(--blue)}
 .why:hover{transform:translate(-5px,-5px);box-shadow:16px 16px 0 #000}
-.why__n{font-family:var(--mono);font-weight:700;font-size:clamp(10px,.8vw,12px);letter-spacing:.2em;opacity:.55;margin-top:8px}
-.why h3{margin-top:auto;padding-top:clamp(22px,3vw,40px)}
-.why p{margin-top:10px;font-size:clamp(13px,1.02vw,16px);line-height:1.45;max-width:32ch}
-.why__foot{margin-top:clamp(16px,2vw,24px);padding-top:12px;border-top:1.5px solid rgba(0,0,0,.25);opacity:.6}
+.why__n{font-family:var(--mono);font-weight:700;font-size:clamp(10px,.8cqw,12px);letter-spacing:.2em;opacity:.55;margin-top:8px}
+.why h3{margin-top:auto;padding-top:clamp(22px,3cqw,40px)}
+.why p{margin-top:10px;font-size:clamp(13px,1.02cqw,16px);line-height:1.45;max-width:32ch}
+.why__foot{margin-top:clamp(16px,2cqw,24px);padding-top:12px;border-top:1.5px solid rgba(0,0,0,.25);opacity:.6}
 
 /* ==========================================================================
    Cena 05 — Solução
    ========================================================================== */
 .s5__head{display:flex;justify-content:space-between;align-items:flex-end;gap:30px;flex-wrap:wrap}
 .s5__head .lead{max-width:38ch;text-align:right}
-.layers{margin-top:clamp(34px,4.6vw,64px);border-top:2px solid var(--ink)}
+.layers{margin-top:clamp(34px,4.6cqw,64px);border-top:2px solid var(--ink)}
 .layer{
-  display:grid;grid-template-columns:clamp(56px,6.5vw,96px) minmax(0,.85fr) minmax(0,1.15fr);
-  gap:clamp(14px,2.6vw,44px);align-items:start;
-  padding:clamp(18px,2.5vw,34px) 0;border-bottom:2px solid var(--ink);
+  display:grid;grid-template-columns:clamp(56px,6.5cqw,96px) minmax(0,.85fr) minmax(0,1.15fr);
+  gap:clamp(14px,2.6cqw,44px);align-items:start;
+  padding:clamp(18px,2.5cqw,34px) 0;border-bottom:2px solid var(--ink);
   position:relative;transition:background .45s var(--ease),padding-left .5s var(--ease);
 }
 .layer>*{position:relative;z-index:2}
@@ -526,32 +762,32 @@ html:not(.js) .rv,html:not(.js) .line>span{opacity:1 !important;transform:none !
   transform:scaleX(0);transform-origin:left;transition:transform .55s var(--ease);
 }
 .layer:hover::before{transform:scaleX(1)}
-.layer:hover{padding-left:clamp(8px,1.2vw,20px)}
-.layer__n{font-size:clamp(24px,3.2vw,44px);font-weight:800;line-height:1;letter-spacing:-.05em;color:transparent;-webkit-text-stroke:1.6px var(--ink)}
+.layer:hover{padding-left:clamp(8px,1.2cqw,20px)}
+.layer__n{font-size:clamp(24px,3.2cqw,44px);font-weight:800;line-height:1;letter-spacing:-.05em;color:transparent;-webkit-text-stroke:1.6px var(--ink)}
 .layer__k{display:flex;align-items:center;gap:10px;margin-bottom:10px}
 .layer__k i{width:9px;height:9px;display:block;background:var(--red)}
 .layer:nth-child(2) .layer__k i{background:var(--blue)}
 .layer:nth-child(3) .layer__k i{background:var(--green)}
 .layer h3{max-width:16ch}
-.layer__d{margin-top:10px;font-size:clamp(13px,1.02vw,16px);line-height:1.46;max-width:38ch;opacity:.78}
+.layer__d{margin-top:10px;font-size:clamp(13px,1.02cqw,16px);line-height:1.46;max-width:38ch;opacity:.78}
 .layer__tags{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;align-content:flex-start}
 .layer__tags span{
   border:1.5px solid var(--ink);padding:7px 10px;font-family:var(--mono);font-weight:700;
-  font-size:clamp(8px,.66vw,9.5px);letter-spacing:.16em;text-transform:uppercase;line-height:1;
+  font-size:clamp(8px,.66cqw,9.5px);letter-spacing:.16em;text-transform:uppercase;line-height:1;
   background:#fff;transition:background .3s,color .3s,transform .3s var(--ease);
 }
 .layer:hover .layer__tags span{background:var(--ink);color:#fff}
 .layer__tags span:nth-child(2){transition-delay:.04s}
 .layer__tags span:nth-child(3){transition-delay:.08s}
-.s5__foot{display:flex;gap:clamp(14px,2vw,28px);flex-wrap:wrap;margin-top:clamp(20px,2.6vw,34px);align-items:center}
+.s5__foot{display:flex;gap:clamp(14px,2cqw,28px);flex-wrap:wrap;margin-top:clamp(20px,2.6cqw,34px);align-items:center}
 .s5__foot .mono{opacity:.55}
-.s5__foot b{font-family:var(--mono);font-weight:700;font-size:clamp(9px,.75vw,11px);letter-spacing:.18em;text-transform:uppercase}
+.s5__foot b{font-family:var(--mono);font-weight:700;font-size:clamp(9px,.75cqw,11px);letter-spacing:.18em;text-transform:uppercase}
 
 /* ==========================================================================
    Cena 06 — Como funciona
    ========================================================================== */
 .s6__head{display:flex;justify-content:space-between;align-items:flex-end;gap:30px;flex-wrap:wrap}
-.flow{position:relative;margin-top:clamp(34px,5vw,70px);padding-top:46px}
+.flow{position:relative;margin-top:clamp(34px,5cqw,70px);padding-top:46px}
 .flow__rail{position:absolute;left:0;right:0;top:8px;height:2px;background:rgba(255,255,255,.22)}
 .flow__fill{position:absolute;left:0;top:8px;height:2px;width:0;background:var(--red);transition:width .85s var(--ease)}
 .flow__dot{
@@ -559,45 +795,83 @@ html:not(.js) .rv,html:not(.js) .line>span{opacity:1 !important;transform:none !
   border-radius:50%;transform:translateX(-50%);transition:left .85s var(--ease);
   box-shadow:0 0 0 6px rgba(255,51,51,.22);
 }
-.flow__nodes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(12px,2vw,28px)}
+.flow__nodes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(12px,2cqw,28px)}
 .node{position:relative;padding-top:0;transition:opacity .5s,transform .5s var(--ease);opacity:.42;transform:translateY(4px)}
 .node.on{opacity:1;transform:none}
 .node__dot{
-  width:18px;height:18px;border:2px solid #fff;background:#000;margin-bottom:clamp(16px,2vw,24px);
+  width:18px;height:18px;border:2px solid #fff;background:#000;margin-bottom:clamp(16px,2cqw,24px);
   transition:background .4s,border-color .4s,transform .4s var(--ease);display:block;
 }
 .node.on .node__dot{background:var(--red);border-color:var(--red);transform:rotate(45deg) scale(1.15)}
-.node__k{font-family:var(--mono);font-weight:700;font-size:clamp(8px,.66vw,9.5px);letter-spacing:.2em;text-transform:uppercase;color:var(--yellow)}
-.node h3{margin:10px 0 8px;font-size:clamp(18px,1.9vw,28px);letter-spacing:-.025em;line-height:1.05}
-.node p{font-size:clamp(12.5px,.95vw,15px);line-height:1.46;max-width:30ch;opacity:.72}
+.node__k{font-family:var(--mono);font-weight:700;font-size:clamp(8px,.66cqw,9.5px);letter-spacing:.2em;text-transform:uppercase;color:var(--yellow)}
+.node h3{margin:10px 0 8px;font-size:clamp(18px,1.9cqw,28px);letter-spacing:-.025em;line-height:1.05}
+.node p{font-size:clamp(12.5px,.95cqw,15px);line-height:1.46;max-width:30ch;opacity:.72}
 
 .s6__foot{
-  margin-top:clamp(34px,5vw,62px);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);
-  gap:clamp(18px,3vw,44px);align-items:stretch;
+  margin-top:clamp(34px,5cqw,62px);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);
+  gap:clamp(18px,3cqw,44px);align-items:stretch;
 }
 .callout{
   background:var(--yellow);color:var(--ink);border:2.5px solid var(--ink);box-shadow:9px 9px 0 rgba(255,255,255,.92);
-  padding:clamp(16px,2vw,26px);
+  padding:clamp(16px,2cqw,26px);
 }
-.callout b{display:block;font-size:clamp(19px,2vw,27px);line-height:1.04;letter-spacing:-.03em;margin-top:8px;max-width:18ch}
+.callout b{display:block;font-size:clamp(19px,2cqw,27px);line-height:1.04;letter-spacing:-.03em;margin-top:8px;max-width:18ch}
 .callout b em{font-style:normal;background:var(--ink);color:var(--yellow);padding:0 .18em}
 .custody{display:flex;flex-direction:column;justify-content:center;gap:10px}
 .custody__row{display:flex;align-items:center;gap:12px;font-family:var(--mono);font-weight:700;
-  font-size:clamp(9px,.78vw,11px);letter-spacing:.16em;text-transform:uppercase;opacity:.75}
+  font-size:clamp(9px,.78cqw,11px);letter-spacing:.16em;text-transform:uppercase;opacity:.75}
 .custody__row i{width:22px;height:2px;background:var(--red);display:block;flex:none}
 .custody__row.tick i{width:8px;height:8px;border-radius:50%;background:var(--red);box-shadow:0 0 0 4px rgba(255,51,51,.2)}
+
+
+/* ==========================================================================
+   Palco de slide — cenas que eram full-bleed (03 e 14) e a 06
+   --------------------------------------------------------------------------
+   No PPTX estes slides são uma "caixa" desenhada sobre o fundo, com barra de
+   título; no deck web o palco ocupa o slide inteiro, mas o conteúdo continua
+   abaixo do HUD e do fio.
+   ========================================================================== */
+.s3{padding-top:calc(var(--hud-h) + clamp(18px,3cqh,34px));padding-bottom:calc(var(--bot) + 16px)}
+.s3__ring,.s3__ring2{top:46%}
+.s3__ring{width:min(96cqw,1260px)}
+.s3__ring2{width:min(64cqw,860px)}
+
+.s14{padding-top:calc(var(--hud-h) + clamp(16px,2.6cqh,30px))}
+.s14 .ask{margin-top:clamp(22px,3cqw,40px)}
+
+@media (max-height:780px){
+  .s3{padding-top:calc(var(--hud-h) + 10px)}
+  .s3__pains{margin-top:clamp(20px,3cqw,40px)}
+  .s14{padding-top:calc(var(--hud-h) + 8px)}
+  .s14 .ask__n{font-size:clamp(26px,3.6cqw,48px)}
+}
+
+/* 06 · destaque amarelo: texto dentro do cartão em qualquer altura de tela */
+.s6__foot{grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr)}
+.callout{display:flex;flex-direction:column;justify-content:center;min-width:0;overflow:hidden}
+.callout .mono{flex:none}
+.callout b{max-width:100%}
+@media (min-width:1024px) and (max-height:920px) and (min-aspect-ratio:4/3){
+  .callout b{font-size:clamp(15px,1.5cqw,20px);line-height:1.08;max-width:22ch}
+  .callout .mono{font-size:clamp(8px,.66cqw,9px)}
+}
+
+html.is-stage .why,html.is-stage .layer{background:#15171b!important;color:#f5f5f5!important;border-color:#f5f5f5}
+html.is-stage .layer__tags span{background:#202329;color:#f5f5f5}
+html.is-stage .layer__tags span:hover{background:#30343b}
+html.is-stage .s6__foot .callout{color:#08090b!important}
 </style>
 <style>/* ==========================================================================
    Cena 07 — Produto
    ========================================================================== */
-.s7__grid{display:grid;grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);gap:clamp(24px,4vw,70px);align-items:center}
-.s7__copy .lead{margin-top:clamp(16px,2vw,26px);max-width:34ch;opacity:.85}
-.s7__tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:clamp(20px,2.6vw,32px)}
+.s7__grid{display:grid;grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);gap:clamp(24px,4cqw,70px);align-items:center}
+.s7__copy .lead{margin-top:clamp(16px,2cqw,26px);max-width:34ch;opacity:.85}
+.s7__tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:clamp(20px,2.6cqw,32px)}
 .s7__tags span{border:1.5px solid #fff;padding:8px 11px;font-family:var(--mono);font-weight:700;
-  font-size:clamp(8px,.66vw,9.5px);letter-spacing:.16em;text-transform:uppercase;line-height:1;transition:background .3s,color .3s}
+  font-size:clamp(8px,.66cqw,9.5px);letter-spacing:.16em;text-transform:uppercase;line-height:1;transition:background .3s,color .3s}
 .s7__tags span:hover{background:#fff;color:var(--blue)}
 
-.dev{position:relative;width:100%;max-width:min(52vw,720px);margin-left:auto}
+.dev{position:relative;width:100%;max-width:min(52cqw,720px);margin-left:auto}
 .browser{background:#fff;border:2.5px solid #000;box-shadow:14px 14px 0 rgba(0,0,0,.95);overflow:hidden;color:#000}
 .browser__bar{height:40px;border-bottom:2px solid #000;display:flex;align-items:center;gap:9px;padding:0 13px}
 .browser__bar>i{width:11px;height:11px;border:1.5px solid #000;display:block;flex:none}
@@ -624,7 +898,7 @@ html:not(.js) .rv,html:not(.js) .line>span{opacity:1 !important;transform:none !
 .browser__seal i{width:6px;height:6px;background:#000;display:block}
 
 .phone{
-  position:absolute;right:-4%;bottom:-9%;width:clamp(96px,11vw,150px);aspect-ratio:9/19;
+  position:absolute;right:-4%;bottom:-9%;width:clamp(96px,11cqw,150px);aspect-ratio:9/19;
   background:#fff;border:2.5px solid #000;box-shadow:9px 9px 0 #000;padding:7px;
   transform:rotate(-7deg);animation:bob 7.5s var(--ease-io) infinite;
 }
@@ -636,74 +910,83 @@ html:not(.js) .rv,html:not(.js) .line>span{opacity:1 !important;transform:none !
 /* ==========================================================================
    Cena 08 — Diferencial
    ========================================================================== */
-.s8__grid{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr);gap:clamp(28px,5vw,80px);align-items:start;margin-top:clamp(26px,4vw,52px)}
-.verif{margin-top:clamp(22px,3vw,38px);display:flex;flex-direction:column}
-.verif__i{display:grid;grid-template-columns:auto 1fr;gap:clamp(12px,1.6vw,20px);
-  padding:clamp(13px,1.7vw,20px) 0;border-top:1.5px solid rgba(255,255,255,.22)}
+.s8__grid{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr);gap:clamp(28px,5cqw,80px);align-items:start;margin-top:clamp(26px,4cqw,52px)}
+.verif{margin-top:clamp(22px,3cqw,38px);display:flex;flex-direction:column}
+.verif__i{display:grid;grid-template-columns:auto 1fr;gap:clamp(12px,1.6cqw,20px);
+  padding:clamp(13px,1.7cqw,20px) 0;border-top:1.5px solid rgba(255,255,255,.22)}
 .verif__i:last-child{border-bottom:1.5px solid rgba(255,255,255,.22)}
-.verif__c{width:clamp(26px,2.2vw,34px);height:clamp(26px,2.2vw,34px);border:1.5px solid rgba(255,255,255,.5);
+.verif__c{width:clamp(26px,2.2cqw,34px);height:clamp(26px,2.2cqw,34px);border:1.5px solid rgba(255,255,255,.5);
   display:grid;place-items:center;flex:none;transition:background .4s,border-color .4s}
 .verif__c svg{width:60%;height:60%;overflow:visible}
 .verif__c path{stroke:#fff;stroke-width:2.6;fill:none;stroke-dasharray:24;stroke-dashoffset:24;transition:stroke-dashoffset .8s var(--ease)}
 .js .scene.on .verif__c path{stroke-dashoffset:0}
 html:not(.js) .verif__c path{stroke-dashoffset:0}
-.verif__i h3{font-size:clamp(17px,1.5vw,22px);letter-spacing:-.02em;line-height:1.1}
-.verif__i p{font-size:clamp(12.5px,.95vw,15px);line-height:1.45;opacity:.66;margin-top:6px;max-width:40ch}
+.verif__i h3{font-size:clamp(17px,1.5cqw,22px);letter-spacing:-.02em;line-height:1.1}
+.verif__i p{font-size:clamp(12.5px,.95cqw,15px);line-height:1.45;opacity:.66;margin-top:6px;max-width:40ch}
 
-.states{background:#111;border:2px solid rgba(255,255,255,.22);padding:clamp(16px,1.8vw,24px);position:relative}
+.states{background:#111;border:2px solid rgba(255,255,255,.22);padding:clamp(16px,1.8cqw,24px);position:relative}
 .states__k{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;opacity:.55}
 .state{position:relative;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px;
-  padding:clamp(10px,1.2vw,15px) 0;border-top:1px solid rgba(255,255,255,.14);
+  padding:clamp(10px,1.2cqw,15px) 0;border-top:1px solid rgba(255,255,255,.14);
   opacity:.38;transition:opacity .5s,transform .5s var(--ease)}
 .state:first-of-type{border-top:0}
 .state.on{opacity:1;transform:translateX(5px)}
 .state__d{width:11px;height:11px;border:1.5px solid #fff;flex:none;transition:background .4s,border-color .4s}
 .state.on .state__d{background:var(--red);border-color:var(--red);box-shadow:0 0 0 5px rgba(255,51,51,.18)}
-.state__t{font-size:clamp(15px,1.3vw,19px);font-weight:800;letter-spacing:-.02em;line-height:1}
-.state__s{font-family:var(--mono);font-size:clamp(7.5px,.6vw,9px);letter-spacing:.16em;text-transform:uppercase;opacity:.7}
-.state__x{font-family:var(--mono);font-size:clamp(8px,.66vw,10px);letter-spacing:.14em;opacity:.6;text-align:right}
+.state__t{font-size:clamp(15px,1.3cqw,19px);font-weight:800;letter-spacing:-.02em;line-height:1}
+.state__s{font-family:var(--mono);font-size:clamp(7.5px,.6cqw,9px);letter-spacing:.16em;text-transform:uppercase;opacity:.7}
+.state__x{font-family:var(--mono);font-size:clamp(8px,.66cqw,10px);letter-spacing:.14em;opacity:.6;text-align:right}
 .s8__quote{
-  margin-top:clamp(32px,4.6vw,60px);padding-top:clamp(16px,2vw,26px);border-top:2px solid rgba(255,255,255,.25);
-  display:flex;gap:clamp(14px,2vw,26px);align-items:baseline;flex-wrap:wrap;
+  margin-top:clamp(32px,4.6cqw,60px);padding-top:clamp(16px,2cqw,26px);border-top:2px solid rgba(255,255,255,.25);
+  display:flex;gap:clamp(14px,2cqw,26px);align-items:baseline;flex-wrap:wrap;
 }
-.s8__quote b{font-size:clamp(22px,2.6vw,38px);letter-spacing:-.03em;line-height:1}
-.s8__quote span{font-size:clamp(13px,1.02vw,16px);opacity:.62;max-width:52ch;line-height:1.45}
+.s8__quote b{font-size:clamp(22px,2.6cqw,38px);letter-spacing:-.03em;line-height:1}
+.s8__quote span{font-size:clamp(13px,1.02cqw,16px);opacity:.62;max-width:52ch;line-height:1.45}
 
 /* ==========================================================================
    Cena 09 — Modelo
    ========================================================================== */
 .s9__head{display:flex;justify-content:space-between;align-items:flex-end;gap:30px;flex-wrap:wrap}
-.rev{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;margin-top:clamp(34px,5vw,66px);border-top:2px solid var(--ink)}
-.rev__c{padding:clamp(18px,2.2vw,30px) clamp(14px,2vw,28px) clamp(18px,2.2vw,28px) 0;border-bottom:2px solid var(--ink);position:relative}
-.rev__c+.rev__c{padding-left:clamp(14px,2vw,28px);border-left:2px solid var(--ink)}
+.rev{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;margin-top:clamp(34px,5cqw,66px);border-top:2px solid var(--ink)}
+.rev__c{padding:clamp(18px,2.2cqw,30px) clamp(14px,2cqw,28px) clamp(18px,2.2cqw,28px) 0;border-bottom:2px solid var(--ink);position:relative}
+.rev__c+.rev__c{padding-left:clamp(14px,2cqw,28px);border-left:2px solid var(--ink)}
 .rev__k{display:flex;align-items:center;gap:8px}
 .rev__k i{width:8px;height:8px;background:var(--red);display:block}
 .rev__c:nth-child(2) .rev__k i{background:var(--blue)}
 .rev__c:nth-child(3) .rev__k i{background:var(--green)}
-.rev__n{font-size:clamp(38px,5.2vw,76px);font-weight:800;letter-spacing:-.055em;line-height:.92;margin-top:clamp(14px,2vw,24px)}
+.rev__n{font-size:clamp(38px,5.2cqw,76px);font-weight:800;letter-spacing:-.055em;line-height:.92;margin-top:clamp(14px,2cqw,24px)}
 .rev__n small{font-size:.34em;letter-spacing:-.01em;font-weight:700}
-.rev__t{margin-top:10px;font-weight:800;font-size:clamp(14px,1.15vw,18px);letter-spacing:-.02em}
-.rev__d{margin-top:6px;font-size:clamp(12px,0.94vw,14.5px);line-height:1.45;opacity:.68;max-width:32ch}
-.rev__bar{height:8px;background:rgba(0,0,0,.12);margin-top:clamp(14px,1.8vw,22px);position:relative;overflow:hidden}
+.rev__t{margin-top:10px;font-weight:800;font-size:clamp(14px,1.15cqw,18px);letter-spacing:-.02em}
+.rev__d{margin-top:6px;font-size:clamp(12px,0.94cqw,14.5px);line-height:1.45;opacity:.68;max-width:32ch}
+.rev__bar{height:8px;background:rgba(0,0,0,.12);margin-top:clamp(14px,1.8cqw,22px);position:relative;overflow:hidden}
 .rev__bar i{position:absolute;left:0;top:0;bottom:0;background:var(--red);width:var(--w,60%);transform:translateX(-101%);transition:transform 1.2s var(--ease);transition-delay:.3s}
 .js .scene.on .rev__bar i{transform:none}
 html:not(.js) .rev__bar i{transform:none}
 .rev__c:nth-child(2) .rev__bar i{background:var(--blue)}
 .rev__c:nth-child(3) .rev__bar i{background:var(--green)}
 
-.econ{margin-top:clamp(26px,3.4vw,44px);background:var(--ink);color:#fff;padding:clamp(16px,2vw,26px) clamp(16px,2.2vw,30px);
-  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(10px,1.6vw,24px);align-items:center;position:relative;overflow:hidden}
+.econ{margin-top:clamp(26px,3.4cqw,44px);background:var(--ink);color:#fff;padding:clamp(16px,2cqw,26px) clamp(16px,2.2cqw,30px);
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(10px,1.6cqw,24px);align-items:center;position:relative;overflow:hidden}
 .econ::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--red)}
-.econ__i{padding-left:clamp(6px,1vw,14px)}
-.econ__i b{display:block;font-size:clamp(20px,2.1vw,32px);letter-spacing:-.035em;line-height:1}
+.econ__i{padding-left:clamp(6px,1cqw,14px)}
+.econ__i b{display:block;font-size:clamp(20px,2.1cqw,32px);letter-spacing:-.035em;line-height:1}
 .econ__i span{display:block;margin-top:5px;opacity:.6}
+
+html.is-stage .browser,html.is-stage .phone{background:#14161a!important;color:#f5f5f5!important;border-color:#f5f5f5;box-shadow:9px 9px 0 #000}
+html.is-stage .browser__bar{border-color:#f5f5f5}
+html.is-stage .browser__bar>i,html.is-stage .browser__url{border-color:#777}
+html.is-stage .browser__url{color:#f5f5f5}
+html.is-stage .browser__h,html.is-stage .browser__btn{background:#f5f5f5;color:#090a0d}
+html.is-stage .browser__img b{background:#14161a;color:#f5f5f5;border-color:#f5f5f5}
+html.is-stage .phone__scr{background:#202329;border-color:#555}
+html.is-stage .phone__scr .ln{background:#f5f5f5}
 </style>
 <style>/* ==========================================================================
    Cena 10 — Posicionamento
    ========================================================================== */
-.s10__grid{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(0,.88fr);gap:clamp(26px,4.4vw,72px);align-items:center;margin-top:clamp(20px,3vw,40px)}
+.s10__grid{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(0,.88fr);gap:clamp(26px,4.4cqw,72px);align-items:center;margin-top:clamp(20px,3cqw,40px)}
 .matrix{
-  position:relative;width:100%;height:min(62vh,600px);border:2.5px solid var(--ink);
+  position:relative;width:100%;height:min(62cqh,600px);border:2.5px solid var(--ink);
   background-color:#fff;overflow:hidden;
 }
 .matrix__q{position:absolute;width:50%;height:50%;transition:background .45s var(--ease)}
@@ -711,14 +994,14 @@ html:not(.js) .rev__bar i{transform:none}
 .matrix__ax{position:absolute;background:var(--ink);opacity:.22}
 .matrix__ax--h{left:0;right:0;top:50%;height:1.5px}
 .matrix__ax--v{top:0;bottom:0;left:50%;width:1.5px}
-.matrix__lbl{position:absolute;font-family:var(--mono);font-weight:700;font-size:clamp(7.5px,.6vw,9px);
+.matrix__lbl{position:absolute;font-family:var(--mono);font-weight:700;font-size:clamp(7.5px,.6cqw,9px);
   letter-spacing:.2em;text-transform:uppercase;opacity:.55}
 .matrix__lbl--x{right:10px;bottom:8px}
 .matrix__lbl--y{left:8px;top:10px;writing-mode:vertical-rl;transform:rotate(180deg)}
-.matrix__qk{position:absolute;font-family:var(--mono);font-weight:700;font-size:clamp(7px,.56vw,8.5px);
+.matrix__qk{position:absolute;font-family:var(--mono);font-weight:700;font-size:clamp(7px,.56cqw,8.5px);
   letter-spacing:.16em;text-transform:uppercase;opacity:.3}
 .pin{position:absolute;transform:translate(-50%,-50%);display:flex;align-items:center;gap:7px;white-space:nowrap;
-  font-family:var(--mono);font-weight:700;font-size:clamp(7.5px,.62vw,9.5px);letter-spacing:.1em;text-transform:uppercase;
+  font-family:var(--mono);font-weight:700;font-size:clamp(7.5px,.62cqw,9.5px);letter-spacing:.1em;text-transform:uppercase;
   padding:5px 8px;border:1.5px solid var(--ink);background:#fff;transition:transform .4s var(--ease),background .3s}
 .pin i{width:6px;height:6px;background:var(--ink);display:block;flex:none}
 .pin:hover{transform:translate(-50%,-50%) scale(1.06);background:var(--yellow)}
@@ -727,7 +1010,7 @@ html:not(.js) .rev__bar i{transform:none}
 .pin--mkt{left:74%;top:74%}
 .target{
   position:absolute;left:76%;top:26%;transform:translate(-50%,-50%);
-  width:clamp(14px,1.5vw,20px);height:clamp(14px,1.5vw,20px);background:var(--red);
+  width:clamp(14px,1.5cqw,20px);height:clamp(14px,1.5cqw,20px);background:var(--red);
   border:2px solid var(--ink);box-shadow:4px 4px 0 var(--ink);z-index:3;
 }
 .target::before,.target::after{
@@ -738,20 +1021,20 @@ html:not(.js) .rev__bar i{transform:none}
 @keyframes ping{0%{opacity:.9;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,-50%) scale(4.2)}}
 .target__lb{position:absolute;left:50%;top:calc(100% + 12px);transform:translateX(-50%);
   background:var(--ink);color:#fff;padding:6px 9px;font-family:var(--mono);font-weight:700;
-  font-size:clamp(8px,.66vw,10px);letter-spacing:.18em;text-transform:uppercase;white-space:nowrap;border:2px solid var(--ink)}
+  font-size:clamp(8px,.66cqw,10px);letter-spacing:.18em;text-transform:uppercase;white-space:nowrap;border:2px solid var(--ink)}
 
 .s10__copy p{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;
-  padding:clamp(12px,1.6vw,20px) 0;border-top:1.5px solid rgba(0,0,0,.2);font-size:clamp(13.5px,1.05vw,16.5px);line-height:1.44}
+  padding:clamp(12px,1.6cqw,20px) 0;border-top:1.5px solid rgba(0,0,0,.2);font-size:clamp(13.5px,1.05cqw,16.5px);line-height:1.44}
 .s10__copy p i{width:8px;height:8px;background:var(--ink);display:block;margin-top:7px;flex:none}
 .s10__copy p b{font-weight:800}
-.s10__punch{margin-top:clamp(16px,2vw,26px);background:var(--ink);color:#fff;padding:clamp(14px,1.8vw,22px);
-  font-size:clamp(15px,1.35vw,20px);line-height:1.3;letter-spacing:-.02em;font-weight:500}
+.s10__punch{margin-top:clamp(16px,2cqw,26px);background:var(--ink);color:#fff;padding:clamp(14px,1.8cqw,22px);
+  font-size:clamp(15px,1.35cqw,20px);line-height:1.3;letter-spacing:-.02em;font-weight:500}
 .s10__punch b{font-weight:800;color:var(--yellow)}
 
 /* ==========================================================================
    Cena 11 — Roadmap
    ========================================================================== */
-.road{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(14px,2vw,30px);margin-top:clamp(36px,5vw,70px)}
+.road{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(14px,2cqw,30px);margin-top:clamp(36px,5cqw,70px)}
 .phase{position:relative;padding-top:calc(var(--h,60px) + 26px)}
 .phase__stem{position:absolute;left:0;top:0;width:2px;height:var(--h,60px);background:var(--ink);transform-origin:top;
   transform:scaleY(0);transition:transform .9s var(--ease)}
@@ -762,48 +1045,48 @@ html:not(.js) .rev__bar i{transform:none}
 html:not(.js) .phase__stem{transform:none}
 .phase::after{content:"";position:absolute;left:-4px;top:calc(var(--h,60px) - 4px);width:10px;height:10px;background:var(--ink)}
 .phase__tag{display:inline-flex;padding:6px 9px;border:1.5px solid var(--ink);font-family:var(--mono);font-weight:700;
-  font-size:clamp(7.5px,.6vw,9px);letter-spacing:.18em;text-transform:uppercase;line-height:1;margin-bottom:14px}
+  font-size:clamp(7.5px,.6cqw,9px);letter-spacing:.18em;text-transform:uppercase;line-height:1;margin-bottom:14px}
 .phase:nth-child(1) .phase__tag{background:var(--red);color:#fff;border-color:var(--red)}
 .phase:nth-child(2) .phase__tag{background:var(--yellow)}
-.phase h3{font-size:clamp(17px,1.55vw,23px);letter-spacing:-.02em;line-height:1.1;margin-bottom:8px}
-.phase p{font-size:clamp(12.5px,.95vw,15px);line-height:1.46;opacity:.66;max-width:26ch}
-.phase__k{font-family:var(--mono);font-size:clamp(8px,.64vw,9.5px);letter-spacing:.2em;opacity:.45;margin-bottom:8px}
+.phase h3{font-size:clamp(17px,1.55cqw,23px);letter-spacing:-.02em;line-height:1.1;margin-bottom:8px}
+.phase p{font-size:clamp(12.5px,.95cqw,15px);line-height:1.46;opacity:.66;max-width:26ch}
+.phase__k{font-family:var(--mono);font-size:clamp(8px,.64cqw,9.5px);letter-spacing:.2em;opacity:.45;margin-bottom:8px}
 
 /* ==========================================================================
    Cena 12 — Onde estamos
    ========================================================================== */
 .s12{padding:0;display:block}
-.s12__grid{display:grid;grid-template-columns:1.22fr .78fr;min-height:100vh;min-height:100svh}
-.s12__l{padding:var(--top) clamp(22px,3.4vw,58px) var(--bot) var(--pad);display:flex;flex-direction:column;justify-content:center}
-.s12__r{background:var(--ink);color:#fff;padding:var(--top) var(--pad) var(--bot) clamp(22px,3.4vw,58px);
+.s12__grid{display:grid;grid-template-columns:1.22fr .78fr;min-height:100cqh;min-height:100svh}
+.s12__l{padding:var(--top) clamp(22px,3.4cqw,58px) var(--bot) var(--pad);display:flex;flex-direction:column;justify-content:center}
+.s12__r{background:var(--ink);color:#fff;padding:var(--top) var(--pad) var(--bot) clamp(22px,3.4cqw,58px);
   display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
 .s12__r::before{content:"";position:absolute;left:0;top:0;bottom:0;width:8px;background:var(--red)}
-.status{margin-top:clamp(22px,3vw,40px);display:flex;flex-direction:column}
-.status__i{display:grid;grid-template-columns:auto 1fr auto;gap:clamp(10px,1.4vw,18px);align-items:start;
-  padding:clamp(12px,1.6vw,19px) 0;border-top:1.5px solid rgba(0,0,0,.22)}
+.status{margin-top:clamp(22px,3cqw,40px);display:flex;flex-direction:column}
+.status__i{display:grid;grid-template-columns:auto 1fr auto;gap:clamp(10px,1.4cqw,18px);align-items:start;
+  padding:clamp(12px,1.6cqw,19px) 0;border-top:1.5px solid rgba(0,0,0,.22)}
 .status__i:last-child{border-bottom:1.5px solid rgba(0,0,0,.22)}
 .status__d{width:10px;height:10px;background:var(--green);margin-top:7px}
-.status__i h3{font-size:clamp(15px,1.2vw,19px);letter-spacing:-.02em;line-height:1.15}
-.status__i p{font-size:clamp(12px,.95vw,14.5px);line-height:1.45;opacity:.63;margin-top:5px;max-width:42ch}
-.status__tag{font-family:var(--mono);font-weight:700;font-size:clamp(7.5px,.6vw,9px);letter-spacing:.16em;
+.status__i h3{font-size:clamp(15px,1.2cqw,19px);letter-spacing:-.02em;line-height:1.15}
+.status__i p{font-size:clamp(12px,.95cqw,14.5px);line-height:1.45;opacity:.63;margin-top:5px;max-width:42ch}
+.status__tag{font-family:var(--mono);font-weight:700;font-size:clamp(7.5px,.6cqw,9px);letter-spacing:.16em;
   text-transform:uppercase;border:1.5px solid var(--ink);padding:5px 7px;line-height:1;white-space:nowrap}
 .s12__r .big{
-  font-size:clamp(28px,3.6vw,54px);line-height:1;letter-spacing:-.04em;font-weight:800;
-  margin-top:clamp(16px,2vw,26px);max-width:14ch;
+  font-size:clamp(28px,3.6cqw,54px);line-height:1;letter-spacing:-.04em;font-weight:800;
+  margin-top:clamp(16px,2cqw,26px);max-width:14ch;
 }
 .s12__r .big em{font-style:normal;color:var(--red)}
-.s12__r p{font-size:clamp(13.5px,1.05vw,16.5px);line-height:1.5;opacity:.74;margin-top:clamp(16px,2vw,24px);max-width:44ch}
-.s12__r .tag{align-self:flex-start;margin-bottom:clamp(14px,2vw,22px)}
-.s12__note{position:absolute;left:clamp(22px,3.4vw,58px);bottom:clamp(28px,4vh,44px);
-  font-family:var(--mono);font-size:clamp(8px,.64vw,9.5px);letter-spacing:.2em;opacity:.4}
+.s12__r p{font-size:clamp(13.5px,1.05cqw,16.5px);line-height:1.5;opacity:.74;margin-top:clamp(16px,2cqw,24px);max-width:44ch}
+.s12__r .tag{align-self:flex-start;margin-bottom:clamp(14px,2cqw,22px)}
+.s12__note{position:absolute;left:clamp(22px,3.4cqw,58px);bottom:clamp(28px,4cqh,44px);
+  font-family:var(--mono);font-size:clamp(8px,.64cqw,9.5px);letter-spacing:.2em;opacity:.4}
 
 /* ==========================================================================
    Cena 13 — Time
    ========================================================================== */
-.team{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(12px,1.7vw,24px);margin-top:clamp(32px,4.4vw,64px)}
+.team{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(12px,1.7cqw,24px);margin-top:clamp(32px,4.4cqw,64px)}
 .member{
   position:relative;background:#fff;border:2.5px solid var(--ink);box-shadow:8px 8px 0 var(--ink);
-  padding:clamp(16px,1.8vw,26px);min-height:clamp(230px,25vw,320px);display:flex;flex-direction:column;
+  padding:clamp(16px,1.8cqw,26px);min-height:clamp(230px,25cqw,320px);display:flex;flex-direction:column;
   transition:transform .5s var(--ease),box-shadow .5s var(--ease);
 }
 .member::before{content:"";position:absolute;left:-2.5px;right:-2.5px;top:-2.5px;height:9px;background:var(--c,var(--red))}
@@ -811,33 +1094,33 @@ html:not(.js) .phase__stem{transform:none}
 .member:nth-child(2){--c:var(--yellow)}
 .member:nth-child(3){--c:var(--blue)}
 .member:nth-child(4){--c:var(--green)}
-.member__p{font-size:clamp(24px,2.6vw,40px);font-weight:800;letter-spacing:-.05em;color:transparent;
+.member__p{font-size:clamp(24px,2.6cqw,40px);font-weight:800;letter-spacing:-.05em;color:transparent;
   -webkit-text-stroke:1.5px var(--ink);line-height:1;margin-top:10px}
-.member h3{margin-top:auto;padding-top:clamp(18px,2.4vw,32px)}
-.member p{margin-top:8px;font-size:clamp(12px,.92vw,14.5px);line-height:1.45;opacity:.66;max-width:26ch}
-.member__who{margin-top:clamp(14px,1.8vw,22px);padding-top:10px;border-top:1.5px solid rgba(0,0,0,.2);
-  font-family:var(--mono);font-size:clamp(8px,.64vw,9.5px);letter-spacing:.16em;opacity:.45;text-transform:uppercase}
-.s13__foot{margin-top:clamp(20px,2.6vw,32px);display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;opacity:.6}
+.member h3{margin-top:auto;padding-top:clamp(18px,2.4cqw,32px)}
+.member p{margin-top:8px;font-size:clamp(12px,.92cqw,14.5px);line-height:1.45;opacity:.66;max-width:26ch}
+.member__who{margin-top:clamp(14px,1.8cqw,22px);padding-top:10px;border-top:1.5px solid rgba(0,0,0,.2);
+  font-family:var(--mono);font-size:clamp(8px,.64cqw,9.5px);letter-spacing:.16em;opacity:.45;text-transform:uppercase}
+.s13__foot{margin-top:clamp(20px,2.6cqw,32px);display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;opacity:.6}
 
 /* ==========================================================================
    Cena 14 — O pedido
    ========================================================================== */
-.ask{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin-top:clamp(30px,4.4vw,62px);
+.ask{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin-top:clamp(30px,4.4cqw,62px);
   border-top:2px solid var(--ink);border-bottom:2px solid var(--ink)}
-.ask__c{padding:clamp(18px,2.4vw,34px) clamp(14px,2vw,28px);border-left:1.5px solid rgba(0,0,0,.32)}
+.ask__c{padding:clamp(18px,2.4cqw,34px) clamp(14px,2cqw,28px);border-left:1.5px solid rgba(0,0,0,.32)}
 .ask__c:first-child{border-left:0;padding-left:0}
 .ask__k{display:flex;align-items:center;gap:8px}
 .ask__k i{width:8px;height:8px;background:var(--ink);display:block}
-.ask__n{font-size:clamp(32px,4.6vw,68px);font-weight:800;letter-spacing:-.055em;line-height:.94;margin-top:clamp(12px,1.8vw,22px)}
+.ask__n{font-size:clamp(32px,4.6cqw,68px);font-weight:800;letter-spacing:-.055em;line-height:.94;margin-top:clamp(12px,1.8cqw,22px)}
 .ask__n small{font-size:.36em;letter-spacing:-.02em}
-.ask__t{font-weight:800;margin-top:10px;font-size:clamp(14px,1.15vw,18px);letter-spacing:-.02em}
-.ask__d{margin-top:6px;font-size:clamp(12px,0.94vw,14.5px);line-height:1.45;opacity:.82;max-width:30ch}
+.ask__t{font-weight:800;margin-top:10px;font-size:clamp(14px,1.15cqw,18px);letter-spacing:-.02em}
+.ask__d{margin-top:6px;font-size:clamp(12px,0.94cqw,14.5px);line-height:1.45;opacity:.82;max-width:30ch}
 .meta{
-  margin-top:clamp(24px,3.2vw,42px);background:var(--ink);color:#fff;display:grid;
-  grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(10px,1.6vw,24px);
-  padding:clamp(14px,1.8vw,24px) clamp(16px,2.2vw,30px);
+  margin-top:clamp(24px,3.2cqw,42px);background:var(--ink);color:#fff;display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(10px,1.6cqw,24px);
+  padding:clamp(14px,1.8cqw,24px) clamp(16px,2.2cqw,30px);
 }
-.meta__i b{display:block;font-size:clamp(18px,1.9vw,28px);letter-spacing:-.03em;line-height:1}
+.meta__i b{display:block;font-size:clamp(18px,1.9cqw,28px);letter-spacing:-.03em;line-height:1}
 .meta__i span{display:block;margin-top:5px;opacity:.6}
 .meta__i.hot b{color:var(--yellow)}
 
@@ -846,26 +1129,26 @@ html:not(.js) .phase__stem{transform:none}
    ========================================================================== */
 .s15{align-items:flex-start;justify-content:center}
 .s15__disc{
-  position:absolute;right:-14%;top:50%;width:min(66vw,860px);aspect-ratio:1;border-radius:50%;
+  position:absolute;right:-14%;top:50%;width:min(66cqw,860px);aspect-ratio:1;border-radius:50%;
   background:var(--red);transform:translateY(-50%);z-index:0;
   animation:breathe 12s var(--ease-io) infinite;
 }
 .s15__ring{
-  position:absolute;right:-24%;top:50%;width:min(92vw,1200px);aspect-ratio:1;border-radius:50%;
+  position:absolute;right:-24%;top:50%;width:min(92cqw,1200px);aspect-ratio:1;border-radius:50%;
   border:2px dashed rgba(255,255,255,.22);transform:translateY(-50%);z-index:0;
   animation:spinSlow 120s linear infinite;
 }
-.s15__in{position:relative;z-index:2;max-width:min(58vw,900px)}
-.s15__title{font-size:clamp(52px,9.4vw,150px);line-height:.86;letter-spacing:-.055em;font-weight:800}
+.s15__in{position:relative;z-index:2;max-width:min(58cqw,900px)}
+.s15__title{font-size:clamp(52px,9.4cqw,150px);line-height:.86;letter-spacing:-.055em;font-weight:800}
 .s15__title span{display:block}
-.s15__lead{margin-top:clamp(20px,2.6vw,34px);font-size:clamp(16px,1.5vw,22px);line-height:1.4;max-width:38ch;opacity:.82}
-.s15__contacts{display:flex;flex-wrap:wrap;gap:10px;margin-top:clamp(26px,3.4vw,44px)}
+.s15__lead{margin-top:clamp(20px,2.6cqw,34px);font-size:clamp(16px,1.5cqw,22px);line-height:1.4;max-width:38ch;opacity:.82}
+.s15__contacts{display:flex;flex-wrap:wrap;gap:10px;margin-top:clamp(26px,3.4cqw,44px)}
 .s15__contacts span{border:1.5px solid rgba(255,255,255,.45);padding:9px 12px;font-family:var(--mono);
-  font-weight:700;font-size:clamp(9px,.72vw,11px);letter-spacing:.14em;text-transform:uppercase;line-height:1;
+  font-weight:700;font-size:clamp(9px,.72cqw,11px);letter-spacing:.14em;text-transform:uppercase;line-height:1;
   transition:background .3s,color .3s,border-color .3s}
 .s15__contacts span:hover{background:var(--yellow);color:#000;border-color:var(--yellow)}
-.s15__top{margin-top:clamp(28px,4vw,50px);display:flex;align-items:center;gap:12px;opacity:.55;
-  font-family:var(--mono);font-weight:700;font-size:clamp(9px,.72vw,11px);letter-spacing:.18em;text-transform:uppercase}
+.s15__top{margin-top:clamp(28px,4cqw,50px);display:flex;align-items:center;gap:12px;opacity:.55;
+  font-family:var(--mono);font-weight:700;font-size:clamp(9px,.72cqw,11px);letter-spacing:.18em;text-transform:uppercase}
 .s15__top i{width:26px;height:26px;border:1.5px solid currentColor;display:grid;place-items:center;transition:transform .4s var(--ease)}
 .s15__top:hover{opacity:1}
 .s15__top:hover i{transform:translateY(-4px)}
@@ -883,7 +1166,7 @@ html:not(.js) .phase__stem{transform:none}
   .why:nth-child(n){margin-top:0}
   .s3__pains{grid-template-columns:1fr;gap:18px}
   .s12__grid{grid-template-columns:1fr}
-  .s12__r{padding:clamp(40px,7vh,70px) var(--pad)}
+  .s12__r{padding:clamp(40px,7cqh,70px) var(--pad)}
   .s8__grid{gap:34px}
   .flow__nodes{grid-template-columns:repeat(2,minmax(0,1fr));gap:26px}
   .s6__foot{grid-template-columns:1fr}
@@ -899,12 +1182,455 @@ html:not(.js) .phase__stem{transform:none}
   .ag__arr{display:none}
   .ag__d{display:none}
   .s2__note{text-align:left}
-  .hud__mid{display:none}
-  .s1__title{font-size:clamp(40px,13vw,72px)}
+  .hud__brand{letter-spacing:.18em}
+  .hud__count{letter-spacing:.14em}
+  .s1__title{font-size:clamp(40px,13cqw,72px)}
   .s15__in{max-width:100%}
 }
+
+/* contatos reais do fechamento: e-mail e telefone como se escreve */
+.s15__contacts span{text-transform:none;letter-spacing:.05em;
+  font-size:clamp(10.5px,.84cqw,12.5px);padding:10px 13px}
+
+html.is-stage .pin,html.is-stage .s9__pin,html.is-stage .member{background:#15171b!important;color:#f5f5f5!important}
+html.is-stage .s10__tag,html.is-stage .phase__tag{background:#15171b;color:#f5f5f5}
+html.is-stage .s12__r{background:#101216!important}
+html.is-stage .s13__foot,html.is-stage .s14__ask{background:#111318}
+html.is-stage .s15__contacts span{background:#15171b;color:#fff;border-color:#777}
 </style>
-<style>@media print{html,body{background:#fff}.hud,.progress,.fab,.cursor,.grain,.glow,.menu,.edge{display:none !important}.scene{break-after:page;min-height:0;height:100vh}}</style>
+<style>/* ==========================================================================
+   Canvas PowerPoint 16:9 + interface de edição e ajuste integral ao canvas.
+   Em modo de edição, `fitStage()` reduz o slide inteiro proporcionalmente
+   para caber na área central. Em apresentação, usa o máximo da janela 16:9.
+   Isso preserva a composição e evita que conteúdo ultrapasse a página.
+   ========================================================================== */
+
+@media (min-width:1024px) and (max-height:920px) and (min-aspect-ratio:4/3){
+  :root{
+    --top:clamp(64px,9.4cqh,96px);
+    --bot:clamp(38px,5.6cqh,58px);
+  }
+
+  /* 02 · Agenda */
+  .s2{padding-top:calc(var(--hud-h) + clamp(8px,1.6cqh,20px))}
+  .ag{margin-top:clamp(12px,2.2cqh,26px)}
+  .ag__row{padding:clamp(9px,1.5cqh,16px) 0}
+  .ag__n{font-size:clamp(24px,3.2cqw,46px)}
+  .ag__t{font-size:clamp(19px,2.15cqw,32px)}
+
+  /* 03 · Problema */
+  .s3{padding-top:calc(var(--hud-h) + clamp(6px,1.2cqh,16px))}
+  .s3__pains{margin-top:clamp(18px,3cqh,36px)}
+  .s3__ring{width:min(88cqw,1140px)}
+  .s3__ring2{width:min(58cqw,760px)}
+
+  /* 04 · Por que agora */
+  .s4__grid{margin-top:clamp(22px,3.6cqh,44px);gap:clamp(14px,1.9cqw,28px)}
+  .why{min-height:clamp(186px,23cqh,268px);padding:clamp(14px,1.5cqw,22px);box-shadow:7px 7px 0 #000}
+  .why:nth-child(2){margin-top:clamp(8px,1.6cqh,22px)}
+  .why:nth-child(3){margin-top:clamp(18px,3.2cqh,46px)}
+  .why h3{padding-top:clamp(12px,1.8cqh,22px)}
+  .why p{font-size:clamp(12.5px,.96cqw,15px)}
+  .why__foot{margin-top:clamp(10px,1.4cqh,16px);padding-top:9px}
+
+  /* 05 · Solução */
+  .layers{margin-top:clamp(14px,2.4cqh,30px)}
+  .layer{padding:clamp(10px,1.6cqh,18px) 0;gap:clamp(12px,2cqw,30px)}
+  .layer__k{margin-bottom:7px}
+  .layer__d{margin-top:6px;font-size:clamp(12.5px,.96cqw,15px)}
+  .layer__tags span{padding:5px 8px}
+  .s5__foot{margin-top:clamp(10px,1.8cqh,20px)}
+
+  /* 06 · Como funciona */
+  .flow{margin-top:clamp(16px,2.8cqh,34px);padding-top:34px}
+  .node__dot{margin-bottom:clamp(8px,1.4cqh,16px)}
+  .s6__foot{margin-top:clamp(18px,3cqh,36px);gap:clamp(14px,2.4cqw,32px)}
+  .callout{padding:clamp(12px,1.5cqw,20px);box-shadow:7px 7px 0 rgba(255,255,255,.92)}
+  .callout b{font-size:clamp(17px,1.7cqw,23px)}
+  .custody{gap:7px}
+
+  /* 07 · Produto */
+  .s7__tags{margin-top:clamp(14px,2cqh,22px)}
+
+  /* 08 · Diferencial */
+  .s8__grid{margin-top:clamp(14px,2.4cqh,28px);gap:clamp(20px,3.4cqw,52px)}
+  .verif{margin-top:clamp(12px,2cqh,22px)}
+  .verif__i{padding:clamp(9px,1.5cqh,15px) 0}
+  .verif__i p{font-size:clamp(12px,.9cqw,14px);margin-top:4px}
+  .states{padding:clamp(12px,1.5cqw,18px)}
+  .state{padding:clamp(7px,1.15cqh,12px) 0}
+  .s8__quote{margin-top:clamp(18px,3cqh,34px);padding-top:clamp(12px,1.6cqh,18px)}
+  .s8__quote b{font-size:clamp(20px,2.2cqw,30px)}
+
+  /* 09 · Modelo */
+  .rev{margin-top:clamp(20px,3.4cqh,40px)}
+  .rev__c{padding-top:clamp(14px,2cqh,22px);padding-bottom:clamp(14px,2cqh,20px)}
+  .rev__n{font-size:clamp(34px,4.4cqw,62px);margin-top:clamp(8px,1.4cqh,16px)}
+  .rev__bar{margin-top:clamp(10px,1.6cqh,16px)}
+  .econ{margin-top:clamp(16px,2.6cqh,30px);padding:clamp(12px,1.6cqw,20px) clamp(14px,1.8cqw,24px)}
+
+  /* 10 · Posicionamento */
+  .matrix{height:min(56cqh,520px)}
+
+  /* 11 · Roadmap */
+  .road{margin-top:clamp(20px,3.4cqh,44px)}
+
+  /* 13 · Time */
+  .team{margin-top:clamp(18px,3cqh,40px)}
+  .member{min-height:clamp(196px,25cqh,272px);padding:clamp(14px,1.5cqw,22px)}
+  .member h3{padding-top:clamp(12px,1.8cqh,24px)}
+  .s13__foot{margin-top:clamp(12px,2cqh,22px)}
+
+  /* 14 · O pedido */
+  .s14 .ask{margin-top:clamp(16px,2.6cqh,32px)}
+  .ask__c{padding-top:clamp(12px,1.8cqh,22px);padding-bottom:clamp(12px,1.8cqh,22px)}
+  .ask__n{font-size:clamp(28px,3.8cqw,54px);margin-top:clamp(8px,1.4cqh,16px)}
+  .meta{margin-top:clamp(14px,2.2cqh,28px);padding:clamp(10px,1.5cqh,18px) clamp(14px,1.8cqw,24px)}
+}
+
+
+/* ========================================================================
+   Palco PowerPoint: proporção real 16:9, uma cena visível e transição
+   discreta entre páginas. Em telas fora da proporção, barras pretas.
+   ======================================================================== */
+html.is-stage, html.is-stage body{
+  width:100%;height:100%;min-height:100%;overflow:hidden!important;
+  background:#050608!important;overscroll-behavior:none;
+}
+html.is-stage body{position:relative}
+html.is-stage #deck{
+  position:fixed;z-index:1;left:50%;top:50%;
+  width:min(100vw,177.7777778vh);height:min(100vh,56.25vw);
+  transform:translate(-50%,-50%);transform-origin:center center;
+  overflow:hidden;background:#090a0d;
+  contain:layout paint size;container-type:size;container-name:slide-stage;isolation:isolate;
+}
+html.is-stage .scene{
+  position:absolute!important;inset:0!important;
+  width:100%!important;height:100%!important;min-height:0!important;
+  display:none;overflow:hidden;
+  --pad:clamp(16px,5.4cqw,92px);
+  --top:clamp(48px,12cqh,128px);
+  --bot:clamp(32px,9cqh,96px);
+  --hud-h:clamp(64px,12cqh,128px);
+  padding:var(--top) var(--pad) var(--bot)!important;
+  background:#090a0d!important;color:#f5f5f5!important;
+  isolation:isolate;
+}
+html.is-stage .scene.on,
+html.is-stage .scene.is-out-next,
+html.is-stage .scene.is-out-prev{display:flex}
+html.is-stage .scene.on{z-index:2}
+html.is-stage .scene .fx3d{transform:scale(var(--fit-scale,1));transform-origin:center center}
+html.is-stage .scene.is-out-next,
+html.is-stage .scene.is-out-prev{z-index:3;pointer-events:none}
+
+@media (min-width:1024px) and (max-height:920px) and (min-aspect-ratio:4/3){
+  html.is-stage .scene{--top:clamp(48px,9.4cqh,96px);--bot:clamp(32px,5.6cqh,58px)}
+}
+
+@keyframes pptEnterNext{from{opacity:0;transform:translateX(2.2%) scale(.992)}to{opacity:1;transform:none}}
+@keyframes pptEnterPrev{from{opacity:0;transform:translateX(-2.2%) scale(.992)}to{opacity:1;transform:none}}
+@keyframes pptExitNext{from{opacity:1;transform:none}to{opacity:0;transform:translateX(-1.2%) scale(.996)}}
+@keyframes pptExitPrev{from{opacity:1;transform:none}to{opacity:0;transform:translateX(1.2%) scale(.996)}}
+html.is-stage .scene.is-in-next{animation:pptEnterNext .48s cubic-bezier(.2,.72,.25,1) both}
+html.is-stage .scene.is-in-prev{animation:pptEnterPrev .48s cubic-bezier(.2,.72,.25,1) both}
+html.is-stage .scene.is-out-next{animation:pptExitNext .42s ease both}
+html.is-stage .scene.is-out-prev{animation:pptExitPrev .42s ease both}
+
+/* Fundo escuro uniforme, sem retirar a cor das peças e dos acentos. */
+html.is-stage .scene--paper,
+html.is-stage .scene--dark,
+html.is-stage .scene--red,
+html.is-stage .scene--blue{background:#090a0d!important;color:#f5f5f5!important}
+html.is-stage .s12__l{background:#090a0d!important;color:#f5f5f5!important}
+html.is-stage .s12__r{background:#101216!important;color:#f5f5f5!important}
+html.is-stage .s15{background:#050608!important;color:#f5f5f5!important}
+html.is-stage .hud{z-index:40}
+html.is-stage .progress{z-index:39}
+
+@media (max-aspect-ratio:4/5){
+  html.is-stage #deck{width:100vw;height:56.25vw;}
+}
+@media (prefers-reduced-motion:reduce){
+  html.is-stage .scene.is-in-next,html.is-stage .scene.is-in-prev,
+  html.is-stage .scene.is-out-next,html.is-stage .scene.is-out-prev{animation:none}
+}
+
+/* graphic surfaces harmonized with the all-dark slide theme */
+html.is-stage .matrix{background:#14161a!important;border-color:#f5f5f5}
+html.is-stage .matrix__q:nth-child(odd){background:rgba(255,255,255,.025)}
+html.is-stage .matrix__q:nth-child(even){background:rgba(255,255,255,.055)}
+html.is-stage .matrix__ax{background:#f5f5f5;opacity:.28}
+html.is-stage .s0__rule{background:#f5f5f5}
+html.is-stage .s0__mark{border-color:#f5f5f5;box-shadow:8px 8px 0 #f5f5f5}
+html.is-stage .browser__btn{background:#f5f5f5!important;color:#090a0d!important}
+html.is-stage .member{border-color:#f5f5f5;box-shadow:8px 8px 0 #000}
+html.is-stage .member__p{-webkit-text-stroke-color:#f5f5f5}
+html.is-stage .phase__stem,html.is-stage .phase::after{background:#f5f5f5}
+html.is-stage .ask{border-color:#f5f5f5}
+html.is-stage .s10__copy p{border-color:rgba(255,255,255,.22)}
+html.is-stage .status__i{border-color:rgba(255,255,255,.22)}
+@media (max-width:767px){html.is-stage .s12__grid{min-height:100%!important;height:100%}}
+html.is-stage .s12__grid{min-height:100%!important;height:100%}
+
+/* ------------------------------------------------------------------------
+   Modo de edição: interface completa inspirada no PowerPoint antes de
+   apresentar. As ferramentas da faixa são só visual; miniaturas navegam.
+   ------------------------------------------------------------------------ */
+html.is-stage,html.is-stage body{
+  width:100%;height:100%;min-height:100%;overflow:hidden!important;
+  background:#f1f1f1!important;color:#252525;overscroll-behavior:none;
+}
+html.is-stage body{position:relative}
+.pptApp{
+  position:fixed;inset:0;z-index:5;display:flex;flex-direction:column;
+  min-width:0;overflow:hidden;background:#f3f3f3;color:#242424;
+  font-family:"Segoe UI",Arial,sans-serif;font-size:13px;line-height:1.25;
+}
+.pptTopbar{
+  height:42px;flex:none;display:flex;align-items:center;gap:11px;padding:0 14px;
+  background:#fff;border-bottom:1px solid #dedede;color:#333;white-space:nowrap;
+}
+.pptBrand{width:28px;display:grid;place-items:center;flex:none}
+.pptBrand__mark{width:22px;height:24px;display:grid;place-items:center;background:#c43e1c;color:#fff;
+  border-radius:2px;font-weight:800;font-size:17px;box-shadow:2px 2px 0 #8f2b16}
+.pptQuick{display:flex;gap:9px;color:#606060;font-size:17px;border-right:1px solid #ddd;padding-right:12px}
+.pptFile{display:flex;flex-direction:column;min-width:210px;line-height:1.05}
+.pptFile strong{font-weight:500;font-size:13px}.pptFile span{font-size:10px;color:#6c6c6c;margin-top:4px}
+.pptSearch{height:27px;width:min(30vw,390px);margin:0 auto;display:flex;align-items:center;gap:9px;
+  padding:0 10px;border:1px solid #d4d4d4;border-radius:4px;background:#fafafa;color:#666}
+.pptSearch i{font-size:18px;font-style:normal}
+.pptTopActions{display:flex;align-items:center;gap:10px;margin-left:auto}
+.pptAvatar{width:24px;height:24px;display:grid;place-items:center;background:#672d91;color:#fff;border-radius:50%;font-size:9px;font-weight:700}
+.pptTopGhost{color:#555;font-size:12px;padding:5px 7px;border:1px solid #bbb;border-radius:3px}
+.pptPresent{height:30px;padding:0 12px;display:inline-flex;align-items:center;justify-content:center;gap:7px;
+  color:#fff;background:#c43e1c;border:1px solid #a83217;border-radius:3px;font-size:12px;font-weight:600;white-space:nowrap}
+.pptPresent svg{width:12px;height:12px;fill:currentColor}
+.pptPresent:hover{background:#a83217}
+.pptShare{height:30px;padding:0 13px;display:flex;align-items:center;background:#c43e1c;color:#fff;border-radius:3px;font-weight:600}
+.pptWindowBtns{color:#666;font-size:12px;margin-left:5px}
+.pptTabs{height:34px;flex:none;display:flex;align-items:stretch;gap:0;padding:0 15px;background:#fff;border-bottom:1px solid #d9d9d9;overflow:hidden}
+.pptTab{position:relative;display:flex;align-items:center;padding:0 11px;color:#333;white-space:nowrap;font-size:12px}
+.pptTab--file{color:#c43e1c}.pptTab--active{font-weight:600}
+.pptTab--active::after{content:"";position:absolute;left:10px;right:10px;bottom:0;height:3px;background:#c43e1c}
+.pptRibbon{height:91px;flex:none;display:flex;align-items:stretch;gap:0;padding:6px 10px 3px;background:#fff;
+  border-bottom:1px solid #d0d0d0;overflow:hidden}
+.pptGroup{min-width:100px;display:flex;flex-direction:column;justify-content:space-between;position:relative;
+  padding:3px 11px 0;border-right:1px solid #e2e2e2;color:#3d3d3d}
+.pptGroup:first-child{min-width:115px}.pptGroup--font{min-width:235px}.pptGroup--slideshow{min-width:155px}
+.pptGroup>small{font-size:10px;color:#6b6b6b;text-align:center;padding:2px 0 0;white-space:nowrap}
+.pptToolRow{height:59px;display:flex;align-items:center;justify-content:center;gap:9px}
+.pptBigTool{min-width:39px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:25px;color:#555}
+.pptBigTool small{font-size:10px;color:#404040;white-space:nowrap}
+.pptToolStack{font-size:10px;line-height:1.75;color:#555;white-space:nowrap}
+.pptFontLine{height:27px;display:flex;align-items:center;gap:10px;padding:0 7px;font-size:12px;color:#333}
+.pptFontLine:first-child{border:1px solid #cfcfcf;border-radius:2px;margin-bottom:2px}
+.pptFontLine:first-child span:first-child{min-width:122px}.pptFontLine:first-child span:nth-child(2){min-width:34px}
+.pptFontLine b{font-size:14px}.pptFontLine i{font-style:italic}.pptRibbonEnd{margin-left:auto;align-self:center;color:#777;padding:0 8px}
+.pptPresent--ribbon{height:43px;background:#fff;color:#444;border:1px solid #d1d1d1;font-weight:500;padding:3px 8px;flex-direction:column}
+.pptPresent--ribbon svg{width:14px;height:14px;color:#c43e1c}.pptPresent--ribbon span{font-size:10px}
+.pptPresent--ribbon:hover{background:#f3f3f3;color:#333}
+.pptWorkspace{flex:1;min-height:0;display:grid;grid-template-columns:218px minmax(0,1fr);background:#e7e7e7}
+.pptThumbRail{min-height:0;display:flex;flex-direction:column;background:#f8f8f8;border-right:1px solid #d2d2d2;overflow:hidden}
+.pptRailHead{height:35px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 13px;color:#4a4a4a}
+.pptRailHead strong{font-size:12px;font-weight:600}.pptRailHead span{color:#777}
+.pptThumbList{list-style:none;min-height:0;overflow:auto;padding:3px 9px 12px 8px;scrollbar-color:#b7b7b7 transparent;scrollbar-width:thin}
+.pptThumbList li{margin:0 0 5px}
+.pptThumb{width:100%;min-height:75px;display:grid;grid-template-columns:25px minmax(0,1fr);grid-template-rows:1fr;align-items:center;gap:5px;
+  padding:5px 5px 5px 0;text-align:left;border:1px solid transparent;border-radius:3px;color:#444;background:transparent}
+.pptThumb:hover{background:#ededed}
+.pptThumb.is-selected{border-color:#c43e1c;background:#fff;box-shadow:0 0 0 1px #c43e1c}
+.pptThumb__num{font-size:11px;text-align:center;color:#555}
+.pptThumb__page{height:62px;aspect-ratio:16/9;position:relative;overflow:hidden;display:flex;flex-direction:column;
+  padding:7px 8px 5px;background:#0a0b0e;color:#f5f5f5;border:1px solid #555;box-shadow:0 1px 2px #bbb}
+.pptThumb__page i{position:absolute;left:8px;top:6px;width:5px;height:5px;background:var(--thumb-accent)}
+.pptThumb__page b{font-size:7px;line-height:1.1;margin-top:15px;max-width:100%;max-height:16px;overflow:hidden;font-weight:700}
+.pptThumb__page strong{font-size:4px;line-height:1.2;margin-top:3px;opacity:.55;white-space:nowrap;overflow:hidden}
+.pptThumb__page em{height:1px;background:var(--thumb-accent);margin-top:auto;width:48%;opacity:.85}
+.pptThumb__label{display:none}
+.pptEditor{min-height:0;display:grid;grid-template-rows:minmax(0,1fr) 65px;overflow:hidden}
+.pptCanvas{position:relative;min-height:0;overflow:hidden;display:grid;place-items:center;padding:12px;background:#e7e7e7}
+html.is-stage #deck{
+  position:absolute;z-index:2;left:50%;top:50%;
+  width:min(100vw,177.7777778vh);height:min(100vh,56.25vw);
+  transform:translate(-50%,-50%) scale(var(--editor-scale,.66));transform-origin:center center;
+  overflow:hidden;background:#090a0d;contain:layout paint size;isolation:isolate;
+}
+.pptNotes{min-height:0;background:#fff;border-top:1px solid #d2d2d2;padding:8px 14px;display:flex;gap:10px;color:#444}
+.pptNotes__handle{width:3px;height:100%;background:#c43e1c;opacity:.75}
+.pptNotes strong{font-size:11px;font-weight:600}.pptNotes p{margin-top:5px;color:#888;font-size:12px}
+.pptStatusbar{height:25px;flex:none;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 9px;
+  background:#f8f8f8;border-top:1px solid #d4d4d4;color:#4d4d4d;font-size:10px;white-space:nowrap;overflow:hidden}
+.pptStatusLeft,.pptStatusRight{display:flex;align-items:center;gap:14px;min-width:0}
+.pptStatusRight{gap:10px}.pptViewIcons{padding-left:8px;border-left:1px solid #ccc;color:#777;font-size:14px}
+.pptZoomTrack{width:100px;height:3px;background:#c8c8c8;position:relative}
+.pptZoomTrack i{position:absolute;left:48%;top:-4px;width:11px;height:11px;border:1px solid #777;border-radius:50%;background:#fff}
+.pptStatusPresent{width:24px;height:20px;padding:0;background:transparent;color:#555;border-color:#aaa}
+html.is-stage .present,html.is-stage .fab{display:none!important}
+html.is-presenting .pptApp{display:contents}
+html.is-presenting .pptTopbar,html.is-presenting .pptTabs,html.is-presenting .pptRibbon,
+html.is-presenting .pptThumbRail,html.is-presenting .pptNotes,html.is-presenting .pptStatusbar{display:none!important}
+html.is-presenting .pptWorkspace,html.is-presenting .pptEditor,html.is-presenting .pptCanvas{display:contents}
+html.is-presenting,html.is-presenting body{background:#050608!important;overflow:hidden!important}
+html.is-presenting #deck{
+  position:fixed;z-index:999;left:50%;top:50%;
+  width:min(100vw,177.7777778vh);height:min(100vh,56.25vw);
+  transform:translate(-50%,-50%);transform-origin:center center;
+}
+@media (max-width:1120px){
+  .pptWorkspace{grid-template-columns:190px minmax(0,1fr)}
+  .pptGroup{min-width:80px;padding-left:7px;padding-right:7px}
+  .pptGroup--font{min-width:200px}.pptSearch{width:22vw}
+}
+@media (max-width:760px){
+  .pptTopGhost,.pptQuick,.pptWindowBtns,.pptGroup--slideshow{display:none}
+  .pptFile{min-width:auto}.pptSearch{display:none}
+  .pptWorkspace{grid-template-columns:150px minmax(0,1fr)}
+  .pptGroup:nth-child(n+4){display:none}
+  .pptRibbon{height:80px}
+  .pptStatusLeft span:nth-child(n+3),.pptStatusRight>span:nth-child(2){display:none}
+}
+@media (max-height:650px){
+  .pptRibbon{height:72px}.pptGroup{padding-top:0}.pptToolRow{height:43px}.pptGroup>small{font-size:8px}
+  .pptEditor{grid-template-rows:minmax(0,1fr) 48px}.pptThumb{min-height:62px}.pptThumb__page{height:50px}
+}
+@media (prefers-reduced-motion:reduce){
+  .pptApp *{scroll-behavior:auto!important;transition:none!important}
+}
+</style>
+<style>/* ==========================================================================
+   Apresentação — HUD do PowerPoint
+   --------------------------------------------------------------------------
+   O pedido é o HUD do PowerPoint recriado de forma idêntica, sem as mecânicas
+   dele: só o botão de apresentar (tela cheia) e a troca de slides funcionam.
+   A barra reproduz a do modo de apresentação: ← → | caneta · ver todos ·
+   zoom · legendas | ⋯. Os ícones entre as barras são desenho, não ferramenta.
+
+   Estados:
+   - `.present`  botão de apresentar (fora da apresentação)
+   - `is-presenting` no <html>  modo apresentação (some o chrome de site)
+   - `.pshow.on`  barra visível (aparece com o mouse, some após 2,8 s parado)
+   - `is-idle`   cursor escondido por inatividade, como no PowerPoint
+   ========================================================================== */
+
+/* ---------- botão apresentar --------------------------------------------- */
+.present{
+  position:fixed;z-index:46;
+  right:calc(clamp(14px,2vw,26px) + 108px);
+  bottom:clamp(20px,3vh,34px);
+  display:flex;align-items:center;gap:9px;
+  background:#000;color:#fff;border:2px solid #000;
+  box-shadow:5px 5px 0 rgba(0,0,0,.22);
+  padding:10px 13px;
+  font-family:var(--mono);font-weight:700;font-size:9px;letter-spacing:.18em;
+  text-transform:uppercase;line-height:1;
+  transition:transform .3s var(--ease),box-shadow .3s var(--ease),background .25s,border-color .25s;
+}
+.present svg{width:11px;height:11px;flex:none;fill:var(--red);stroke:none;transition:fill .25s}
+.present:hover{transform:translate(-3px,-3px);box-shadow:9px 9px 0 rgba(0,0,0,.28);background:var(--red);border-color:var(--red)}
+.present:hover svg{fill:#fff}
+.present:active{transform:translate(0,0);box-shadow:3px 3px 0 rgba(0,0,0,.25)}
+@media (max-width:640px){
+  .present span{display:none}
+  .present{right:clamp(14px,2vw,26px);bottom:calc(clamp(20px,3vh,34px) + 44px);padding:11px}
+}
+
+/* ---------- barra do PowerPoint ------------------------------------------ */
+.pshow{
+  position:fixed;left:clamp(12px,1.8vw,24px);bottom:clamp(16px,2.8vh,28px);z-index:70;
+  display:flex;align-items:center;gap:0;padding:5px 6px;
+  border-radius:7px;
+  background:rgba(36,36,36,.92);
+  -webkit-backdrop-filter:blur(10px) saturate(1.1);
+  backdrop-filter:blur(10px) saturate(1.1);
+  box-shadow:0 10px 30px rgba(0,0,0,.34),inset 0 0 0 1px rgba(255,255,255,.10);
+  color:#fff;
+  opacity:0;transform:translateY(10px);pointer-events:none;
+  transition:opacity .24s var(--ease),transform .24s var(--ease);
+}
+.pshow.on{opacity:1;transform:none;pointer-events:auto}
+
+.pshow__b{
+  width:33px;height:33px;display:grid;place-items:center;border-radius:5px;
+  color:#fff;transition:background .16s,color .16s;
+  cursor:pointer;
+}
+.pshow__b svg{
+  width:18px;height:18px;
+  fill:none;stroke:currentColor;stroke-width:1.85;
+  stroke-linecap:round;stroke-linejoin:round;
+}
+.pshow__b:hover{background:rgba(255,255,255,.17)}
+.pshow__b:active{background:rgba(255,255,255,.28)}
+.pshow__b:focus-visible{outline:2px solid #fff;outline-offset:1px;background:rgba(255,255,255,.17)}
+
+/* ícones que existem no PowerPoint mas não têm função aqui (só desenho) */
+.pshow__b.is-inert{cursor:default}
+.pshow__b.is-inert:hover{background:transparent}
+
+.pshow__sep{width:1px;height:19px;background:rgba(255,255,255,.25);margin:0 5px;flex:none}
+
+/* menu do ⋯ */
+.pshow__menu{
+  position:fixed;left:clamp(12px,1.8vw,24px);
+  bottom:calc(clamp(16px,2.8vh,28px) + 52px);z-index:71;
+  min-width:250px;padding:6px;
+  border-radius:7px;background:rgba(44,44,44,.97);
+  box-shadow:0 14px 40px rgba(0,0,0,.4),inset 0 0 0 1px rgba(255,255,255,.12);
+  color:#fff;
+  animation:pshowIn .16s var(--ease) both;
+}
+.pshow__menu[hidden]{display:none}
+.pshow__mi{
+  display:flex;align-items:center;justify-content:space-between;gap:18px;
+  width:100%;padding:9px 11px;border-radius:4px;text-align:left;
+  font-family:var(--sans);font-size:12.5px;font-weight:500;letter-spacing:0;
+  color:#fff;cursor:pointer;
+}
+.pshow__mi:hover{background:rgba(255,255,255,.17)}
+.pshow__mi kbd{
+  font-family:var(--mono);font-size:9px;letter-spacing:.12em;
+  border:1px solid rgba(255,255,255,.4);border-radius:3px;padding:3px 5px;opacity:.8;
+}
+
+/* número digitado (Ir para o slide) */
+.pshow__goto{
+  position:fixed;left:clamp(12px,1.8vw,24px);
+  bottom:calc(clamp(16px,2.8vh,28px) + 52px);z-index:71;
+  background:rgba(36,36,36,.95);color:#fff;
+  border-radius:5px;padding:8px 12px;
+  font-family:var(--mono);font-weight:700;font-size:11px;letter-spacing:.16em;
+  box-shadow:0 10px 26px rgba(0,0,0,.35),inset 0 0 0 1px rgba(255,255,255,.12);
+  animation:pshowIn .16s var(--ease) both;
+}
+.pshow__goto[hidden]{display:none}
+.pshow__goto i{font-style:normal;color:var(--yellow);margin-left:6px}
+
+@keyframes pshowIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* ---------- modo apresentação -------------------------------------------- */
+html.is-presenting .present,
+html.is-presenting .fab,
+html.is-presenting .cursor,
+html.is-presenting .menu{display:none !important}
+
+/* cursor: seta normal; some sozinho quando o mouse para (como no PowerPoint) */
+html.is-presenting body{cursor:default}
+html.is-presenting .pshow,
+html.is-presenting .pshow *,
+html.is-presenting .pshow__menu,
+html.is-presenting .pshow__menu *{cursor:pointer}
+html.is-presenting.is-idle body,
+html.is-presenting.is-idle .pshow,
+html.is-presenting.is-idle .pshow *{cursor:none}
+
+/* impressão: controles de tela fora do papel */
+@media print{
+  .present,.pshow,.pshow__menu,.pshow__goto{display:none !important}
+}
+</style>
+<style>@media print{html,body{background:#fff}.hud,.progress,.fab,.cursor,.grain,.glow,.menu,.edge,.fx3d{display:none !important}.scene{break-after:page;min-height:0;height:100vh}}</style>
 </head>
 <body>
 
@@ -912,13 +1638,79 @@ html:not(.js) .phase__stem{transform:none}
 <div class="grain" aria-hidden="true"></div>
 <div class="glow" id="glow" aria-hidden="true"></div>
 
-<header class="hud" id="hud">
-  <a class="hud__brand" href="#s1" aria-label="CoreMotion — voltar ao início"><i></i>CoreMotion</a>
-  <div class="hud__mid mono"><em id="hudCh">Capa</em></div>
-  <div class="hud__num"><b id="hudNum">01</b><span>/ 15</span></div>
-</header>
 
+
+<div class="pptApp" id="pptApp">
+  <header class="pptTopbar" aria-label="Barra superior do PowerPoint">
+    <div class="pptBrand" aria-label="PowerPoint"><span class="pptBrand__mark">P</span></div>
+    <div class="pptQuick" aria-hidden="true"><span>↶</span><span>↷</span><span>▣</span></div>
+    <div class="pptFile"><strong>CoreMotion — Pitch 2026</strong><span>Salvo neste dispositivo</span></div>
+    <div class="pptSearch" aria-hidden="true"><i>⌕</i> Pesquisar (Alt+Q)</div>
+    <div class="pptTopActions">
+      <span class="pptAvatar" aria-hidden="true">CM</span>
+      <span class="pptTopGhost">Comentários</span>
+      <button class="pptPresent" id="toolbarPresent" type="button" data-from="current" aria-label="Apresentar do slide atual">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5 13 8l-9 5.5z"/></svg> Apresentar
+      </button>
+      <span class="pptShare">Compartilhar</span>
+      <span class="pptWindowBtns" aria-hidden="true">—　□　×</span>
+    </div>
+  </header>
+
+  <nav class="pptTabs" aria-label="Abas da faixa de opções">
+    <span class="pptTab pptTab--file">Arquivo</span><span class="pptTab pptTab--active">Página Inicial</span>
+    <span class="pptTab">Inserir</span><span class="pptTab">Desenhar</span><span class="pptTab">Design</span>
+    <span class="pptTab">Transições</span><span class="pptTab">Animações</span><span class="pptTab">Apresentação de Slides</span>
+    <span class="pptTab">Revisão</span><span class="pptTab">Exibir</span><span class="pptTab">Ajuda</span>
+  </nav>
+
+  <section class="pptRibbon" aria-label="Faixa de opções Página Inicial">
+    <div class="pptGroup"><div class="pptToolRow"><span class="pptBigTool">▣<small>Colar</small></span><span class="pptToolStack">✂　Recortar<br>▢　Copiar<br>▧　Pincel</span></div><small>Área de Transferência</small></div>
+    <div class="pptGroup"><div class="pptToolRow"><span class="pptBigTool">＋<small>Novo Slide</small></span><span class="pptToolStack">▤　Layout<br>⧉　Reutilizar<br>⌄　Seção</span></div><small>Slides</small></div>
+    <div class="pptGroup pptGroup--font"><div class="pptFontLine"><span>DM Sans　⌄</span><span>18　⌄</span><b>B</b><i>I</i><u>U</u><span>A̲</span><span>✎</span></div><div class="pptFontLine"><span>🔤</span><span>◉</span><span>▤</span><span>▣</span><span>✦</span></div><small>Fonte</small></div>
+    <div class="pptGroup"><div class="pptToolRow"><span class="pptToolStack">•　Marcadores<br>≡　Alinhar<br>↔　Espaçamento<br>▤　Colunas</span></div><small>Parágrafo</small></div>
+    <div class="pptGroup"><div class="pptToolRow"><span class="pptBigTool">◇<small>Formas</small></span><span class="pptToolStack">▧　Organizar<br>◉　Estilos<br>⌕　Localizar</span></div><small>Desenho</small></div>
+    <div class="pptGroup pptGroup--slideshow"><div class="pptToolRow"><button class="pptPresent pptPresent--ribbon" type="button" data-from="start"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5 13 8l-9 5.5z"/></svg><span>Do início</span></button><span class="pptBigTool">▤<small>Exibir slides</small></span></div><small>Apresentação de Slides</small></div>
+    <div class="pptRibbonEnd" aria-hidden="true">⌄</div>
+  </section>
+
+  <div class="pptWorkspace">
+    <aside class="pptThumbRail" aria-label="Miniaturas dos slides">
+      <div class="pptRailHead"><strong>Slides</strong><span>⌄　＋</span></div>
+      <ol id="thumbList" class="pptThumbList"></ol>
+    </aside>
+    <section class="pptEditor" aria-label="Área de edição do slide">
+      <div class="pptCanvas" id="pptCanvas">
 <main id="deck">
+<header class="hud" id="hud">
+  <a class="hud__brand" href="#s0" aria-label="CoreMotion — voltar ao início"><i></i>CoreMotion</a>
+  <div class="hud__count">
+    <span class="hud__ch" id="hudCh">Abertura</span>
+    <span class="hud__dot" aria-hidden="true">·</span>
+    <span class="hud__num"><b id="hudNum">01</b><span id="hudTotal">/16</span></span>
+  </div>
+</header>
+<!-- ============================ 00 · ABERTURA ============================ -->
+<section class="scene scene--paper s0" id="s0" data-ch="Abertura" data-hud="dark" data-fx="soft">
+  <div class="s0__reveal" aria-hidden="true"><span class="s0__wipe"></span></div>
+
+  <div class="s0__in">
+    <div class="s0__lockup" role="img" aria-label="CoreMotion">
+      <div class="s0__mark" aria-hidden="true">CM</div>
+      <div class="s0__word" aria-hidden="true">CoreMotion<i>.</i></div>
+    </div>
+
+    <div class="s0__rule" aria-hidden="true"></div>
+
+    <h1 class="s0__slogan">
+      <span class="line"><span>Entre em <em>movimento.</em></span></span>
+    </h1>
+    <p class="s0__sub mono">Marketplace esportivo · lojas verificadas · custódia</p>
+  </div>
+
+  <div class="s0__scroll hint mono mono--s"><span class="arr"></span>Role para começar</div>
+</section>
+
 <!-- ============================ 01 · CAPA ============================ -->
 <section class="scene scene--paper s1" id="s1" data-ch="Capa" data-hud="dark">
   <div class="inner s1__grid">
@@ -932,7 +1724,6 @@ html:not(.js) .phase__stem{transform:none}
         <span class="tag"><i></i>Lojas verificadas</span>
         <span class="tag"><i></i>Custódia</span>
       </div>
-      <p class="mono mono--s s1__by rv" style="--i:5">Apresentado por [seu nome] · [cidade], 2026</p>
     </div>
 
     <div class="s1__art" aria-hidden="true">
@@ -1547,7 +2338,7 @@ html:not(.js) .phase__stem{transform:none}
 </section>
 
 <!-- ============================ 15 · OBRIGADO ============================ -->
-<section class="scene scene--dark s15" id="s15" data-ch="Obrigado" data-hud="light">
+<section class="scene scene--dark s15" id="s15" data-ch="Obrigado" data-hud="light" data-fx="off">
   <div class="s15__ring" aria-hidden="true"></div>
   <div class="s15__disc" aria-hidden="true"></div>
 
@@ -1558,11 +2349,10 @@ html:not(.js) .phase__stem{transform:none}
     </h2>
     <p class="s15__lead rv" style="--i:2">Vamos construir o ponto de encontro do esporte de alta performance?</p>
     <div class="s15__contacts rv" style="--i:3">
-      <span>[seu@email.com]</span>
-      <span>[telefone]</span>
-      <span>[site]</span>
+      <span>alfeuvlp@gmail.com</span>
+      <span>41 9 9893-8283</span>
     </div>
-    <a class="s15__top rv" style="--i:4" href="#s1" data-top>
+    <a class="s15__top rv" style="--i:4" href="#s0" data-top>
       <i>
         <svg width="11" height="11" viewBox="0 0 12 12" aria-hidden="true"><path d="M6 10V2M2 6l4-4 4 4" stroke="currentColor" stroke-width="1.6" fill="none"/></svg>
       </i>
@@ -1571,7 +2361,7 @@ html:not(.js) .phase__stem{transform:none}
   </div>
 </section>
 
-</main>
+
 
 <!-- ============================ MENU ============================ -->
 <div class="menu" id="menu" aria-hidden="true" role="dialog" aria-label="Índice da apresentação">
@@ -1591,12 +2381,69 @@ html:not(.js) .phase__stem{transform:none}
   <b aria-hidden="true"><i></i><i></i><i></i></b><span>Índice</span>
 </button>
 
+<!-- ============================ APRESENTAR ============================ -->
+<button class="present" id="presentBtn" type="button" aria-label="Apresentar em tela cheia" title="Apresentar em tela cheia · F5 do começo · Shift+F5 do slide atual">
+  <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4.6 2.4 13 8l-8.4 5.6z"/></svg>
+  <span>Apresentar</span>
+</button>
+
+<!-- HUD da apresentação: a barra do PowerPoint, no canto inferior esquerdo.
+     ← e → navegam; os demais ícones são só o desenho do PowerPoint
+     (o pedido é o HUD idêntico, não as ferramentas de caneta/zoom). -->
+<div class="pshow" id="pshow" role="toolbar" aria-label="Controles da apresentação" aria-hidden="true">
+  <button class="pshow__b" type="button" data-ps="prev" aria-label="Slide anterior" title="Slide anterior  ←">
+    <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12.6 4.4 7 10l5.6 5.6"/></svg>
+  </button>
+  <button class="pshow__b" type="button" data-ps="next" aria-label="Próximo slide" title="Próximo slide  →">
+    <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7.4 4.4 13 10l-5.6 5.6"/></svg>
+  </button>
+
+  <span class="pshow__sep" aria-hidden="true"></span>
+
+  <button class="pshow__b is-inert" type="button" aria-disabled="true" tabindex="-1" aria-label="Caneta e apontador (visual do PowerPoint)" title="Caneta e apontador — visual do PowerPoint">
+    <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M13.5 3.9a1.9 1.9 0 0 1 2.6.1 1.9 1.9 0 0 1 .1 2.6l-8.4 8.3L4 16l1.1-3.8z"/><path d="M12.2 5.2 15 8"/></svg>
+  </button>
+  <button class="pshow__b is-inert" type="button" aria-disabled="true" tabindex="-1" aria-label="Ver todos os slides (visual do PowerPoint)" title="Ver todos os slides — visual do PowerPoint">
+    <svg viewBox="0 0 20 20" aria-hidden="true"><rect x="3.6" y="4.1" width="5.4" height="5" rx=".7"/><rect x="11" y="4.1" width="5.4" height="5" rx=".7"/><rect x="3.6" y="10.9" width="5.4" height="5" rx=".7"/><rect x="11" y="10.9" width="5.4" height="5" rx=".7"/></svg>
+  </button>
+  <button class="pshow__b is-inert" type="button" aria-disabled="true" tabindex="-1" aria-label="Zoom no slide (visual do PowerPoint)" title="Zoom no slide — visual do PowerPoint">
+    <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="9" cy="9" r="4.6"/><path d="M12.5 12.5 16.5 16.5M6.9 9h4.2M9 6.9v4.2"/></svg>
+  </button>
+  <button class="pshow__b is-inert" type="button" aria-disabled="true" tabindex="-1" aria-label="Legendas (visual do PowerPoint)" title="Legendas — visual do PowerPoint">
+    <svg viewBox="0 0 20 20" aria-hidden="true"><rect x="3" y="5.2" width="14" height="9.6" rx="1.4"/><path d="M8.6 8.9a2.1 2.1 0 1 0 0 2.9M14.2 8.9a2.1 2.1 0 1 0 0 2.9"/></svg>
+  </button>
+
+  <span class="pshow__sep" aria-hidden="true"></span>
+
+  <button class="pshow__b" type="button" data-ps="more" aria-label="Mais opções" aria-haspopup="menu" aria-expanded="false" title="Mais opções">
+    <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="4.6" cy="10" r="1.15" style="fill:currentColor;stroke:none"/><circle cx="10" cy="10" r="1.15" style="fill:currentColor;stroke:none"/><circle cx="15.4" cy="10" r="1.15" style="fill:currentColor;stroke:none"/></svg>
+  </button>
+</div>
+
+<div class="pshow__menu" id="pshowMenu" role="menu" aria-label="Opções da apresentação" hidden>
+  <button class="pshow__mi" type="button" data-ps="end" role="menuitem">Encerrar apresentação <kbd>Esc</kbd></button>
+</div>
+
+<div class="pshow__goto" id="pshowGoto" aria-live="polite" hidden></div>
+
 <div class="progress" aria-hidden="true">
   <div class="progress__bar"></div>
   <div class="progress__fill" id="progFill"></div>
-  <div class="progress__ticks" id="progTicks"></div>
 </div>
 
+</main>
+      </div>
+      <section class="pptNotes" aria-label="Anotações do apresentador">
+        <span class="pptNotes__handle" aria-hidden="true"></span>
+        <div><strong>Anotações</strong><p>Clique para adicionar anotações</p></div>
+      </section>
+    </section>
+  </div>
+  <footer class="pptStatusbar" aria-label="Barra de status">
+    <div class="pptStatusLeft"><span id="pptSlideStatus">Slide 1 de 16</span><span id="pptPageName">Abertura</span><span>Português (Brasil)</span><span>♿ Acessibilidade: investigar</span></div>
+    <div class="pptStatusRight"><span>Notas</span><span>Comentários</span><span class="pptViewIcons" aria-hidden="true">▣　▦　▤</span><span>−</span><span class="pptZoomTrack"><i></i></span><span>＋</span><span id="pptZoomValue">100%</span><button class="pptStatusPresent pptPresent" type="button" data-from="current" aria-label="Apresentar do slide atual">⛶</button></div>
+  </footer>
+</div>
 <script>(() => {
   'use strict';
   const $  = (s, c = document) => c.querySelector(s);
@@ -1611,13 +2458,43 @@ html:not(.js) .phase__stem{transform:none}
   const hudCh  = $('#hudCh');
   const hudNum = $('#hudNum');
   const progFill = $('#progFill');
-  const progTicks = $('#progTicks');
+  const hudTotal = $('#hudTotal');
   const menu = $('#menu');
   const list = $('#menuList');
+  const thumbList = $('#thumbList');
+  const pptSlideStatus = $('#pptSlideStatus');
+  const pptPageName = $('#pptPageName');
 
-  /* ---------------------------------------------------------------- ticks */
-  if (progTicks) {
-    for (let i = 0; i < N; i++) progTicks.appendChild(document.createElement('i'));
+  if (hudTotal) hudTotal.textContent = '/' + String(N).padStart(2, '0');
+
+  /* Miniaturas da interface de edição do PowerPoint. As ferramentas da fita
+     são só visuais; as miniaturas continuam sendo navegação de slide. */
+  if (thumbList) {
+    scenes.forEach((scene, i) => {
+      const li = document.createElement('li');
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'pptThumb';
+      button.dataset.goto = String(i);
+      button.setAttribute('aria-label', 'Ir ao slide ' + (i + 1) + ': ' + (scene.dataset.ch || ''));
+      const title = scene.querySelector('.h1,.h2,.s0__word,.s12__r .big');
+      const heading = (title ? title.textContent : scene.dataset.ch || 'CoreMotion')
+        .replace(/\s+/g, ' ').trim().slice(0, 46);
+      const accent = scene.classList.contains('scene--red') ? '#ff3333' :
+                     scene.classList.contains('scene--blue') ? '#0066ff' : '#ff3333';
+      button.style.setProperty('--thumb-accent', accent);
+      button.innerHTML = '<span class="pptThumb__num">' + String(i + 1).padStart(2, '0') + '</span>' +
+        '<span class="pptThumb__page"><i></i><b></b><strong></strong><em></em></span>' +
+        '<span class="pptThumb__label">' + (scene.dataset.ch || 'Slide') + '</span>';
+      button.querySelector('.pptThumb__page b').textContent = heading;
+      button.querySelector('.pptThumb__page strong').textContent = scene.dataset.kicker || '';
+      li.appendChild(button);
+      thumbList.appendChild(li);
+    });
+    thumbList.addEventListener('click', (e) => {
+      const button = e.target.closest('[data-goto]');
+      if (button) goTo(Number(button.dataset.goto));
+    });
   }
 
   /* ---------------------------------------------------------------- índice */
@@ -1667,70 +2544,175 @@ html:not(.js) .phase__stem{transform:none}
     });
   }
 
-  /* ---------------------------------------------------------------- navega */
-  function goTo(i) {
-    i = Math.max(0, Math.min(N - 1, i));
-    const top = scenes[i].getBoundingClientRect().top + window.scrollY;
-    window.scrollTo({ top, behavior: reduce ? 'auto' : 'smooth' });
+  /* ---------------------------------------------------------------- palco */
+  /* Slide 16:9 fixo, como um slide do PowerPoint: 1600x900 unidades de
+     projeto, reduzidas por escala para caber na janela (letterbox em volta). */
+  const STAGE_W = 1600;
+  const STAGE_H = 900;
+  const deck = $('#deck');
+
+  const editorCanvas = $('#pptCanvas');
+  function fitStage() {
+    if (!deck) return;
+    const vw = window.innerWidth || STAGE_W;
+    const vh = window.innerHeight || STAGE_H;
+    const baseW = Math.min(vw, vh * 16 / 9);
+    const baseH = baseW * 9 / 16;
+    const areaW = editorCanvas ? editorCanvas.clientWidth : vw;
+    const areaH = editorCanvas ? editorCanvas.clientHeight : vh;
+    const k = document.documentElement.classList.contains('is-presenting') ? 1 :
+      Math.min(1, Math.max(.1, (areaW - 40) / baseW), Math.max(.1, (areaH - 32) / baseH));
+    document.documentElement.style.setProperty('--editor-scale', k.toFixed(4));
   }
 
-  let cur = -1;
-  let ticking = false;
-
-  function measure() {
-    const vh = window.innerHeight || 1;
-    const max = document.documentElement.scrollHeight - vh;
-    if (progFill) progFill.style.width = (max > 0 ? (window.scrollY / max) * 100 : 0) + '%';
-
-    let best = 0, bestScore = -1;
-
-    scenes.forEach((s, i) => {
-      const r = s.getBoundingClientRect();
-      const seen = Math.min(r.bottom, vh) - Math.max(r.top, 0);
-      const score = Math.max(0, seen) / vh;
-      if (score > bestScore) { bestScore = score; best = i; }
-
-      if (!reduce) {
-        const p = (r.top + r.height / 2 - vh / 2) / vh;
-        s.style.setProperty('--p', Math.max(-1.4, Math.min(1.4, p)).toFixed(3));
-      }
-      s.classList.toggle('on', score > 0.32);
+  /* Mantém cada composição dentro da área útil do slide. É um ajuste de
+     segurança proporcional: só reduz quando o conteúdo real excede a página. */
+  function fitScene(scene) {
+    if (!scene || !scene.classList.contains('on')) return;
+    const root = scene.querySelector(':scope > .inner,:scope > .s0__in,:scope > .s12__grid,:scope > .s15__in');
+    if (!root) return;
+    root.style.removeProperty('transform');
+    scene.style.removeProperty('--fit-scale');
+    const sceneRect = scene.getBoundingClientRect();
+    const rootRect = root.getBoundingClientRect();
+    const insetX = Math.max(16, Math.min(32, scene.clientWidth * .025));
+    const insetY = Math.max(16, Math.min(32, scene.clientHeight * .04));
+    let left = rootRect.left, right = rootRect.right;
+    let top = rootRect.top, bottom = rootRect.bottom;
+    root.querySelectorAll('*').forEach((element) => {
+      if (!element.getClientRects().length) return;
+      const rect = element.getBoundingClientRect();
+      left = Math.min(left, rect.left); right = Math.max(right, rect.right);
+      top = Math.min(top, rect.top); bottom = Math.max(bottom, rect.bottom);
     });
-
-    if (best !== cur) {
-      cur = best;
-      if (hudCh) hudCh.textContent = scenes[best].dataset.ch || '';
-      if (hudNum) hudNum.textContent = String(best + 1).padStart(2, '0');
-      const tone = scenes[best].dataset.hud;
-      if (hud) {
-        hud.classList.toggle('hud--light', tone === 'light');
-        hud.classList.toggle('hud--split', tone === 'split');
-      }
-      if (list) {
-        $$('li', list).forEach((li, i) => li.classList.toggle('is-now', i === best));
-      }
-      if (history.replaceState) history.replaceState(null, '', '#' + scenes[best].id);
+    const centerX = (rootRect.left + rootRect.right) / 2;
+    const centerY = (rootRect.top + rootRect.bottom) / 2;
+    const halfW = Math.max(centerX - left, right - centerX, 1);
+    const halfH = Math.max(centerY - top, bottom - centerY, 1);
+    const availableW = Math.max(1, sceneRect.width / 2 - insetX);
+    const availableH = Math.max(1, sceneRect.height / 2 - insetY);
+    const scale = Math.min(1, availableW / halfW, availableH / halfH);
+    if (scale < .999) {
+      const fitScale = scale.toFixed(4);
+      scene.style.setProperty('--fit-scale', fitScale);
+      root.style.transformOrigin = 'center center';
+      root.style.transform = `scale(${fitScale})`;
+    } else {
+      root.style.removeProperty('transform-origin');
     }
   }
 
-  function onScroll() {
-    if (ticking) return;
-    ticking = true;
-    requestAnimationFrame(() => { ticking = false; measure(); });
+  function fitActiveScene() {
+    fitStage();
+    if (cur >= 0) requestAnimationFrame(() => fitScene(scenes[cur]));
+  }
+  fitStage();
+
+  /* ---------------------------------------------------------------- navega */
+  let cur = -1;
+  let dir = 1;
+  let animTimer = null;
+
+  function clearAnim() {
+    scenes.forEach((sc) => sc.classList.remove('is-in-next', 'is-in-prev', 'is-out-next', 'is-out-prev'));
   }
 
-  window.addEventListener('scroll', onScroll, { passive: true });
-  window.addEventListener('resize', onScroll);
+  function paint(i, animate) {
+    const prev = cur;
+    cur = i;
 
-  /* ---------------------------------------------------------------- teclado */
+    clearTimeout(animTimer);
+    clearAnim();
+
+    scenes.forEach((sc, k) => sc.classList.toggle('on', k === i));
+
+    if (animate && prev >= 0 && prev !== i) {
+      const incoming = scenes[i];
+      const outgoing = scenes[prev];
+      incoming.classList.add(dir > 0 ? 'is-in-next' : 'is-in-prev');
+      outgoing.classList.add(dir > 0 ? 'is-out-next' : 'is-out-prev');
+      outgoing.classList.remove('on');
+      animTimer = setTimeout(clearAnim, 760);
+    }
+
+    if (hudCh) hudCh.textContent = scenes[i].dataset.ch || '';
+    if (hudNum) hudNum.textContent = String(i + 1).padStart(2, '0');
+    if (hud) {
+      hud.classList.add('hud--light');           // tema escuro em todos os slides
+      hud.classList.remove('hud--split');
+      hud.classList.toggle('hud--red', scenes[i].classList.contains('scene--red'));
+      hud.classList.toggle('hud--blue', scenes[i].classList.contains('scene--blue'));
+    }
+    if (progFill) progFill.style.width = (N > 1 ? (i / (N - 1)) * 100 : 100) + '%';
+    if (list) $$('li', list).forEach((li, k) => li.classList.toggle('is-now', k === i));
+    if (thumbList) $$('.pptThumb', thumbList).forEach((button, k) => {
+      const selected = k === i;
+      button.classList.toggle('is-selected', selected);
+      if (selected) {
+        button.setAttribute('aria-current', 'page');
+        button.scrollIntoView({ block: 'nearest' });
+      } else button.removeAttribute('aria-current');
+    });
+    if (pptSlideStatus) pptSlideStatus.textContent = 'Slide ' + (i + 1) + ' de ' + N;
+    if (pptPageName) pptPageName.textContent = scenes[i].dataset.ch || '';
+    requestAnimationFrame(() => fitScene(scenes[i]));
+    if (history.replaceState) history.replaceState(null, '', '#' + scenes[i].id);
+  }
+
+  function goTo(i, animate) {
+    i = Math.max(0, Math.min(N - 1, i));
+    if (i === cur) return;
+    dir = i > cur ? 1 : -1;
+    paint(i, animate !== false);
+  }
+
+  /* ---------------------------------------------------------------- teclado */  /* ---------------------------------------------------------------- teclado */
   window.addEventListener('keydown', (e) => {
     const tag = (e.target.tagName || '').toLowerCase();
     if (tag === 'input' || tag === 'textarea') return;
+
+    /* F5 / Shift+F5: apresentar do começo / do slide atual */
+    if (e.key === 'F5') {
+      e.preventDefault();
+      if (presenting) stopPresent(); else startPresent(!e.shiftKey);
+      return;
+    }
+    if (e.key === 'Escape' && presenting) {
+      e.preventDefault();
+      if (pshowMenu && !pshowMenu.hidden) closePshowMenu();
+      else stopPresent();
+      return;
+    }
 
     if (isOpen()) {
       if (e.key === 'Escape') { e.preventDefault(); closeMenu(); }
       return;
     }
+
+    /* dentro da apresentação: passagem de slides do PowerPoint */
+    if (presenting) {
+      if (/^[0-9]$/.test(e.key)) { e.preventDefault(); typeGoto(e.key); return; }
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        if (gotoBuf) goToNumber();
+        else goTo(currentIndex() + 1);
+        wakeHud();
+        return;
+      }
+      if (e.key === ' ' || e.key === 'ArrowRight' || e.key === 'ArrowDown' ||
+          e.key === 'PageDown' || e.key === 'n' || e.key === 'N') {
+        e.preventDefault(); goTo(currentIndex() + 1); wakeHud();
+      } else if (e.key === 'Backspace' || e.key === 'ArrowLeft' || e.key === 'ArrowUp' ||
+                 e.key === 'PageUp' || e.key === 'p' || e.key === 'P') {
+        e.preventDefault(); goTo(currentIndex() - 1); wakeHud();
+      } else if (e.key === 'Home') {
+        e.preventDefault(); goTo(0); wakeHud();
+      } else if (e.key === 'End') {
+        e.preventDefault(); goTo(N - 1); wakeHud();
+      }
+      return;
+    }
+
     const k = e.key;
     if (k === 'ArrowRight' || k === 'ArrowDown' || k === 'PageDown' || k === ' ') {
       e.preventDefault(); goTo((cur < 0 ? 0 : cur) + 1);
@@ -1743,6 +2725,161 @@ html:not(.js) .phase__stem{transform:none}
     } else if (k === 'm' || k === 'M') {
       e.preventDefault(); openMenu();
     }
+  });
+
+  /* ---------------------------------------------------------------- apresentação */
+  /* HUD do PowerPoint: barra inferior esquerda + botão de apresentar.
+     Só a apresentação (tela cheia) e a passagem de slides funcionam — caneta,
+     ver todos, zoom e legendas são o desenho do HUD, como pedido. */
+  const presentBtn = $('#presentBtn');
+  const pshow = $('#pshow');
+  const pshowMenu = $('#pshowMenu');
+  const pshowGoto = $('#pshowGoto');
+  const moreBtn = pshow ? pshow.querySelector('[data-ps="more"]') : null;
+
+  let presenting = false;
+  let hudTimer = null;
+  let idleTimer = null;
+  let gotoBuf = '';
+  let gotoTimer = null;
+
+  function currentIndex() { return cur < 0 ? 0 : cur; }
+
+  function wakeHud() {
+    if (!presenting || !pshow) return;
+    pshow.classList.add('on');
+    pshow.setAttribute('aria-hidden', 'false');
+    clearTimeout(hudTimer);
+    hudTimer = setTimeout(() => {
+      const busy = pshow.matches(':hover') || pshow.contains(document.activeElement) ||
+                   (pshowMenu && !pshowMenu.hidden);
+      if (busy) { wakeHud(); return; }
+      pshow.classList.remove('on');
+      pshow.setAttribute('aria-hidden', 'true');
+    }, 2800);
+  }
+
+  function wakeCursor() {
+    document.documentElement.classList.remove('is-idle');
+    clearTimeout(idleTimer);
+    if (!presenting) return;
+    idleTimer = setTimeout(() => {
+      if (pshow && pshow.matches(':hover')) { wakeCursor(); return; }
+      document.documentElement.classList.add('is-idle');
+    }, 2200);
+  }
+
+  function openPshowMenu() {
+    if (!pshowMenu) return;
+    pshowMenu.hidden = false;
+    if (moreBtn) moreBtn.setAttribute('aria-expanded', 'true');
+    wakeHud();
+  }
+  function closePshowMenu() {
+    if (!pshowMenu) return;
+    pshowMenu.hidden = true;
+    if (moreBtn) moreBtn.setAttribute('aria-expanded', 'false');
+  }
+  function togglePshowMenu() {
+    if (!pshowMenu) return;
+    if (pshowMenu.hidden) openPshowMenu(); else closePshowMenu();
+  }
+
+  function showGoto() {
+    if (!pshowGoto) return;
+    clearTimeout(gotoTimer);
+    if (!gotoBuf) { pshowGoto.hidden = true; return; }
+    pshowGoto.innerHTML = 'Slide <i>' + gotoBuf + '</i> + Enter';
+    pshowGoto.hidden = false;
+    gotoTimer = setTimeout(() => { gotoBuf = ''; pshowGoto.hidden = true; }, 2400);
+  }
+  function typeGoto(d) {
+    gotoBuf = (gotoBuf + d).replace(/^0+(?=\d)/, '').slice(0, 3) || '0';
+    showGoto();
+  }
+  function goToNumber() {
+    const n = parseInt(gotoBuf, 10);
+    gotoBuf = '';
+    if (pshowGoto) pshowGoto.hidden = true;
+    if (n >= 1 && n <= N) goTo(n - 1);
+    wakeHud();
+  }
+
+  function startPresent(fromStart) {
+    if (presenting) return;
+    presenting = true;
+    closeMenu();
+    closePshowMenu();
+    document.documentElement.classList.add('is-presenting');
+    goTo(fromStart ? 0 : currentIndex());
+    const el = document.documentElement;
+    if (el.requestFullscreen) {
+      const p = el.requestFullscreen({ navigationUI: 'hide' });
+      if (p && p.catch) p.catch(() => {});   // iframe sem allowfullscreen: segue em tela cheia falsa
+    }
+    wakeHud();
+    wakeCursor();
+    setTimeout(fitActiveScene, 140);
+  }
+
+  function stopPresent() {
+    if (!presenting) return;
+    presenting = false;
+    closePshowMenu();
+    document.documentElement.classList.remove('is-presenting', 'is-idle');
+    if (pshow) { pshow.classList.remove('on'); pshow.setAttribute('aria-hidden', 'true'); }
+    clearTimeout(hudTimer);
+    clearTimeout(idleTimer);
+    gotoBuf = '';
+    if (pshowGoto) pshowGoto.hidden = true;
+    if (document.fullscreenElement && document.exitFullscreen) {
+      document.exitFullscreen().catch(() => {});
+    }
+  }
+
+  if (presentBtn) presentBtn.addEventListener('click', () => startPresent(false));
+  $$('.pptPresent').forEach((button) => {
+    button.addEventListener('click', () => startPresent(button.dataset.from === 'start'));
+  });
+
+  if (pshow) {
+    pshow.addEventListener('click', (e) => {
+      const b = e.target.closest('[data-ps]');
+      if (!b) return;
+      const act = b.dataset.ps;
+      if (act === 'prev') { closePshowMenu(); goTo(currentIndex() - 1); }
+      else if (act === 'next') { closePshowMenu(); goTo(currentIndex() + 1); }
+      else if (act === 'more') togglePshowMenu();
+      else if (act === 'end') { closePshowMenu(); stopPresent(); }
+      wakeHud();
+    });
+  }
+
+  if (pshowMenu) {
+    pshowMenu.addEventListener('click', (e) => {
+      const b = e.target.closest('[data-ps="end"]');
+      if (b) { closePshowMenu(); stopPresent(); }
+    });
+  }
+
+  /* clique no slide avança, como no PowerPoint */
+  document.addEventListener('click', (e) => {
+    if (!presenting) return;
+    if (e.target.closest('.pshow, .pshow__menu, .pshow__goto')) return;
+    if (e.target.closest('a, button, input, textarea, select, .menu')) return;
+    if (pshowMenu && !pshowMenu.hidden) { closePshowMenu(); return; }
+    goTo(currentIndex() + 1);
+    wakeHud();
+  });
+
+  window.addEventListener('mousemove', () => {
+    if (!presenting) return;
+    wakeHud();
+    wakeCursor();
+  }, { passive: true });
+
+  document.addEventListener('fullscreenchange', () => {
+    if (presenting && !document.fullscreenElement) stopPresent();
   });
 
   /* ---------------------------------------------------------------- cursor */
@@ -1839,21 +2976,298 @@ html:not(.js) .phase__stem{transform:none}
     }, 1900);
   }
 
-  /* ---------------------------------------------------------------- deep link */
-  if (location.hash) {
-    const target = document.querySelector(location.hash);
-    if (target) {
-      document.documentElement.style.scrollBehavior = 'auto';
-      window.scrollTo(0, target.getBoundingClientRect().top + window.scrollY);
-      requestAnimationFrame(() => { document.documentElement.style.scrollBehavior = ''; });
+
+  /* ---------------------------------------------------------------- fx 3D */
+  /* Relevo 3D monocromático: cada ícone é um <symbol> com a silhueta
+     "extrudada" (5 cópias deslocadas + a face por cima, tudo na mesma cor).
+     As cenas recebem uma camada .fx3d com 7 peças soltas; a última cena fica
+     limpa. A cor vem da cena (fx.css), nunca do ícone. */
+
+  const FX_ICONS = {
+    /* tênis — perfil, bico à esquerda */
+    sneaker: [
+      'M3 68 L97 68 L97 77 C97 81 94 83 90 83 L10 83 C6 83 3 81 3 77 Z',
+      'M4 66 C5 62 8 58 13 55 C22 50 32 47 40 42 C46 38 49 33 52 27 C54 24 58 23 61 25 L68 29 C70 31 71 34 71 37 L71 49 L88 56 C93 58 96 61 96 65 L96 66 L4 66 Z',
+      'M71 42 C79 45 86 48 92 51 L92 54 C86 51 78 48 71 46 Z'
+    ],
+    /* camisa esportiva */
+    jersey: [
+      'M32 12 L42 8 C46 17 54 17 58 8 L68 12 L88 26 L79 40 L70 34 L70 90 L30 90 L30 34 L21 40 L12 26 Z'
+    ],
+    /* boné */
+    cap: [
+      'M14 60 C14 35 30 18 50 18 C70 18 86 35 86 60 Z',
+      'M86 60 C96 60 100 66 100 71 L14 71 C14 65 18 60 26 60 Z',
+      'M50 10 a4 4 0 1 0 .01 0 Z'
+    ],
+    /* garrafa */
+    bottle: [
+      'M40 4 h20 v14 h-20 z',
+      'M38 22 L62 22 L62 30 C68 33 70 38 70 44 L70 88 C70 92 67 95 63 95 L37 95 C33 95 30 92 30 88 L30 44 C30 38 32 33 38 30 Z'
+    ],
+    /* halter */
+    dumbbell: [
+      'M8 30 h11 v40 h-11 z',
+      'M81 30 h11 v40 h-11 z',
+      'M19 36 h10 v28 h-10 z',
+      'M71 36 h10 v28 h-10 z',
+      'M29 44 h42 v12 h-42 z'
+    ],
+    /* medalha */
+    medal: [
+      'M34 6 L46 6 L58 43 L50 50 Z',
+      'M66 6 L54 6 L42 43 L50 50 Z',
+      'M50 44 a24 24 0 1 0 .01 0 Z M50 53 L53.5 62.9 L64 63.3 L55.6 69.8 L58.6 79.9 L50 73.8 L41.4 79.9 L44.4 69.8 L36 63.3 L46.5 62.9 Z'
+    ],
+    /* relógio / smartband */
+    watch: [
+      'M40 6 h20 v22 h-20 z',
+      'M40 70 h20 v24 h-20 z',
+      'M70 41 h7 v12 h-7 z',
+      'M39 26 H61 A9 9 0 0 1 70 35 V63 A9 9 0 0 1 61 72 H39 A9 9 0 0 1 30 63 V35 A9 9 0 0 1 39 26 Z M38 38 H62 V60 H38 Z'
+    ],
+    /* faixa de cabeça */
+    headband: [
+      'M6 66 C6 34 25 14 50 14 C75 14 94 34 94 66 L74 66 C74 46 63 34 50 34 C37 34 26 46 26 66 Z'
+    ],
+    /* mochila */
+    backpack: [
+      'M24 36 C24 24 32 16 42 16 H58 C68 16 76 24 76 36 V88 C76 92 73 95 69 95 H31 C27 95 24 92 24 88 Z M34 62 H66 V86 H34 Z',
+      'M42 16 C42 5 58 5 58 16 L53 16 C53 11 47 11 47 16 Z'
+    ],
+    /* óculos escuros */
+    sunglasses: [
+      'M4 38 a8 8 0 0 1 8 -8 h24 a8 8 0 0 1 8 8 v14 a8 8 0 0 1 -8 8 h-24 a8 8 0 0 1 -8 -8 Z',
+      'M56 38 a8 8 0 0 1 8 -8 h24 a8 8 0 0 1 8 8 v14 a8 8 0 0 1 -8 8 h-24 a8 8 0 0 1 -8 -8 Z',
+      'M44 40 h12 v6 h-12 z',
+      'M0 36 h4 v6 h-4 z',
+      'M96 36 h4 v6 h-4 z'
+    ],
+    /* bola */
+    ball: [
+      'M50 8 a42 42 0 1 0 .01 0 Z' +
+      ' M50 33 L60.5 40.6 L56.5 52.9 H43.5 L39.5 40.6 Z' +
+      ' M21 28 L29.4 34.1 L26.2 44.2 H15.8 L12.6 34.1 Z' +
+      ' M79 28 L87.4 34.1 L84.2 44.2 H73.8 L70.6 34.1 Z' +
+      ' M50 74 L58.4 80.1 L55.2 90.2 H44.8 L41.6 80.1 Z'
+    ],
+    /* raquete */
+    racket: [
+      'M50 6 C67 6 80 19 80 36 C80 53 67 64 50 64 C33 64 20 53 20 36 C20 19 33 6 50 6 Z M50 14 C38 14 29 23 29 36 C29 49 38 57 50 57 C62 57 71 49 71 36 C71 23 62 14 50 14 Z',
+      'M45 62 h10 l3 32 h-16 z'
+    ]
+  };
+
+  function mulberry32(a) {
+    return function () {
+      a |= 0; a = a + 0x6D2B79F5 | 0;
+      let t = Math.imul(a ^ a >>> 15, 1 | a);
+      t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+      return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    };
+  }
+
+  const SVG_NS = 'http://www.w3.org/2000/svg';
+  const XLINK_NS = 'http://www.w3.org/1999/xlink';
+  function svgEl(name, attrs) {
+    const n = document.createElementNS(SVG_NS, name);
+    if (attrs) for (const k in attrs) {
+      n.setAttribute(k, attrs[k]);
+      if (k === 'href') n.setAttributeNS(XLINK_NS, 'xlink:href', attrs[k]);   // Safari/engine antiga
     }
+    return n;
+  }
+
+  function fxSprite() {
+    const svg = svgEl('svg', { width: '0', height: '0', 'aria-hidden': 'true', focusable: 'false' });
+    svg.setAttribute('fill-rule', 'evenodd');
+    svg.setAttribute('fill', 'currentColor');
+    svg.style.position = 'absolute';
+    const defs = svgEl('defs');
+
+    Object.keys(FX_ICONS).forEach((name) => {
+      const face = svgEl('g', { id: 'fxp-' + name });
+      FX_ICONS[name].forEach((d) => face.appendChild(svgEl('path', { d })));
+      defs.appendChild(face);
+
+      // relevo: 5 cópias deslocadas para o canto + a face por cima
+      const sym = svgEl('symbol', { id: 'fx-' + name, viewBox: '0 0 112 112' });
+      for (let k = 5; k >= 1; k--) {
+        sym.appendChild(svgEl('use', {
+          href: '#fxp-' + name, x: (k * 2).toFixed(1), y: (k * 2).toFixed(1), opacity: '.42'
+        }));
+      }
+      sym.appendChild(svgEl('use', { href: '#fxp-' + name }));
+      defs.appendChild(sym);
+    });
+
+    svg.appendChild(defs);
+    document.body.appendChild(svg);
+  }
+
+  /* paleta do deck: cada peça recebe UMA cor, sorteada entre as cores do slide */
+  const PALETTES = {
+    paper: ['#ff3333', '#0066ff', '#00cc00', '#cc00cc', '#ffff00', '#ffffff'],
+    dark:  ['#ffff00', '#ff3333', '#0066ff', '#00cc00', '#cc00cc', '#ffffff'],
+    red:   ['#ffff00', '#ffffff', '#0066ff', '#00cc00', '#cc00cc'],
+    blue:  ['#ffff00', '#ffffff', '#ff3333', '#00cc00', '#cc00cc'],
+    split: ['#ff3333', '#0066ff', '#00cc00', '#cc00cc', '#ffff00', '#ffffff']
+  };
+
+  function paletteOf(scene) {
+    if (scene.classList.contains('scene--dark')) return PALETTES.dark;
+    if (scene.classList.contains('scene--red')) return PALETTES.red;
+    if (scene.classList.contains('scene--blue')) return PALETTES.blue;
+    if (scene.classList.contains('s12')) return PALETTES.split;
+    return PALETTES.paper;
+  }
+
+  function mountFx() {
+    const all = $$('.scene');
+    if (!all.length) return;
+    fxSprite();
+
+    const names = Object.keys(FX_ICONS);
+    const small = window.matchMedia('(max-width:760px)').matches;
+    const vw = window.innerWidth || 1280;
+    const count = small ? 4 : 7;
+
+    all.forEach((scene, si) => {
+      if (si === all.length - 1) return;              // último slide: sem decoração
+      if (scene.dataset.fx === 'off') return;
+
+      const layer = document.createElement('div');
+      layer.className = 'fx3d';
+      layer.setAttribute('aria-hidden', 'true');
+
+      const soft = scene.dataset.fx === 'soft';   // capa: peças menores, mais discreta
+      const pal = paletteOf(scene);
+      const rand = mulberry32(9137 + si * 7919);
+      const used = [];
+      const bag = [];
+      const colorBag = [];
+      const total = soft ? Math.max(4, count - 2) : count;
+
+      for (let i = 0; i < total; i++) {
+        let l = 0, t = 0, guard = 0;
+        do {
+          l = 12 + rand() * 63;
+          t = 10 + rand() * 70;
+          guard++;
+        } while (guard < 26 && used.some((p) => Math.hypot(p[0] - l, p[1] - t) < 21));
+        used.push([l, t]);
+
+        if (!bag.length) {                   // reabastece sem repetir na mesma cena
+          bag.push.apply(bag, names);
+          for (let j = bag.length - 1; j > 0; j--) {
+            const k = Math.floor(rand() * (j + 1));
+            const tmp = bag[j]; bag[j] = bag[k]; bag[k] = tmp;
+          }
+        }
+        const name = bag.pop();
+        if (!colorBag.length) {              // uma cor de cada vez: variedade garantida
+          colorBag.push.apply(colorBag, pal);
+          for (let j = colorBag.length - 1; j > 0; j--) {
+            const k = Math.floor(rand() * (j + 1));
+            const tmp = colorBag[j]; colorBag[j] = colorBag[k]; colorBag[k] = tmp;
+          }
+        }
+        const color = colorBag.pop();
+        const w = Math.round((small ? 58 : 100) + rand() * (small ? 70 : Math.min(150, vw * 0.105)))
+                    * (soft ? 0.62 : 1);
+        const dur = 8 + rand() * 9;
+        const drift = (18 + rand() * 12) * (rand() > 0.5 ? 1 : -1);
+        const rise = (8 + rand() * 8) * (rand() > 0.5 ? 1 : -1);
+        const z = Math.round(-240 + rand() * 330);
+        const turn = 9 + rand() * 8;
+        const rx = rand() * 20 - 10, ry = rand() * 36 - 18, rz = rand() * 30 - 15;
+
+        const item = document.createElement('div');
+        item.className = 'fx';
+        item.style.cssText =
+          '--l:' + l.toFixed(2) + '%;' +
+          '--t:' + t.toFixed(2) + '%;' +
+          '--fx:' + color + ';' +
+          '--w:' + w + 'px;' +
+          '--dx:' + drift.toFixed(1) + 'vw;' +
+          '--dy:' + rise.toFixed(1) + 'vh;' +
+          '--z:' + z + 'px;' +
+          '--dur:' + dur.toFixed(1) + 's;' +
+          '--del:' + (-rand() * dur).toFixed(1) + 's;' +
+          '--bob:' + (6 + rand() * 16).toFixed(1) + 'px;' +
+          '--bdur:' + (5 + rand() * 4).toFixed(1) + 's;' +
+          '--bdel:' + (-rand() * 10).toFixed(1) + 's;' +
+          '--fo:' + (0.72 + rand() * 0.55).toFixed(2) + ';';
+
+        const inner = document.createElement('div');
+        inner.className = 'fx__in';
+        inner.style.cssText =
+          '--tdur:' + turn.toFixed(1) + 's;' +
+          '--tdel:' + (-rand() * turn).toFixed(1) + 's;' +
+          '--rx:' + rx.toFixed(1) + 'deg;--rx2:' + (rx + (rand() * 10 - 5)).toFixed(1) + 'deg;' +
+          '--ry:' + ry.toFixed(1) + 'deg;--ry2:' + (ry + (rand() * 26 - 13)).toFixed(1) + 'deg;' +
+          '--rz:' + rz.toFixed(1) + 'deg;--rz2:' + (rz + (rand() * 16 - 8)).toFixed(1) + 'deg;' +
+          '--sx:' + (rand() > 0.5 ? -1 : 1) + ';';
+
+        const svg = svgEl('svg', { viewBox: '0 0 112 112', 'aria-hidden': 'true' });
+        svg.appendChild(svgEl('use', { href: '#fx-' + name }));
+        inner.appendChild(svg);
+        item.appendChild(inner);
+        layer.appendChild(item);
+      }
+
+      scene.insertBefore(layer, scene.firstChild);
+    });
+  }
+  mountFx();
+
+  /* ---------------------------------------------------------------- deep link */
+  function fromHash() {
+    const id = (location.hash || '').replace('#', '');
+    const i = id ? scenes.findIndex((sc) => sc.id === id) : -1;
+    return i >= 0 ? i : 0;
   }
 
   /* ---------------------------------------------------------------- start */
-  measure();
-  window.addEventListener('load', measure);
-  setTimeout(measure, 300);
-  setTimeout(measure, 1200);
+  document.documentElement.classList.add('is-stage');
+  paint(fromHash(), false);
+
+  window.addEventListener('resize', fitActiveScene);
+  window.addEventListener('load', fitActiveScene);
+  window.addEventListener('fullscreenchange', () => setTimeout(fitActiveScene, 60));
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitActiveScene);
+
+  /* roda do mouse: passagem de slide, um por gesto (como no PowerPoint) */
+  let wheelAt = 0;
+  window.addEventListener('wheel', (e) => {
+    if (pshowMenu && !pshowMenu.hidden) return;
+    if (Math.abs(e.deltaY) < 4) return;
+    e.preventDefault();
+    const now = Date.now();
+    if (now - wheelAt < 420) return;
+    wheelAt = now;
+    goTo(currentIndex() + (e.deltaY > 0 ? 1 : -1));
+    if (presenting) wakeHud();
+  }, { passive: false });
+
+  /* swipe em tela de toque */
+  let tX = 0, tY = 0, touchOn = false;
+  window.addEventListener('touchstart', (e) => {
+    if (e.touches.length !== 1) return;
+    touchOn = true;
+    tX = e.touches[0].clientX;
+    tY = e.touches[0].clientY;
+  }, { passive: true });
+  window.addEventListener('touchend', (e) => {
+    if (!touchOn) return;
+    touchOn = false;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - tX;
+    const dy = t.clientY - tY;
+    if (Math.max(Math.abs(dx), Math.abs(dy)) < 46) return;
+    goTo(currentIndex() + ((dy < 0 || dx < -46) ? 1 : -1));
+    if (presenting) wakeHud();
+  }, { passive: true });
 })();
 </script>
 </body>

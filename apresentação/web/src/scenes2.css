@@ -1,0 +1,142 @@
+/* ==========================================================================
+   Cena 04 — Por que agora
+   ========================================================================== */
+.s4__head{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:clamp(20px,4cqw,64px);align-items:end}
+.s4__aside{justify-self:end;max-width:34ch;padding-bottom:6px}
+.s4__grid{
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:clamp(16px,2.2cqw,34px);margin-top:clamp(44px,6.5cqw,96px);
+}
+.why{
+  position:relative;background:#fff;color:#000;border:2.5px solid #000;
+  box-shadow:9px 9px 0 #000;padding:clamp(18px,2cqw,30px);
+  transition:transform .55s var(--ease),box-shadow .55s var(--ease);
+  display:flex;flex-direction:column;min-height:clamp(240px,26cqw,330px);
+}
+.why:nth-child(2){margin-top:clamp(18px,3cqw,48px)}
+.why:nth-child(3){margin-top:clamp(36px,6cqw,96px)}
+.why::before{content:"";position:absolute;left:-2.5px;right:-2.5px;top:-2.5px;height:10px;background:var(--red)}
+.why:nth-child(2)::before{background:var(--yellow)}
+.why:nth-child(3)::before{background:var(--blue)}
+.why:hover{transform:translate(-5px,-5px);box-shadow:16px 16px 0 #000}
+.why__n{font-family:var(--mono);font-weight:700;font-size:clamp(10px,.8cqw,12px);letter-spacing:.2em;opacity:.55;margin-top:8px}
+.why h3{margin-top:auto;padding-top:clamp(22px,3cqw,40px)}
+.why p{margin-top:10px;font-size:clamp(13px,1.02cqw,16px);line-height:1.45;max-width:32ch}
+.why__foot{margin-top:clamp(16px,2cqw,24px);padding-top:12px;border-top:1.5px solid rgba(0,0,0,.25);opacity:.6}
+
+/* ==========================================================================
+   Cena 05 — Solução
+   ========================================================================== */
+.s5__head{display:flex;justify-content:space-between;align-items:flex-end;gap:30px;flex-wrap:wrap}
+.s5__head .lead{max-width:38ch;text-align:right}
+.layers{margin-top:clamp(34px,4.6cqw,64px);border-top:2px solid var(--ink)}
+.layer{
+  display:grid;grid-template-columns:clamp(56px,6.5cqw,96px) minmax(0,.85fr) minmax(0,1.15fr);
+  gap:clamp(14px,2.6cqw,44px);align-items:start;
+  padding:clamp(18px,2.5cqw,34px) 0;border-bottom:2px solid var(--ink);
+  position:relative;transition:background .45s var(--ease),padding-left .5s var(--ease);
+}
+.layer>*{position:relative;z-index:2}
+.layer::before{
+  content:"";position:absolute;inset:0;background:var(--yellow);z-index:1;
+  transform:scaleX(0);transform-origin:left;transition:transform .55s var(--ease);
+}
+.layer:hover::before{transform:scaleX(1)}
+.layer:hover{padding-left:clamp(8px,1.2cqw,20px)}
+.layer__n{font-size:clamp(24px,3.2cqw,44px);font-weight:800;line-height:1;letter-spacing:-.05em;color:transparent;-webkit-text-stroke:1.6px var(--ink)}
+.layer__k{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.layer__k i{width:9px;height:9px;display:block;background:var(--red)}
+.layer:nth-child(2) .layer__k i{background:var(--blue)}
+.layer:nth-child(3) .layer__k i{background:var(--green)}
+.layer h3{max-width:16ch}
+.layer__d{margin-top:10px;font-size:clamp(13px,1.02cqw,16px);line-height:1.46;max-width:38ch;opacity:.78}
+.layer__tags{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;align-content:flex-start}
+.layer__tags span{
+  border:1.5px solid var(--ink);padding:7px 10px;font-family:var(--mono);font-weight:700;
+  font-size:clamp(8px,.66cqw,9.5px);letter-spacing:.16em;text-transform:uppercase;line-height:1;
+  background:#fff;transition:background .3s,color .3s,transform .3s var(--ease);
+}
+.layer:hover .layer__tags span{background:var(--ink);color:#fff}
+.layer__tags span:nth-child(2){transition-delay:.04s}
+.layer__tags span:nth-child(3){transition-delay:.08s}
+.s5__foot{display:flex;gap:clamp(14px,2cqw,28px);flex-wrap:wrap;margin-top:clamp(20px,2.6cqw,34px);align-items:center}
+.s5__foot .mono{opacity:.55}
+.s5__foot b{font-family:var(--mono);font-weight:700;font-size:clamp(9px,.75cqw,11px);letter-spacing:.18em;text-transform:uppercase}
+
+/* ==========================================================================
+   Cena 06 — Como funciona
+   ========================================================================== */
+.s6__head{display:flex;justify-content:space-between;align-items:flex-end;gap:30px;flex-wrap:wrap}
+.flow{position:relative;margin-top:clamp(34px,5cqw,70px);padding-top:46px}
+.flow__rail{position:absolute;left:0;right:0;top:8px;height:2px;background:rgba(255,255,255,.22)}
+.flow__fill{position:absolute;left:0;top:8px;height:2px;width:0;background:var(--red);transition:width .85s var(--ease)}
+.flow__dot{
+  position:absolute;top:1px;left:0;width:16px;height:16px;background:#fff;border:2px solid var(--red);
+  border-radius:50%;transform:translateX(-50%);transition:left .85s var(--ease);
+  box-shadow:0 0 0 6px rgba(255,51,51,.22);
+}
+.flow__nodes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(12px,2cqw,28px)}
+.node{position:relative;padding-top:0;transition:opacity .5s,transform .5s var(--ease);opacity:.42;transform:translateY(4px)}
+.node.on{opacity:1;transform:none}
+.node__dot{
+  width:18px;height:18px;border:2px solid #fff;background:#000;margin-bottom:clamp(16px,2cqw,24px);
+  transition:background .4s,border-color .4s,transform .4s var(--ease);display:block;
+}
+.node.on .node__dot{background:var(--red);border-color:var(--red);transform:rotate(45deg) scale(1.15)}
+.node__k{font-family:var(--mono);font-weight:700;font-size:clamp(8px,.66cqw,9.5px);letter-spacing:.2em;text-transform:uppercase;color:var(--yellow)}
+.node h3{margin:10px 0 8px;font-size:clamp(18px,1.9cqw,28px);letter-spacing:-.025em;line-height:1.05}
+.node p{font-size:clamp(12.5px,.95cqw,15px);line-height:1.46;max-width:30ch;opacity:.72}
+
+.s6__foot{
+  margin-top:clamp(34px,5cqw,62px);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);
+  gap:clamp(18px,3cqw,44px);align-items:stretch;
+}
+.callout{
+  background:var(--yellow);color:var(--ink);border:2.5px solid var(--ink);box-shadow:9px 9px 0 rgba(255,255,255,.92);
+  padding:clamp(16px,2cqw,26px);
+}
+.callout b{display:block;font-size:clamp(19px,2cqw,27px);line-height:1.04;letter-spacing:-.03em;margin-top:8px;max-width:18ch}
+.callout b em{font-style:normal;background:var(--ink);color:var(--yellow);padding:0 .18em}
+.custody{display:flex;flex-direction:column;justify-content:center;gap:10px}
+.custody__row{display:flex;align-items:center;gap:12px;font-family:var(--mono);font-weight:700;
+  font-size:clamp(9px,.78cqw,11px);letter-spacing:.16em;text-transform:uppercase;opacity:.75}
+.custody__row i{width:22px;height:2px;background:var(--red);display:block;flex:none}
+.custody__row.tick i{width:8px;height:8px;border-radius:50%;background:var(--red);box-shadow:0 0 0 4px rgba(255,51,51,.2)}
+
+
+/* ==========================================================================
+   Palco de slide — cenas que eram full-bleed (03 e 14) e a 06
+   --------------------------------------------------------------------------
+   No PPTX estes slides são uma "caixa" desenhada sobre o fundo, com barra de
+   título; no deck web o palco ocupa o slide inteiro, mas o conteúdo continua
+   abaixo do HUD e do fio.
+   ========================================================================== */
+.s3{padding-top:calc(var(--hud-h) + clamp(18px,3cqh,34px));padding-bottom:calc(var(--bot) + 16px)}
+.s3__ring,.s3__ring2{top:46%}
+.s3__ring{width:min(96cqw,1260px)}
+.s3__ring2{width:min(64cqw,860px)}
+
+.s14{padding-top:calc(var(--hud-h) + clamp(16px,2.6cqh,30px))}
+.s14 .ask{margin-top:clamp(22px,3cqw,40px)}
+
+@media (max-height:780px){
+  .s3{padding-top:calc(var(--hud-h) + 10px)}
+  .s3__pains{margin-top:clamp(20px,3cqw,40px)}
+  .s14{padding-top:calc(var(--hud-h) + 8px)}
+  .s14 .ask__n{font-size:clamp(26px,3.6cqw,48px)}
+}
+
+/* 06 · destaque amarelo: texto dentro do cartão em qualquer altura de tela */
+.s6__foot{grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr)}
+.callout{display:flex;flex-direction:column;justify-content:center;min-width:0;overflow:hidden}
+.callout .mono{flex:none}
+.callout b{max-width:100%}
+@media (min-width:1024px) and (max-height:920px) and (min-aspect-ratio:4/3){
+  .callout b{font-size:clamp(15px,1.5cqw,20px);line-height:1.08;max-width:22ch}
+  .callout .mono{font-size:clamp(8px,.66cqw,9px)}
+}
+
+html.is-stage .why,html.is-stage .layer{background:#15171b!important;color:#f5f5f5!important;border-color:#f5f5f5}
+html.is-stage .layer__tags span{background:#202329;color:#f5f5f5}
+html.is-stage .layer__tags span:hover{background:#30343b}
+html.is-stage .s6__foot .callout{color:#08090b!important}

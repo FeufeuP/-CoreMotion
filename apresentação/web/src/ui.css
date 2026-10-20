@@ -32,8 +32,7 @@
 .menu__list li.is-now .t{color:var(--red)}
 .menu__foot{display:flex;gap:22px;flex-wrap:wrap;margin-top:clamp(16px,2.6vh,32px);opacity:.4}
 
-/* cena dividida: metade clara, metade escura */
-.hud--split .hud__brand,.hud--split .hud__mid{color:#000}
+/* cena dividida: metade clara, metade escura (o resto está em base.css) */
 .hud--split .hud__num{color:#fff}
 
 /* linha de transição: aparece quando uma cena entra */

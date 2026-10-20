@@ -193,7 +193,7 @@ def sticker(slide, x, y, w, h, label, fill=WHITE, color=INK, size=8,
 
 
 # ------------------------------------------------------------------ chrome
-TOTAL = 15
+TOTAL = 16
 PROGRESS_COLORS = [PRIMARY, SECONDARY, ACCENT, GREEN, MAGENTA]
 
 

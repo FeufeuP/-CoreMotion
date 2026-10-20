@@ -30,6 +30,25 @@ def blank_bg(color):
     return s
 
 
+# =====================================================================
+# 00 — ABERTURA (logo centralizada; mesma primeira cena do deck web)
+# =====================================================================
+s = blank(dark=True)
+mark = box(s, 3.22, 2.54, 1.06, 1.06, fill=PRIMARY, border=WHITE, lw=2.4,
+           shadow=True, shadow_px=7)
+mark_text = mono(s, 3.22, 2.54, 1.06, 1.06, "CM", size=20, color=WHITE,
+                 spc=0, align="c", anchor="m")
+word = text(s, 4.58, 2.45, 5.85, 1.18, "CoreMotion.", size=64, color=WHITE,
+            bold=True, spc=-2.6, anchor="m")
+rule_cover = box(s, 5.88, 4.13, 1.56, 0.07, fill=WHITE, border=None, shadow=False)
+slogan = text(s, 3.05, 4.48, 7.25, 0.68, "Entre em movimento.", size=27,
+              color=WHITE, align="c", anchor="m")
+meta_cover = mono(s, 3.08, 5.34, 7.20, 0.24,
+                  "MARKETPLACE ESPORTIVO · LOJAS VERIFICADAS · CUSTÓDIA",
+                  size=7.5, color=D_MUTED, spc=1.6, align="c")
+chrome(s, 1, "Abertura", dark=True, accent=PRIMARY)
+transition(s, "fade", dur=700, speed="med")
+
 def card(s, x, y, w, h, fill=WHITE, lw=2.2, shadow_px=6):
     return box(s, x, y, w, h, fill=fill, border=INK, lw=lw,
                shadow=True, shadow_px=shadow_px)
@@ -74,17 +93,11 @@ lead = text(s, 0.78, 3.66, 6.7, 1.30,
 meta = mono(s, 0.78, 5.14, 6.7, 0.22,
             "MARKETPLACE · LOJAS VERIFICADAS · CUSTÓDIA", size=8, color=INK_SOFT,
             spc=1.8)
-foot = box(s, 0.78, 6.30, 6.55, 0.50, fill=INK, border=INK, lw=2,
-           shadow=True, shadow_px=6)
-foot_t = mono(s, 0.98, 6.30, 6.2, 0.50, "APRESENTADO POR [SEU NOME] · [CIDADE], 2026",
-              size=7.6, color=WHITE, spc=1.2, anchor="m")
-
 animate(s, cascade(art, 0, 90, "zoom", 650) +
         [(chip1, "drop", 260, 480), (chip2, "left", 340, 480),
          (chip3, "left", 420, 480), (kick, "fade", 120, 400),
          (brand, "rise", 180, 680), (under, "wipe", 420, 450),
-         (lead, "rise", 480, 600), (meta, "fade", 700, 420),
-         (foot, "rise", 800, 500), (foot_t, "fade", 900, 450)])
+         (lead, "rise", 480, 600), (meta, "fade", 700, 420)])
 transition(s, "morph", dur=1000, speed="med")
 notes(s, (
     "ABERTURA (30s).\n"
@@ -112,7 +125,7 @@ animate(s, [(f, "wipe", 40 + i * 18, 420) for i, f in enumerate(d_flag)] +
         [(d_vghost, "fade", 620, 700)] +
         [(g, "zoom", 520 + i * 45, 450) for i, g in enumerate(d_gauge)])
 
-chrome(s, 1, "Capa")
+chrome(s, 2, "Capa")
 
 
 
@@ -175,7 +188,7 @@ animate(s, [(st, "speed", 150 + i * 70, 500) for i, st in enumerate(d_streak)] +
         [(ch, "whip", 380 + i * 60, 360) for i, ch in enumerate(d_chev)] +
         [(d_vghost, "fade", 560, 800)])
 
-chrome(s, 2, "Agenda", dark=True, accent=D_PRIMARY)
+chrome(s, 3, "Agenda", dark=True, accent=D_PRIMARY)
 
 
 
@@ -240,7 +253,7 @@ animate(s, [(st, "speed", 200 + i * 70, 480) for i, st in enumerate(d_streak)] +
         [(ck, "whip", 420 + i * 30, 380) for i, ck in enumerate(d_check)] +
         [(d_vghost, "fade", 620, 700)])
 
-chrome(s, 3, "O problema", dark=True, accent=D_SECOND)
+chrome(s, 4, "O problema", dark=True, accent=D_SECOND)
 
 
 
@@ -306,7 +319,7 @@ animate(s, [(st, "speed", 180 + i * 70, 500) for i, st in enumerate(d_streak)] +
         [(d_arrow, "whip", 520, 520)] +
         [(ch, "whip", 720 + i * 60, 360) for i, ch in enumerate(d_chev)])
 
-chrome(s, 4, "Por que agora")
+chrome(s, 5, "Por que agora")
 
 
 
@@ -382,7 +395,7 @@ animate(s, [(st, "speed", 180 + i * 70, 500) for i, st in enumerate(d_streak)] +
         [(d_chev1, "whip", 620, 380), (d_chev2, "whip", 700, 380)] +
         [(d_vghost, "fade", 800, 700)])
 
-chrome(s, 5, "A solução")
+chrome(s, 6, "A solução")
 
 
 
@@ -459,7 +472,7 @@ animate(s, [(d_runner, "race", 620, 1700, "M 0 0 L 0.822 0 E")] +
         [(ck, "whip", 2320 + i * 25, 380) for i, ck in enumerate(d_check)] +
         [(d_vghost, "fade", 2500, 600)])
 
-chrome(s, 6, "Como funciona")
+chrome(s, 7, "Como funciona")
 
 
 
@@ -551,7 +564,7 @@ animate(s, [(st, "speed", 180 + i * 70, 500) for i, st in enumerate(d_streak)] +
         [(ck, "whip", 480 + i * 30, 380) for i, ck in enumerate(d_check)] +
         [(d_vghost, "fade", 900, 600)])
 
-chrome(s, 7, "Produto")
+chrome(s, 8, "Produto")
 
 
 
@@ -633,7 +646,7 @@ animate(s, [(st, "speed", 180 + i * 70, 500) for i, st in enumerate(d_streak)] +
         [(ck, "wipe", 700 + i * 22, 380) for i, ck in enumerate(d_check)] +
         [(d_vghost, "fade", 880, 600)])
 
-chrome(s, 8, "Diferencial", dark=True, accent=D_PRIMARY)
+chrome(s, 9, "Diferencial", dark=True, accent=D_PRIMARY)
 
 
 # =====================================================================
@@ -702,7 +715,7 @@ animate(s, [(d_gauge[0], "zoom", 220, 520), (d_gauge[1], "zoom", 280, 520),
             (d_gauge[4], "fade", 380, 400), (d_glabel, "fade", 200, 420)] +
         [(st, "speed", 180 + i * 70, 500) for i, st in enumerate(d_streak)])
 
-chrome(s, 9, "Modelo de negócio")
+chrome(s, 10, "Modelo de negócio")
 
 
 
@@ -801,7 +814,7 @@ animate(s, [(tr, "speed", 220 + i * 70, 520) for i, tr in enumerate(d_trail)] +
         [(ck, "whip", 420 + i * 28, 380) for i, ck in enumerate(d_check)] +
         [(ch, "whip", 640 + i * 60, 360) for i, ch in enumerate(d_chev)])
 
-chrome(s, 10, "Posicionamento")
+chrome(s, 11, "Posicionamento")
 
 
 
@@ -856,7 +869,7 @@ animate(s, [(ck, "whip", 260 + i * 26, 380) for i, ck in enumerate(d_flag)] +
         [(d_vghost, "fade", 900, 650)] +
         [(st, "speed", 180 + i * 70, 500) for i, st in enumerate(d_streak)])
 
-chrome(s, 11, "Roadmap")
+chrome(s, 12, "Roadmap")
 
 
 
@@ -906,7 +919,7 @@ name_it(box(s, 0.78, 0.40, 0.15, 0.15, fill=PRIMARY, border=None,
             shadow=False), "CM!!dot")
 name_it(mono(s, 1.04, 0.38, 3.4, 0.2, "CoreMotion", size=9.5, color=INK,
              spc=2.6), "CM!!brand")
-name_it(mono(s, 7.30, 0.38, 5.25, 0.2, "Onde estamos   ·   12/15", size=8,
+name_it(mono(s, 7.30, 0.38, 5.25, 0.2, "Onde estamos   ·   13/16", size=8,
              color=D_MUTED, spc=2.0, align="r"), "CM!!count")
 name_it(rule(s, 0, 7.44, 7.40, 0.06, color=INK), "CM!!rule")
 rule(s, 7.40, 7.44, 5.933, 0.06, color=WHITE)
@@ -986,7 +999,7 @@ animate(s, [(st, "speed", 180 + i * 70, 500) for i, st in enumerate(d_streak)] +
         [(b, "drop", 620 + i * 90, 420) for i, b in enumerate(d_bibs)] +
         [(ch, "whip", 980 + i * 55, 350) for i, ch in enumerate(d_chev)])
 
-chrome(s, 13, "Quem executa")
+chrome(s, 14, "Quem executa")
 
 
 
@@ -1044,7 +1057,7 @@ animate(s, [(d_vghost, "fade", 120, 800)] +
         [(st, "speed", 200 + i * 70, 500) for i, st in enumerate(d_streak)] +
         [(ck, "whip", 700 + i * 28, 380) for i, ck in enumerate(d_check)])
 
-chrome(s, 14, "O pedido", dark=True, accent=D_SECOND)
+chrome(s, 15, "O pedido", dark=True, accent=D_SECOND)
 
 
 # =====================================================================
@@ -1072,7 +1085,7 @@ sub = text(s, 0.78, 3.42, 6.6, 1.05,
            size=19, color=D_MUTED, line=1.3)
 rule2 = box(s, 0.84, 4.66, 1.55, 0.10, fill=D_PRIMARY, border=None,
             shadow=False)
-contact = mono(s, 0.78, 4.98, 7.0, 0.28, "[seu@email.com] · [telefone] · [site]",
+contact = mono(s, 0.78, 4.98, 7.0, 0.28, "alfeuvlp@gmail.com · 41 9 9893-8283",
                size=8.6, color=WHITE, spc=0.8)
 bye = text(s, 0.78, 6.30, 7.0, 0.22, "Obrigado pela leitura. Perguntas, agora.",
            size=9.5, color=RGBColor(0x9A, 0x9A, 0x9A))
@@ -1125,10 +1138,76 @@ animate(s, [(st, "speed", 150 + i * 70, 500) for i, st in enumerate(d_streak)] +
          (eq_kick, "fade", 1040, 420)] +
         [(m, "drop", 1090 + i * 80, 430) for i, m in enumerate(d_memb)])
 
-chrome(s, 15, "Obrigado", dark=True, accent=D_PRIMARY)
+chrome(s, 16, "Obrigado", dark=True, accent=D_PRIMARY)
+
+# ------------------------------------------------------------------ unificação de tema (PowerPoint 16:9)
+def apply_dark_theme(presentation):
+    """Converte também as superfícies herdadas para tema escuro, sem perder os acentos."""
+    bg = RGBColor(0x09, 0x0A, 0x0D)
+    card = RGBColor(0x1A, 0x1C, 0x21)
+    ink = RGBColor(0xF5, 0xF5, 0xF5)
+    muted = RGBColor(0xC7, 0xC9, 0xCE)
+    border = RGBColor(0x64, 0x68, 0x70)
+
+    def mapped(color, target):
+        try:
+            r, g, b = color[0], color[1], color[2]
+        except Exception:
+            return None
+        # Foreground conversion is separate from surface conversion: black text
+        # becomes light; white/accent text stays intact.
+        if target == "text":
+            if max(r, g, b) <= 16:
+                return ink
+            if max(r, g, b) <= 85 and max(r, g, b) - min(r, g, b) <= 5:
+                return muted
+            return None
+        # Neutral white/near-white panels -> graphite; black fills -> deep charcoal.
+        if min(r, g, b) >= 220:
+            return card
+        if max(r, g, b) <= 16:
+            return RGBColor(0x12, 0x14, 0x18)
+        # Black outlines on dark surfaces -> visible subdued gray.
+        if target == "line" and max(r, g, b) <= 16:
+            return border
+        return None
+
+    for slide in presentation.slides:
+        fill = slide.background.fill
+        fill.solid()
+        fill.fore_color.rgb = bg
+        for shape in slide.shapes:
+            try:
+                if shape.fill.type is not None:
+                    old = shape.fill.fore_color.rgb
+                    new = mapped(old, "fill")
+                    if new is not None:
+                        shape.fill.solid()
+                        shape.fill.fore_color.rgb = new
+            except Exception:
+                pass
+            try:
+                old = shape.line.color.rgb
+                new = mapped(old, "line")
+                if new is not None:
+                    shape.line.color.rgb = new
+            except Exception:
+                pass
+            if getattr(shape, "has_text_frame", False):
+                for para in shape.text_frame.paragraphs:
+                    for run in para.runs:
+                        try:
+                            old = run.font.color.rgb
+                            new = mapped(old, "text")
+                            if new is not None:
+                                run.font.color.rgb = new
+                        except Exception:
+                            pass
+
+apply_dark_theme(prs)
 
 # ------------------------------------------------------------------ metadados
-prs.core_properties.title = "CoreMotion — Pitch para banca"
+prs.core_properties.title = "CoreMotion — Pitch para banca (16:9, tema escuro)"
 prs.core_properties.author = "CoreMotion"
 prs.core_properties.subject = "Marketplace esportivo de alta performance"
 prs.core_properties.language = "pt-BR"

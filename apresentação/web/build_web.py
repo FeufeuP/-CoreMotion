@@ -1,15 +1,15 @@
 """Monta o deck web autocontido (fontes embutidas em base64).
 
-Uso:  python build_web.py            -> ../CoreMotion-Pitch-Web.html
+Uso:  python build_web.py            -> ../CoreMotion-Pitch.html
 """
 import pathlib
 import sys
 
 HERE = pathlib.Path(__file__).parent
 SRC = HERE / "src"
-OUT = HERE.parent / "CoreMotion-Pitch-Web.html"
+OUT = HERE.parent / "CoreMotion-Pitch.html"
 
-PARTS = ["01_hero.html", "02_why.html", "03_product.html", "04_market.html", "05_team.html"]
+PARTS = ["00_cover.html", "01_hero.html", "02_why.html", "03_product.html", "04_market.html", "05_team.html"]
 
 
 def read(p):
@@ -20,11 +20,15 @@ def main():
     html = read("00_head.html")
     html = html.replace("/*__FONTS__*/", read("fonts.css"))
     html = html.replace("/*__BASE__*/", read("base.css"))
+    html = html.replace("/*__FX__*/", read("fx.css"))
     html = html.replace("/*__UI__*/", read("ui.css"))
+    html = html.replace("/*__S0__*/", read("scenes0.css"))
     html = html.replace("/*__S1__*/", read("scenes1.css"))
     html = html.replace("/*__S2__*/", read("scenes2.css"))
     html = html.replace("/*__S3__*/", read("scenes3.css"))
     html = html.replace("/*__S4__*/", read("scenes4.css"))
+    html = html.replace("/*__SLIDE__*/", read("slide.css"))
+    html = html.replace("/*__PRESENT__*/", read("present.css"))
 
     body = "\n".join(read(p) for p in PARTS)
     html += body + "\n" + read("09_tail.html")
