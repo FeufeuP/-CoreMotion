@@ -15,6 +15,13 @@ DPI = int(sys.argv[3]) if len(sys.argv) > 3 else 130
 REG = "/tmp/arimo/Arimo-Regular.ttf"
 BOLD = "/tmp/arimo/Arimo-Bold.ttf"
 ITAL = "/tmp/arimo/Arimo-Italic.ttf"
+
+FAMILIES = {
+    "DM Sans": ("/tmp/fonts/DMSans-Regular.ttf", "/tmp/fonts/DMSans-Bold.ttf",
+                "/tmp/fonts/DMSans-Regular.ttf"),
+    "Space Mono": ("/tmp/fonts/SpaceMono-Regular.ttf", "/tmp/fonts/SpaceMono-Bold.ttf",
+                   "/tmp/fonts/SpaceMono-Regular.ttf"),
+}
 A = "{http://schemas.openxmlformats.org/drawingml/2006/main}"
 P = "{http://schemas.openxmlformats.org/presentationml/2006/main}"
 
@@ -26,10 +33,11 @@ os.makedirs(OUTDIR, exist_ok=True)
 _cache = {}
 
 
-def fnt(size_pt, bold=False, italic=False):
-    key = (round(size_pt, 1), bold, italic)
+def fnt(size_pt, bold=False, italic=False, family=None):
+    key = (round(size_pt, 1), bold, italic, family)
     if key not in _cache:
-        path = BOLD if bold else (ITAL if italic else REG)
+        reg, bold_f, ital_f = FAMILIES.get(family, (REG, BOLD, ITAL))
+        path = bold_f if bold else (ital_f if italic else reg)
         _cache[key] = ImageFont.truetype(path, max(5, int(round(size_pt / 72 * DPI))))
     return _cache[key]
 
@@ -92,7 +100,8 @@ def run_props(r):
     spc = 0.0
     if r.font._rPr is not None and r.font._rPr.get("spc"):
         spc = float(r.font._rPr.get("spc")) / 100 / 72 * DPI
-    return {"text": r.text, "f": fnt(size, bool(r.font.bold), bool(r.font.italic)),
+    return {"text": r.text,
+            "f": fnt(size, bool(r.font.bold), bool(r.font.italic), r.font.name),
             "color": color, "alpha": alpha, "spc": spc, "size": size}
 
 
@@ -197,13 +206,23 @@ def draw_shape(d, shape, img):
     rot = shape.rotation or 0
 
     if rot:
-        pad = 4
+        pad = 6
         tmp = Image.new("RGBA", (int(w) + pad * 2, int(h) + pad * 2), (0, 0, 0, 0))
         td = ImageDraw.Draw(tmp)
-        box = [pad, pad, pad + w, pad + h]
-        _prim(td, prst, box, f, l, lw, dash)
-        tmp = tmp.rotate(-rot, resample=Image.BICUBIC, expand=False)
-        img.paste(tmp, (int(x - pad), int(y - pad)), tmp)
+        shp = shape._element
+        shdw = shp.spPr.find(A + "effectLst")
+        if shdw is not None:
+            off = shdw.find(".//" + A + "outerShdw")
+            if off is not None:
+                dist = int(off.get("dist") or 0) / 914400 * DPI
+                td.rectangle([pad + dist * .7, pad + dist * .7,
+                              pad + w + dist * .7, pad + h + dist * .7],
+                             fill=(0, 0, 0, 255))
+        _prim(td, prst, [pad, pad, pad + w, pad + h], f, l, lw, dash)
+        tmp = tmp.rotate(-rot, resample=Image.BICUBIC, expand=True)
+        ox = int(x + w / 2 - tmp.width / 2)
+        oy = int(y + h / 2 - tmp.height / 2)
+        img.paste(tmp, (ox, oy), tmp)
         return
     _prim(d, prst, [x, y, x + w, y + h], f, l, lw, dash)
 

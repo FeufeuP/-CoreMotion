@@ -1,7 +1,8 @@
 # CoreMotion — Roteiro de apresentação para a banca
 
 **Duração alvo:** 12 a 15 minutos + 5 minutos de perguntas
-**Formato:** 15 slides · tema pastel geométrico · animações em cascata
+**Tipografia:** DM Sans (texto) + Space Mono (rótulos e números)
+**Formato:** 15 slides · tema neo-brutalista (branco/preto, #FF3333, #FFFF00, #0066FF) · animações em cascata
 **Arquivos:** `CoreMotion-Pitch-Banca.pptx` (editável) · `.pdf` (backup) · `.html` (versão web animada)
 
 > Antes de apresentar, troque os campos entre colchetes: `[seu nome]`, `[cidade]`,
