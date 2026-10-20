@@ -15,6 +15,32 @@ DM Sans + Space Mono.
 | `CoreMotion-Pitch-Roteiro.md` | fala, tempo e checklist de véspera |
 | `PENDENCIAS.md` | o que ficou para depois e o que precisa ser conferido |
 
+## Movimento e transições
+
+O deck foi tunado para transmitir **velocidade e esporte** sem perder o tema
+neo-brutalista:
+
+- **Transições por slide** — push rápido, `flash` (p14) nos cortes de energia
+  (slides 3 e 14), `pan`/`conveyor`/`gallery`/`vortex` (p14) em blocos
+  narrativos e **`morph`** (p159, PowerPoint 2016+) no fechamento: a faixa
+  preta do slide 14 toma a tela inteira e o header desliza. Slides antigos caem
+  em fallback padrão (fade/push/cover).
+- **Efeitos de entrada** — além de `fade/rise/zoom/wipe`, o motor tem
+  `whip` (entra esticado, como rastro), `speed`/`boost` (chega freando com
+  ultrapassagem), `spin` (assenta girando) e `race` (trajeto de corrida — a
+  bolinha vermelha do slide 6 corre o fluxo de pedido até o repasse).
+- **Kit esportivo** (`brutal_lib.py`) — `speed_streaks` (rastros de
+  movimento), `chevrons` (>>> de ritmo), `checkered` (bandeira de largada:
+  capa, chegada do roadmap, fechamento), `speedometer` (velocímetro na capa,
+  no take rate e no "obrigado") e `ghost` (palavras gigantes em 6% —
+  VELOCIDADE, GO, ATRITO, 90 DIAS…).
+- **Morph pairing** — shapes com nomes `CM!!…` (chrome, faixa e kicker)
+  casam entre slides para o morph mover de verdade.
+
+Animações ficam no XML nativo de timing (`p:timing`), então abrem em qualquer
+PowerPoint 2010+; transições p14/p159 exigem PowerPoint 2010/2016+ e degradam
+graciosamente em alternativas padrão.
+
 ## Como regerar
 
 ```bash
