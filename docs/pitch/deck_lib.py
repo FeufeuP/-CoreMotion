@@ -347,13 +347,24 @@ def animate(slide, specs):
     slide._element.append(el)
 
 
-def transition(slide, kind="fade", speed="slow"):
-    """Transição de slide suave (fade, push, wipe, zoom, dissolve, cover)."""
+def transition(slide, kind="fade", speed="slow", dur=None, direction=None):
+    """Transição de slide (fade, push, cover, wipe, split, zoom, dissolve).
+
+    dur em milissegundos (p14:dur, PowerPoint 2010+); direction em
+    l/u/r/d para push, cover, wipe e split.
+    """
+    attrs = f'spd="{speed}"'
+    if dur:
+        attrs += (f' p14:dur="{int(dur)}" '
+                  'xmlns:p14="http://schemas.microsoft.com/office/powerpoint/2010/main"')
+    extra = ""
+    if direction and kind in ("push", "cover", "wipe", "split"):
+        extra = f' dir="{direction}"'
     xml = (
         '<p:transition xmlns:p="http://schemas.openxmlformats.org/presentationml/2006/main" '
         'xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" '
-        f'spd="{speed}">'
-        f"<p:{kind}/></p:transition>"
+        f'{attrs}>'
+        f"<p:{kind}{extra}/></p:transition>"
     )
     el = parse_xml(xml)
     # transition deve vir antes de timing

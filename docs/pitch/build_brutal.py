@@ -22,6 +22,14 @@ def blank(dark=False):
     return s
 
 
+def blank_bg(color):
+    s = prs.slides.add_slide(prs.slide_layouts[6])
+    bg = s.background.fill
+    bg.solid()
+    bg.fore_color.rgb = color
+    return s
+
+
 def card(s, x, y, w, h, fill=WHITE, lw=2.2, shadow_px=6):
     return box(s, x, y, w, h, fill=fill, border=INK, lw=lw,
                shadow=True, shadow_px=shadow_px)
@@ -77,7 +85,7 @@ animate(s, cascade(art, 0, 90, "zoom", 650) +
          (brand, "rise", 180, 680), (under, "wipe", 420, 450),
          (lead, "rise", 480, 600), (meta, "fade", 700, 420),
          (foot, "rise", 800, 500), (foot_t, "fade", 900, 450)])
-transition(s, "fade")
+transition(s, "fade", dur=1000)
 notes(s, (
     "ABERTURA (30s).\n"
     "• Meu nome é [nome] e o CoreMotion é um marketplace esportivo com lojas "
@@ -88,12 +96,19 @@ notes(s, (
 ))
 chrome(s, 1, "Capa")
 
+
+
+
 # =====================================================================
 # 02 — AGENDA
 # =====================================================================
-s = blank()
-head = title_block(s, "AGENDA", "O caminho",
-                   "Quinze minutos, quatro blocos. Sem slide de história da empresa.")
+s = blank(dark=True)
+head = title_block(s, "AGENDA", "O caminho", None, dark=True,
+                   kicker_color=D_SECOND)
+intro = text(s, 0.78, 2.14, 8.4, 0.28,
+             "Quinze minutos, quatro blocos. Sem slide de história da empresa.",
+             size=12.4, color=D_MUTED)
+
 AGENDA = [
     ("01", "O problema", "Por que comprar e vender esporte ainda é inseguro.", PRIMARY),
     ("02", "A solução", "As três camadas que fazem o CoreMotion funcionar.", SECONDARY),
@@ -101,77 +116,94 @@ AGENDA = [
     ("04", "A entrega", "Onde estamos e o que precisamos de você.", GREEN),
 ]
 ag = []
+Y0 = 2.66
 for i, (num, nm, ds, col) in enumerate(AGENDA):
-    x = 0.78 + i * 3.00
-    c = card(s, x, 2.80, 2.78, 3.32)
-    sq = box(s, x + 0.28, 3.08, 0.82, 0.82, fill=col, border=INK, lw=2.2,
-             shadow=True, shadow_px=4)
-    n = mono(s, x + 0.28, 3.08, 0.82, 0.82, num, size=22, color=INK, spc=0.5,
-             align="c", anchor="m")
-    t = text(s, x + 0.28, 4.16, 2.25, 0.62, nm, size=17.5, color=INK,
-             bold=True, spc=-0.4, line=1.02)
-    d = text(s, x + 0.28, 4.86, 2.22, 0.95, ds, size=10.5, color=INK_SOFT,
-             line=1.35)
-    ar = box(s, x + 2.20, 5.72, 0.24, 0.24, fill=INK, border=None,
-             kind="tri", rot=90, shadow=False)
-    ag += [c, sq, n, t, d, ar]
+    y = Y0 + i * 1.06
+    ag.append(box(s, 0.78, y - 0.16, 11.77, 0.012, fill=WHITE, border=None,
+                  shadow=False, alpha=22))
+    ag.append(box(s, 0.78, y + 0.10, 0.075, 0.50, fill=col, border=None,
+                  shadow=False))
+    ag.append(mono(s, 1.06, y + 0.03, 0.90, 0.55, num, size=25, color=col,
+                   spc=0.8))
+    ag.append(text(s, 2.16, y + 0.01, 4.0, 0.6, nm, size=26, color=WHITE,
+                   bold=True, spc=-0.9, line=1.0))
+    ag.append(text(s, 6.45, y + 0.07, 4.55, 0.6, ds, size=11.2, color=D_MUTED,
+                   line=1.3))
+    ag.append(box(s, 12.02, y + 0.19, 0.26, 0.26, fill=WHITE, border=None,
+                  kind="tri", rot=90, shadow=False))
+ag.append(box(s, 0.78, Y0 + 4 * 1.06 - 0.16, 11.77, 0.012, fill=WHITE,
+              border=None, shadow=False, alpha=22))
 
-tag = sticker(s, 9.35, 6.42, 3.18, 0.36, "PITCH PARA BANCA · COREMOTION 2026",
-              SECONDARY, color=INK, size=6.8, spc=1.2, shadow_px=5)
+foot = mono(s, 0.78, 6.90, 8.0, 0.22, "pitch para banca · coremotion 2026",
+            size=7.2, color=D_MUTED, spc=1.4)
+
 animate(s, cascade(head, 60, 100, "rise", 520) +
-        cascade(ag, 340, 55, "rise", 480) + [(tag, "fade", 980, 400)])
-transition(s, "push")
+        [(intro, "fade", 280, 420)] +
+        cascade(ag, 340, 45, "rise", 470) +
+        [(foot, "fade", 1050, 380)])
+transition(s, "cover", dur=900, direction="l")
 notes(s, (
     "AGENDA (45s).\n"
     "• Quatro blocos. O primeiro é o mais importante: o problema.\n"
     "• Se o tempo apertar, cortamos o bloco 3 e mantemos problema, solução e pedido."
 ))
-chrome(s, 2, "Agenda")
+chrome(s, 2, "Agenda", dark=True, accent=D_PRIMARY)
+
+
 
 # =====================================================================
 # 03 — PROBLEMA
 # =====================================================================
-s = blank()
-head = title_block(s, "O PROBLEMA", "Comprar esporte ainda é um ato de fé.")
+s = blank_bg(PRIMARY)
+head = title_block(s, "O PROBLEMA", "Comprar esporte ainda é um ato de fé.",
+                   None, dark=True, kicker_color=SECONDARY, size=40)
+ring = box(s, 9.10, -1.55, 5.90, 5.90, fill=None, border=RGBColor(0xE2, 0x2B, 0x2B),
+           lw=1.4, kind="oval", shadow=False)
+
 PROB = [
-    ("Falsificação", "Réplica vendida como original. Sem verificação de loja, de catálogo ou de histórico.", PRIMARY, "oval"),
-    ("Dinheiro exposto", "Pix direto para o vendedor: se a peça não chega, o prejuízo inteiro é do atleta.", SECONDARY, "tri"),
-    ("Atleta invisível", "Quem vende usado não tem canal confiável. Quem procura não sabe em quem confiar.", ACCENT, "diamond"),
+    ("Falsificação", "Réplica vendida como original. Sem verificação de loja, de catálogo ou de histórico."),
+    ("Dinheiro exposto", "Pix direto para o vendedor: se a peça não chega, o prejuízo inteiro é do atleta."),
+    ("Atleta invisível", "Quem vende usado não tem canal confiável. Quem procura não sabe em quem confiar."),
 ]
-pb = []
-for i, (nm, ds, col, icon) in enumerate(PROB):
+thesis = text(s, 0.78, 2.34, 10.6, 0.45,
+              "O problema não é oferta. É confiança.", size=21, color=WHITE,
+              bold=True, spc=-0.6)
+tbar = box(s, 0.80, 2.88, 1.45, 0.075, fill=INK, border=None, shadow=False)
+
+pb = [thesis, tbar]
+Y = 3.34
+for i, (nm, ds) in enumerate(PROB):
     x = 0.78 + i * 4.02
-    c = card(s, x, 2.72, 3.72, 3.28)
-    bar = box(s, x, 2.72, 3.72, 0.18, fill=col, border=INK, lw=2.2,
-              shadow=False)
-    isq = box(s, x + 0.30, 3.14, 0.98, 0.98, fill=col, border=INK, lw=2.2,
-              shadow=True, shadow_px=4)
-    ivl = {"oval": 0.42, "tri": 0.50, "diamond": 0.44}[icon]
-    ic = box(s, x + 0.30 + (0.98 - ivl) / 2, 3.14 + (0.98 - ivl) / 2, ivl, ivl,
-             fill=INK, border=None, kind=icon, shadow=False)
-    t = text(s, x + 0.30, 4.38, 3.05, 0.42, nm, size=18, color=INK, bold=True,
-             spc=-0.4)
-    d = text(s, x + 0.30, 4.90, 3.05, 0.95, ds, size=10.5, color=INK_SOFT,
-             line=1.35)
-    pb += [c, bar, isq, ic, t, d]
+    pb.append(box(s, x, Y, 3.68, 0.04, fill=INK, border=None, shadow=False))
+    pb.append(mono(s, x, Y + 0.18, 3.4, 0.2, f"0{i+1} · {nm}", size=7.2,
+                   color=INK, spc=1.6))
+    pb.append(text(s, x, Y + 0.58, 3.40, 0.5, nm, size=19, color=WHITE,
+                   bold=True, spc=-0.5))
+    pb.append(text(s, x, Y + 1.12, 3.36, 0.95, ds, size=11.0,
+                   color=RGBColor(0xFF, 0xEC, 0xEC), line=1.36))
 
-band = box(s, 0.78, 6.24, 11.77, 0.56, fill=INK, border=INK, lw=2,
-           shadow=True, shadow_px=6)
-bt = mono(s, 1.02, 6.24, 11.2, 0.56,
+band = box(s, 0.0, 6.24, 13.333, 1.26, fill=INK, border=None, shadow=False)
+bt = mono(s, 0.78, 6.48, 11.8, 0.30,
           "O atleta compra no escuro. A loja vende sem alcance. O dinheiro fica no meio.",
-          size=9.5, color=WHITE, spc=0.6, anchor="m")
+          size=9.4, color=WHITE, spc=0.7)
+b2 = mono(s, 0.78, 6.86, 11.8, 0.24, "a fé não escala — o fluxo escala.",
+          size=8.0, color=SECONDARY, spc=1.6)
 
-animate(s, cascade(head, 60, 100, "rise", 520) +
-        cascade(pb, 300, 55, "rise", 500) +
-        [(band, "zoom", 900, 550), (bt, "fade", 1000, 450)])
-transition(s, "fade")
+animate(s, [(ring, "zoom", 0, 900)] + cascade(head, 60, 110, "rise", 540) +
+        [(thesis, "rise", 320, 520), (tbar, "wipe", 460, 480)] +
+        cascade(pb[2:], 340, 55, "rise", 500) +
+        [(band, "wipe", 1040, 620), (bt, "fade", 1180, 460),
+         (b2, "fade", 1300, 400)])
+transition(s, "cover", dur=950, direction="l")
 notes(s, (
     "PROBLEMA (2min).\n"
     "• Conte um caso concreto de compra frustrada, se tiver.\n"
     "• As três dores: falsificação, dinheiro exposto, atleta sem canal.\n"
     "• Fechamento: o problema não é oferta, é confiança."
 ))
-chrome(s, 3, "O problema")
+chrome(s, 3, "O problema", dark=True, accent=D_SECOND)
+
+
 
 # =====================================================================
 # 04 — POR QUE AGORA
@@ -217,7 +249,7 @@ animate(s, cascade(head, 60, 100, "rise", 520) +
         [(chart[0], "wipe", 620, 600)] +
         [(b, "wipeup", 720 + i * 90, 620) for i, b in enumerate(chart[1:])] +
         [(cap, "zoom", 1150, 450)])
-transition(s, "wipe")
+transition(s, "fade", dur=850)
 notes(s, (
     "POR QUE AGORA (1min30).\n"
     "• Três mudanças estruturais — não é tendência passageira.\n"
@@ -225,6 +257,9 @@ notes(s, (
     "ofereça o recorte do seu nicho."
 ))
 chrome(s, 4, "Por que agora")
+
+
+
 
 # =====================================================================
 # 05 — SOLUÇÃO
@@ -275,7 +310,7 @@ for i, (label, col, fg) in enumerate([("UM CATÁLOGO", WHITE, INK),
 animate(s, cascade(head, 60, 100, "rise", 520) +
         cascade(sl, 300, 45, "rise", 500) +
         cascade(chips, 1050, 80, "fade", 400))
-transition(s, "fade")
+transition(s, "push", dur=900, direction="u")
 notes(s, (
     "SOLUÇÃO (2min).\n"
     "• Uma plataforma, uma conta, um checkout.\n"
@@ -284,6 +319,9 @@ notes(s, (
     "• Não venda como 'mais um marketplace'. É infraestrutura de confiança."
 ))
 chrome(s, 5, "A solução")
+
+
+
 
 # =====================================================================
 # 06 — COMO FUNCIONA
@@ -335,7 +373,7 @@ animate(s, cascade(head, 60, 100, "rise", 520) +
         [(cust, "zoom", 900, 600)] +
         [(cl, "fade", 1000, 400), (cs, "fade", 1040, 400)] +
         cascade(fl, 1080, 60, "fade", 380))
-transition(s, "push")
+transition(s, "cover", dur=900, direction="u")
 notes(s, (
     "COMO FUNCIONA (2min).\n"
     "• Passo 4 é o argumento comercial: o vendedor recebe sem risco de calote e "
@@ -343,6 +381,9 @@ notes(s, (
     "• A custódia é o que permite vender C2C com segurança."
 ))
 chrome(s, 6, "Como funciona")
+
+
+
 
 # =====================================================================
 # 07 — PRODUTO
@@ -414,7 +455,7 @@ animate(s, cascade(head, 60, 100, "rise", 520) +
         [(x, "fade", 420 + i * 25, 380) for i, x in enumerate([bbar] + dots + ui)] +
         cascade(ph, 640, 30, "rise", 450) +
         [(bl, "fade", 1150, 350)])
-transition(s, "fade")
+transition(s, "fade", dur=900)
 notes(s, (
     "PRODUTO (1min30).\n"
     "• As telas são wireframes: o objetivo é mostrar a lógica, não o visual final.\n"
@@ -422,30 +463,37 @@ notes(s, (
 ))
 chrome(s, 7, "Produto")
 
+
+
+
 # =====================================================================
 # 08 — DIFERENCIAL
 # =====================================================================
-s = blank()
-head = title_block(s, "DIFERENCIAL", "Confiança não é um selo. É um fluxo.")
-left = [mono(s, 0.78, 2.70, 4.3, 0.22, "VERIFICAÇÃO · 3 CAMADAS", size=7.6,
-             color=PRIMARY, spc=1.8)]
+s = blank(dark=True)
+head = title_block(s, "DIFERENCIAL", "Confiança não é um selo. É um fluxo.",
+                   None, dark=True, kicker_color=D_SECOND)
+
+left = [mono(s, 0.78, 2.42, 4.6, 0.22, "VERIFICAÇÃO · 3 CAMADAS", size=7.4,
+             color=D_SECOND, spc=1.8)]
 VER = [("1", "Documento e CNPJ", "Existência real, sócio responsável e dados bancários.", PRIMARY),
-       ("2", "Histórico de vendas", "Tempo de operação, volume e taxa de disputa.", SECONDARY),
+       ("2", "Histórico de vendas", "Tempo de operação, volume e taxa de disputa.", D_SECOND),
        ("3", "Catálogo auditado", "Marcas, procedência e amostra de produtos.", GREEN)]
 for i, (num, nm, ds, col) in enumerate(VER):
-    y = 3.10 + i * 1.10
-    n = box(s, 0.78, y, 0.54, 0.54, fill=col, border=INK, lw=2.0,
-            shadow=True, shadow_px=4)
-    nt = mono(s, 0.78, y, 0.54, 0.54, num, size=10, color=INK, align="c",
-              anchor="m")
-    t = text(s, 1.50, y - 0.03, 3.6, 0.30, nm, size=13.5, color=INK, bold=True)
-    d = text(s, 1.50, y + 0.33, 3.62, 0.55, ds, size=9.6, color=INK_SOFT,
-             line=1.28)
-    left += [n, nt, t, d]
+    y = 2.88 + i * 1.22
+    left.append(box(s, 0.78, y, 0.52, 0.52, fill=col, border=None, shadow=False))
+    left.append(mono(s, 0.78, y, 0.52, 0.52, num, size=11, color=INK,
+                     align="c", anchor="m"))
+    left.append(text(s, 1.54, y - 0.02, 4.3, 0.3, nm, size=14.5, color=WHITE,
+                     bold=True, spc=-0.3))
+    left.append(text(s, 1.54, y + 0.32, 4.35, 0.6, ds, size=9.6, color=D_MUTED,
+                     line=1.3))
+    if i < 2:
+        left.append(box(s, 0.78, y + 0.96, 5.15, 0.010, fill=WHITE, border=None,
+                        shadow=False, alpha=16))
 
-panel = box(s, 5.30, 2.56, 3.55, 4.06, fill=INK, border=INK, lw=2.6,
-            shadow=True, shadow_px=8)
-pt = mono(s, 5.58, 2.78, 3.0, 0.22, "CUSTÓDIA · 4 ESTADOS", size=7.4,
+panel = box(s, 6.60, 2.36, 5.94, 3.60, fill=None, border=WHITE, lw=2.0,
+            shadow=False)
+pt = mono(s, 6.92, 2.58, 4.4, 0.22, "CUSTÓDIA · 4 ESTADOS", size=7.4,
           color=SECONDARY, spc=1.6)
 STATES = [("Pago", "valor entra na conta custodial", PRIMARY),
           ("Retido", "comprador confirma o recebimento", SECONDARY),
@@ -453,50 +501,37 @@ STATES = [("Pago", "valor entra na conta custodial", PRIMARY),
           ("Liberado", "repasse automático ao vendedor", GREEN)]
 stt = [panel, pt]
 for i, (nm, ds, col) in enumerate(STATES):
-    y = 3.20 + i * 0.82
-    stt.append(box(s, 5.58, y, 0.18, 0.18, fill=col, border=WHITE, lw=1.4,
-                   kind="oval", shadow=False))
-    stt.append(text(s, 5.88, y - 0.08, 2.75, 0.28, nm, size=11.5, color=WHITE,
+    y = 3.02 + i * 0.70
+    stt.append(box(s, 6.92, y + 0.03, 0.17, 0.17, fill=col, border=None,
+                   shadow=False))
+    stt.append(text(s, 7.26, y - 0.03, 1.65, 0.26, nm, size=11.5, color=WHITE,
                     bold=True))
-    stt.append(text(s, 5.88, y + 0.20, 2.72, 0.26, ds, size=8.2, color=D_MUTED,
+    stt.append(text(s, 8.95, y, 3.35, 0.26, ds, size=8.4, color=D_MUTED,
                     line=1.2))
+    if i < 3:
+        stt.append(box(s, 6.92, y + 0.56, 5.30, 0.008, fill=WHITE, border=None,
+                       shadow=False, alpha=14))
 
-thesis = card(s, 9.05, 2.56, 3.50, 4.06)
-th1 = text(s, 9.33, 2.82, 3.0, 0.72, "Ninguém faz\nos dois juntos.", size=20,
-           color=INK, bold=True, spc=-0.8, line=1.02)
-th2 = text(s, 9.33, 3.72, 2.95, 1.05,
-           "Marketplaces têm alcance e não verificam. Lojas têm confiança e não "
-           "têm tráfego de atleta.", size=9.2, color=INK_SOFT, line=1.32)
-pills = []
-for i, (label, col, fg) in enumerate([("VERIFICAÇÃO", PRIMARY, WHITE),
-                                     ("REPUTAÇÃO", GREEN, INK),
-                                     ("CUSTÓDIA", ACCENT, WHITE)]):
-    y = 4.88 + i * 0.42
-    pills.append(box(s, 9.33, y, 2.05, 0.32, fill=col, border=INK, lw=1.8,
-                     shadow=True, shadow_px=3))
-    pills.append(mono(s, 9.33, y, 2.05, 0.32, label, size=6.6, color=fg,
-                      spc=1.2, align="c", anchor="m"))
-cta = box(s, 9.33, 6.14, 2.95, 0.34, fill=INK, border=INK, lw=1.8,
-          shadow=False)
-ct = mono(s, 9.33, 6.14, 2.95, 0.34, "OS TRÊS JUNTOS", size=6.8, color=WHITE,
-          spc=1.4, align="c", anchor="m")
+quote = text(s, 0.78, 6.40, 6.0, 0.5, "Ninguém faz os dois juntos.", size=24,
+             color=WHITE, bold=True, spc=-0.9)
+qsub = text(s, 7.00, 6.44, 5.55, 0.6,
+            "Marketplaces têm alcance e não verificam. Lojas têm confiança e não têm tráfego de atleta.",
+            size=9.2, color=D_MUTED, line=1.3)
 
-animate(s, cascade(head, 60, 100, "rise", 520) +
-        cascade(left, 260, 50, "rise", 460) +
-        [(panel, "zoom", 560, 600), (pt, "fade", 680, 400)] +
-        cascade(stt[2:], 720, 55, "fade", 400) +
-        [(thesis, "left", 900, 550), (th1, "fade", 1000, 400),
-         (th2, "fade", 1060, 400)] +
-        cascade(pills, 1120, 60, "rise", 420) +
-        [(cta, "zoom", 1360, 420), (ct, "fade", 1440, 380)])
-transition(s, "wipe")
+animate(s, cascade(head, 60, 110, "rise", 540) +
+        cascade(left, 280, 55, "rise", 460) +
+        [(panel, "zoom", 620, 620), (pt, "fade", 740, 400)] +
+        cascade(stt[2:], 780, 55, "fade", 400) +
+        [(quote, "left", 1120, 560), (qsub, "fade", 1240, 420)])
+transition(s, "cover", dur=900, direction="r")
 notes(s, (
     "DIFERENCIAL (1min30).\n"
     "• A frase-chave: confiança não é selo, é fluxo de dinheiro e de informação.\n"
     "• Verificação sem custódia não protege o pagamento; custódia sem "
     "verificação não protege o produto."
 ))
-chrome(s, 8, "Diferencial")
+chrome(s, 8, "Diferencial", dark=True, accent=D_PRIMARY)
+
 
 # =====================================================================
 # 09 — MODELO DE NEGÓCIO
@@ -544,7 +579,7 @@ for i, (v, l, col) in enumerate(STATS):
 animate(s, cascade(head, 60, 100, "rise", 520) +
         cascade(rv, 300, 50, "rise", 480) +
         [(stats, "zoom", 850, 600)] + cascade(sl[1:], 950, 50, "fade", 380))
-transition(s, "fade")
+transition(s, "fade", dur=850)
 notes(s, (
     "MODELO (1min30).\n"
     "• Receita principal é comissão; assinatura de loja e serviços são alavancas.\n"
@@ -552,6 +587,9 @@ notes(s, (
     "• Se perguntarem de margem: custo dominante é pagamento + suporte de disputa."
 ))
 chrome(s, 9, "Modelo de negócio")
+
+
+
 
 # =====================================================================
 # 10 — POSICIONAMENTO
@@ -630,7 +668,7 @@ animate(s, cascade(head, 60, 100, "rise", 520) +
         [(tlabel, "drop", 900, 450), (target[0], "zoom", 960, 500),
          (target[1], "fade", 1050, 350)] +
         cascade(sd, 1120, 80, "left", 480))
-transition(s, "fade")
+transition(s, "push", dur=850, direction="l")
 notes(s, (
     "POSICIONAMENTO (1min).\n"
     "• O eixo vertical é confiança; o horizontal é alcance.\n"
@@ -638,6 +676,9 @@ notes(s, (
     "• Não citar concorrentes por nome."
 ))
 chrome(s, 10, "Posicionamento")
+
+
+
 
 # =====================================================================
 # 11 — ROADMAP
@@ -670,7 +711,7 @@ for i, b in enumerate(bars):
 rest = [sh for sh in road[1:] if sh not in bars]
 anim += [(sh, "fade", 800 + i * 30, 380) for i, sh in enumerate(rest)]
 animate(s, anim)
-transition(s, "push")
+transition(s, "push", dur=850, direction="u")
 notes(s, (
     "ROADMAP (1min).\n"
     "• Cada fase responde uma pergunta: dá para vender? dá para confiar? dá para escalar?\n"
@@ -678,46 +719,70 @@ notes(s, (
 ))
 chrome(s, 11, "Roadmap")
 
+
+
+
 # =====================================================================
 # 12 — ONDE ESTAMOS
 # =====================================================================
 s = blank()
-head = title_block(s, "ONDE ESTAMOS", "O que já existe, de verdade.")
-STAT = [("Produto", "Fluxos de catálogo, loja e checkout desenhados; identidade visual e telas definidas.", PRIMARY, "oval"),
-        ("Técnica", "Next.js 15 + TypeScript + Supabase. Build e type-check passando no repositório.", SECONDARY, "hex"),
-        ("Operação", "Quatro frentes independentes, com contratos de integração escritos.", ACCENT, "diamond")]
-where = []
-for i, (nm, ds, col, icon) in enumerate(STAT):
-    x = 0.78 + i * 4.02
-    c = card(s, x, 2.66, 3.72, 2.60)
-    isq = box(s, x + 0.28, 2.94, 0.80, 0.80, fill=col, border=INK, lw=2.2,
-              shadow=True, shadow_px=4)
-    ivl = {"oval": 0.36, "hex": 0.44, "diamond": 0.40}[icon]
-    ic = box(s, x + 0.28 + (0.80 - ivl) / 2, 2.94 + (0.80 - ivl) / 2, ivl, ivl,
-             fill=INK, border=None, kind=icon, shadow=False)
-    t = text(s, x + 1.24, 3.16, 2.2, 0.36, nm, size=17, color=INK, bold=True,
-             spc=-0.4)
-    d = text(s, x + 0.28, 4.00, 3.10, 1.05, ds, size=10.2, color=INK_SOFT,
-             line=1.35)
-    where += [c, isq, ic, t, d]
+head = title_block(s, "ONDE ESTAMOS", "O que já existe, de verdade.", None, size=34)
 
-band = box(s, 0.78, 5.52, 11.77, 1.18, fill=INK, border=INK, lw=2.4,
-           shadow=True, shadow_px=7)
-bT = text(s, 1.06, 5.70, 11.2, 0.85,
-          "Ainda sem tração medida. O que existe é base técnica, produto desenhado "
-          "e plano de execução — e é exatamente isso que queremos validar com você.",
-          size=12.5, color=WHITE, bold=True, line=1.35)
+ROWS = [
+    ("Produto", "Fluxos de catálogo, loja e checkout desenhados; identidade visual e telas definidas."),
+    ("Técnica", "Next.js 15 + TypeScript + Supabase. Build e type-check passando no repositório."),
+    ("Operação", "Quatro frentes independentes, com contratos de integração escritos."),
+]
+stt = []
+Y = 3.02
+for i, (nm, ds) in enumerate(ROWS):
+    y = Y + i * 1.16
+    stt.append(box(s, 0.78, y - 0.12, 6.30, 0.012, fill=INK, border=None,
+                   shadow=False, alpha=18))
+    stt.append(box(s, 0.78, y + 0.16, 0.14, 0.14, fill=GREEN, border=None,
+                   shadow=False))
+    stt.append(text(s, 1.10, y + 0.06, 2.2, 0.3, nm, size=14, color=INK,
+                    bold=True, spc=-0.3))
+    stt.append(text(s, 1.10, y + 0.44, 5.85, 0.55, ds, size=10.2, color=INK_SOFT,
+                    line=1.32))
 
-animate(s, cascade(head, 60, 100, "rise", 520) +
-        cascade(where, 300, 55, "rise", 500) +
-        [(band, "zoom", 900, 600), (bT, "fade", 1000, 450)])
-transition(s, "fade")
+# painel preto (metade direita)
+panel = box(s, 7.40, 0, 5.933, 7.5, fill=INK, border=None, shadow=False)
+tag = box(s, 7.95, 1.62, 1.95, 0.34, fill=None, border=WHITE, lw=1.5,
+          shadow=False)
+tagt = mono(s, 7.95, 1.62, 1.95, 0.34, "transparência", size=6.6,
+            color=WHITE, spc=1.4, align="c", anchor="m")
+big = text(s, 7.95, 2.24, 4.70, 1.30, "Ainda sem\ntração medida.", size=31,
+           color=WHITE, bold=True, spc=-1.1, line=1.0)
+bigb = box(s, 7.95, 3.66, 1.30, 0.09, fill=PRIMARY, border=None, shadow=False)
+pr = text(s, 7.95, 4.02, 4.62, 1.45,
+          "O que existe é base técnica, produto desenhado e plano de execução. "
+          "É exatamente isso que queremos validar com você — com vendas reais, "
+          "em 90 dias.", size=10.4, color=D_MUTED, line=1.4)
+note = mono(s, 7.95, 6.55, 4.6, 0.22, "// sem vanity metrics", size=7.0,
+            color=RGBColor(0x88, 0x88, 0x88), spc=1.2)
+
+# cabeçalho próprio (metade clara + metade escura)
+box(s, 0.78, 0.40, 0.15, 0.15, fill=PRIMARY, border=None, shadow=False)
+mono(s, 1.04, 0.38, 3.4, 0.2, "CoreMotion", size=9.5, color=INK, spc=2.6)
+mono(s, 7.30, 0.38, 5.25, 0.2, "Onde estamos   ·   12/15", size=8,
+     color=D_MUTED, spc=2.0, align="r")
+rule(s, 0, 7.44, 7.40, 0.06, color=INK)
+rule(s, 7.40, 7.44, 5.933, 0.06, color=WHITE)
+
+animate(s, cascade(head, 60, 110, "rise", 540) +
+        cascade(stt, 300, 55, "rise", 470) +
+        [(panel, "wipe", 420, 720), (tag, "fade", 760, 400),
+         (tagt, "fade", 800, 400),
+         (big, "rise", 840, 560), (bigb, "wipe", 980, 420),
+         (pr, "fade", 1080, 460), (note, "fade", 1240, 380)])
+transition(s, "cover", dur=900, direction="l")
 notes(s, (
     "ONDE ESTAMOS (1min).\n"
-    "• Transparência total: sem métricas de tração ainda.\n"
-    "• O ativo atual é a base técnica e o desenho de produto — reduz risco de execução."
+    "• Seja honesto: ainda não há tração medida.\n"
+    "• O ativo é base técnica, produto desenhado e plano de execução.\n"
+    "• O piloto existe para transformar isso em evidência."
 ))
-chrome(s, 12, "Onde estamos")
 
 # =====================================================================
 # 13 — TIME
@@ -749,7 +814,7 @@ note = text(s, 0.78, 5.96, 8.0, 0.22,
 
 animate(s, cascade(head, 60, 100, "rise", 520) +
         cascade(tm, 300, 55, "rise", 500) + [(note, "fade", 1000, 380)])
-transition(s, "push")
+transition(s, "fade", dur=850)
 notes(s, (
     "TIME (45s).\n"
     "• Não é 'somos quatro amigos': são quatro responsabilidades com entregáveis.\n"
@@ -757,44 +822,52 @@ notes(s, (
 ))
 chrome(s, 13, "Quem executa")
 
+
+
+
 # =====================================================================
 # 14 — O PEDIDO
 # =====================================================================
-s = blank()
-head = title_block(s, "O PEDIDO", "O que precisamos para os próximos 90 dias.")
-ASK = [("Piloto com 5 lojas", "Acesso a lojas esportivas para validar verificação e custódia com vendas reais.", "REDE", PRIMARY, WHITE),
-       ("R$ 300 mil", "Produto, operação e marketing do piloto. Ajuste o valor ao seu plano.", "INVESTIMENTO", SECONDARY, INK),
-       ("Dois conselheiros", "Marketplace e operação de pagamentos, com uma conversa por mês.", "MENTORIA", ACCENT, WHITE)]
+s = blank_bg(PRIMARY)
+head = title_block(s, "O PEDIDO", "O que precisamos para os próximos 90 dias.",
+                   None, dark=True, kicker_color=SECONDARY, size=38)
+ASK = [("5 lojas", "Piloto com lojas esportivas para validar verificação e custódia com vendas reais.", "REDE"),
+       ("R$ 300 mil", "Produto, operação e marketing do piloto. Ajuste o valor ao seu plano.", "INVESTIMENTO"),
+       ("2 conselheiros", "Marketplace e operação de pagamentos, com uma conversa por mês.", "MENTORIA")]
 ak = []
-for i, (nm, ds, tag, col, fg) in enumerate(ASK):
+for i, (nm, ds, tag) in enumerate(ASK):
     x = 0.78 + i * 4.02
-    c = card(s, x, 2.66, 3.72, 2.86)
-    bar = box(s, x, 2.66, 3.72, 0.16, fill=col, border=INK, lw=2.2,
-              shadow=False)
-    tg = mono(s, x + 0.28, 2.96, 2.9, 0.2, tag, size=6.6, color=INK_SOFT, spc=1.8)
-    t = text(s, x + 0.28, 3.26, 3.10, 0.72, nm, size=23, color=INK, bold=True,
-             spc=-0.9, line=1.0)
-    d = text(s, x + 0.28, 4.12, 3.05, 1.10, ds, size=10.2, color=INK_SOFT,
-             line=1.35)
-    ak += [c, bar, tg, t, d]
+    ak.append(box(s, x, 2.78, 3.68, 0.04, fill=INK, border=None, shadow=False))
+    ak.append(mono(s, x, 2.96, 3.4, 0.2, tag, size=7.2, color=INK, spc=1.8))
+    ak.append(text(s, x, 3.28, 3.60, 0.80, nm, size=36, color=WHITE, bold=True,
+                   spc=-1.5, line=0.98))
+    ak.append(text(s, x, 4.36, 3.44, 0.95, ds, size=10.8,
+                   color=RGBColor(0xFF, 0xEC, 0xEC), line=1.36))
 
-goal = box(s, 0.78, 5.82, 11.77, 0.62, fill=INK, border=INK, lw=2.4,
-           shadow=True, shadow_px=6)
-gt = mono(s, 1.04, 5.82, 11.2, 0.62,
-          "META DO PILOTO · 5 LOJAS · 300 PEDIDOS · 100% COM CUSTÓDIA · 90 DIAS",
-          size=8.6, color=WHITE, spc=0.8, anchor="m")
+goal = box(s, 0.0, 5.62, 13.333, 1.88, fill=INK, border=None, shadow=False)
+gk = mono(s, 0.78, 5.84, 8.0, 0.22, "meta do piloto · 90 dias", size=7.2,
+          color=D_SECOND, spc=1.8)
+META = [("5", "lojas"), ("300", "pedidos"), ("100%", "com custódia"), ("90", "dias")]
+gt = [gk]
+for i, (num, lab) in enumerate(META):
+    x = 0.78 + i * 3.02
+    gt.append(text(s, x, 6.14, 2.70, 0.55, num, size=30, color=WHITE, bold=True,
+                   spc=-1.2, line=1.0))
+    gt.append(mono(s, x, 6.76, 2.70, 0.22, lab, size=7.4, color=D_MUTED, spc=1.4))
 
-animate(s, cascade(head, 60, 100, "rise", 520) +
+animate(s, cascade(head, 60, 110, "rise", 540) +
         cascade(ak, 300, 55, "rise", 500) +
-        [(goal, "zoom", 920, 600), (gt, "fade", 1020, 450)])
-transition(s, "fade")
+        [(goal, "wipe", 980, 620)] +
+        [(x, "fade", 1120 + i * 60, 420) for i, x in enumerate(gt)])
+transition(s, "cover", dur=950, direction="l")
 notes(s, (
     "O PEDIDO (1min30).\n"
     "• Seja direto: 5 lojas, investimento e dois conselheiros.\n"
     "• Ajuste R$ 300 mil ao seu plano antes de apresentar.\n"
     "• Se a banca não puder investir, peça conexão com uma loja."
 ))
-chrome(s, 14, "O pedido")
+chrome(s, 14, "O pedido", dark=True, accent=D_SECOND)
+
 
 # =====================================================================
 # 15 — OBRIGADO (dark)
@@ -830,7 +903,7 @@ animate(s, cascade(dark_shapes, 0, 90, "zoom", 700) +
         [(kick, "fade", 120, 450), (big, "rise", 200, 700),
          (sub, "rise", 420, 600), (rule2, "wipe", 600, 450),
          (contact, "fade", 720, 450), (bye, "fade", 860, 400)])
-transition(s, "fade")
+transition(s, "fade", dur=1100)
 notes(s, (
     "FECHAMENTO (30s).\n"
     "• Pare de falar depois do 'obrigado'. Deixe a banca perguntar.\n"

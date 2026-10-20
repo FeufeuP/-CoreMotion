@@ -190,28 +190,15 @@ PROGRESS_COLORS = [PRIMARY, SECONDARY, ACCENT, GREEN, MAGENTA]
 
 
 def chrome(slide, idx, section, dark=False, total=TOTAL, accent=PRIMARY):
+    """Cabeçalho mínimo: marca, seção, contador e fio inferior."""
     fg = D_TEXT if dark else INK
     soft = D_MUTED if dark else INK_SOFT
-    box(slide, 0.78, 0.40, 0.15, 0.15, fill=accent, border=INK,
-        lw=1.6, shadow=False)
-    mono(slide, 1.05, 0.38, 3.4, 0.2, "CoreMotion", size=9.5, color=fg, spc=2.6)
-    mono(slide, 4.55, 0.38, 4.6, 0.2, section, size=8, color=soft, spc=2.4,
-         align="c")
-    mono(slide, 9.9, 0.38, 2.65, 0.2, f"{idx:02d} / {total:02d}", size=9,
-         color=fg, spc=1.8, align="r")
-    rule(slide, 0.78, 0.80, 11.77, 0.014, color=fg)
-
-    # progresso segmentado
-    seg_w, gap = 0.52, 0.075
-    for i in range(total):
-        x = 0.78 + i * (seg_w + gap)
-        filled = i < idx
-        color = PROGRESS_COLORS[i % len(PROGRESS_COLORS)] if filled else None
-        box(slide, x, 7.02, seg_w, 0.075,
-            fill=color if filled else (None if dark else WHITE),
-            border=fg, lw=1.0, shadow=False)
-    # faixa inferior
-    rule(slide, 0, 7.40, 13.333, 0.09, color=fg)
+    box(slide, 0.78, 0.40, 0.15, 0.15, fill=accent, border=None, shadow=False)
+    mono(slide, 1.04, 0.38, 3.4, 0.2, "CoreMotion", size=9.5, color=fg, spc=2.6)
+    mono(slide, 7.30, 0.38, 5.25, 0.2,
+         f"{section}   ·   {idx:02d}/{total}", size=8, color=soft, spc=2.0,
+         align="r")
+    rule(slide, 0, 7.44, 13.333, 0.06, color=fg)
 
 
 # ------------------------------------------------------------------ título
