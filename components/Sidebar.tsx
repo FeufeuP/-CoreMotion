@@ -24,6 +24,7 @@ import {
   Activity,
   Sparkles,
 } from 'lucide-react';
+import { CoreMotionMark, CoreMotionWordmark } from '@/components/brand/Logo';
 
 interface SidebarProps {
   className?: string;
@@ -160,16 +161,18 @@ export default function Sidebar({ className = '' }: SidebarProps) {
           <button
             onClick={() => handleNavClick('home')}
             className="flex items-center gap-2.5 group focus:outline-none text-left"
-            title="CoreMotiom PRO"
+            title="CoreMotion PRO"
           >
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-red-700 via-red-600 to-red-500 flex items-center justify-center text-white font-black text-sm shadow-lg shadow-red-950/50 group-hover:scale-105 transition-transform shrink-0">
-              CM
-            </div>
+            <CoreMotionMark
+              size={36}
+              className="shrink-0 drop-shadow-[0_4px_14px_rgba(229,9,20,0.35)] group-hover:scale-105 transition-transform"
+            />
             <div>
               <div className="flex items-center gap-1.5">
-                <span className="font-extrabold text-base tracking-tight text-white group-hover:text-red-400 transition-colors">
-                  CoreMotiom
-                </span>
+                <CoreMotionWordmark
+                  height={12}
+                  className="transition-opacity group-hover:opacity-80"
+                />
                 <span className="bg-red-500/15 text-red-400 border border-red-500/30 px-1.5 py-0.2 rounded text-[9px] font-bold tracking-wider uppercase">
                   PRO
                 </span>

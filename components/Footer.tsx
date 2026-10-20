@@ -10,6 +10,7 @@ import {
   ArrowUpRight,
   Sparkles,
 } from 'lucide-react';
+import { CoreMotionMark, CoreMotionWordmark } from '@/components/brand/Logo';
 
 export default function Footer() {
   const { setActiveView } = useCoreMotiom();
@@ -78,10 +79,8 @@ export default function Footer() {
           {/* Brand Col */}
           <div className="md:col-span-2 space-y-4">
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-red-700 to-red-500 flex items-center justify-center text-white font-extrabold text-sm shadow-md shadow-red-950/40">
-                CM
-              </div>
-              <span className="text-lg font-black tracking-tight text-white">CoreMotiom</span>
+              <CoreMotionMark size={32} className="shrink-0" />
+              <CoreMotionWordmark height={13} />
               <span className="bg-red-500/10 text-red-400 border border-red-500/20 px-2 py-0.5 rounded-full text-[9px] font-bold tracking-wider uppercase">
                 PRO
               </span>
