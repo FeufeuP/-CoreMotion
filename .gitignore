@@ -12,3 +12,7 @@ Fluxograma/Diagrama C. De Uso/.flowchart-data.json
 
 # sidecar de contagem de páginas dos PDFs (regenerado on-demand)
 Fluxograma/Diagrama C. De Uso/.flowchart-pages.json
+
+# Python
+__pycache__/
+*.pyc
