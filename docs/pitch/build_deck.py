@@ -726,9 +726,9 @@ for i, (nm, ds, col) in enumerate(TEAM):
     av = shape(s, "oval", x + 0.30, 2.66, 0.92, 0.92, fill=col)
     ini = txt(s, x + 0.30, 2.66, 0.92, 0.92, ["P1", "P2", "P3", "P4"][i],
               size=16, color=INK, bold=True, align="c", anchor="m")
-    nmt = txt(s, x + 0.30, 3.78, 2.1, 0.62, nm, size=12.5, color=INK,
+    nmt = txt(s, x + 0.30, 3.70, 2.15, 0.62, nm, size=12.5, color=INK,
               bold=True, line_spacing=1.05)
-    dst = txt(s, x + 0.30, 4.48, 2.1, 0.95, ds, size=9.4, color=INK2,
+    dst = txt(s, x + 0.30, 4.34, 2.12, 0.95, ds, size=9.4, color=INK2,
               line_spacing=1.25)
     cards += [c, av, ini, nmt, dst]
 
