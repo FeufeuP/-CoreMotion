@@ -38,7 +38,16 @@ def fnt(size_pt, bold=False, italic=False, family=None):
     if key not in _cache:
         reg, bold_f, ital_f = FAMILIES.get(family, (REG, BOLD, ITAL))
         path = bold_f if bold else (ital_f if italic else reg)
-        _cache[key] = ImageFont.truetype(path, max(5, int(round(size_pt / 72 * DPI))))
+        if not os.path.exists(path):
+            dv = "/usr/share/fonts/truetype/dejavu/DejaVuSans%s.ttf"
+            path = dv % ("-Bold" if bold else "")
+        f = ImageFont.truetype(path, max(5, int(round(size_pt / 72 * DPI))))
+        try:
+            if "DMSans" in os.path.basename(path):
+                f.set_variation_by_axes([14.0, 700.0 if bold else 400.0])
+        except Exception:
+            pass
+        _cache[key] = f
     return _cache[key]
 
 
@@ -109,7 +118,7 @@ def text_width(s, run):
     return run["f"].getlength(s) + run["spc"] * len(s)
 
 
-def draw_text(d, shape):
+def draw_text(d, shape, img=None):
     tf = shape.text_frame
     x0, y0 = shape.left * S, shape.top * S
     w, h = shape.width * S, shape.height * S
@@ -176,14 +185,27 @@ def draw_text(d, shape):
         asc, _ = toks[0][1]["f"].getmetrics()
         base_y = cy + para["lh"] / 2 + asc / 2 - 0.05 * DPI
         for tok, run, tw in toks:
+            if run["alpha"] < 255 and img is not None:
+                # alfa de texto: compõe em camada transparente
+                ov = Image.new("RGBA", img.size, (0, 0, 0, 0))
+                od = ImageDraw.Draw(ov)
+                px = cx
+                for ch in tok:
+                    od.text((px, base_y), ch, font=run["f"],
+                            fill=run["color"] + (run["alpha"],), anchor="ls")
+                    px += run["f"].getlength(ch) + run["spc"]
+                img.paste(Image.alpha_composite(
+                    img.convert("RGBA"), ov).convert("RGB"))
+                cx += tw
+                continue
             if run["spc"]:
                 for ch in tok:
                     d.text((cx, base_y), ch, font=run["f"],
-                           fill=run["color"] + (run["alpha"],), anchor="ls")
+                           fill=run["color"], anchor="ls")
                     cx += run["f"].getlength(ch) + run["spc"]
             else:
                 d.text((cx, base_y), tok, font=run["f"],
-                       fill=run["color"] + (run["alpha"],), anchor="ls")
+                       fill=run["color"], anchor="ls")
                 cx += tw
         cy += para["lh"]
         if i == len(lines) - 1 or lines[i + 1][0] is not para:
@@ -253,6 +275,36 @@ def _prim(d, prst, box, f, l, lw, dash):
                    (box[0] + w * .45, box[1] + h / 2)], fill=f, outline=l)
     elif prst == "rtTriangle":
         d.polygon([(box[0], box[1]), (box[0], box[3]), (box[2], box[3])], fill=f)
+    elif prst in ("star8", "star4", "star5", "star10"):
+        from math import cos, sin, pi
+        pts_n = {"star8": (8, 0.44), "star4": (4, 0.30),
+                 "star5": (5, 0.46), "star10": (10, 0.52)}[prst]
+        n, inner = pts_n
+        cx, cy = (box[0] + box[2]) / 2, (box[1] + box[3]) / 2
+        rx, ry = (box[2] - box[0]) / 2, (box[3] - box[1]) / 2
+        pts = []
+        for i in range(n * 2):
+            ang = -pi / 2 + i * pi / n
+            r = 1.0 if i % 2 == 0 else inner
+            pts.append((cx + rx * r * cos(ang), cy + ry * r * sin(ang)))
+        d.polygon(pts, fill=f, outline=l)
+    elif prst == "rightArrow":
+        w, h = box[2] - box[0], box[3] - box[1]
+        d.polygon([(box[0], box[1] + h * .28), (box[0] + w * .52, box[1] + h * .28),
+                   (box[0] + w * .52, box[1]), (box[2], box[1] + h / 2),
+                   (box[0] + w * .52, box[3]), (box[0] + w * .52, box[1] + h * .72),
+                   (box[0], box[1] + h * .72)], fill=f, outline=l)
+    elif prst == "mathPlus":
+        w, h = box[2] - box[0], box[3] - box[1]
+        a, b = w * .30, h * .30
+        d.polygon([(box[0] + w / 2 - a, box[1]), (box[0] + w / 2 + a, box[1]),
+                   (box[0] + w / 2 + a, box[1] + h / 2 - b),
+                   (box[2], box[1] + h / 2 - b), (box[2], box[1] + h / 2 + b),
+                   (box[0] + w / 2 + a, box[1] + h / 2 + b),
+                   (box[0] + w / 2 + a, box[3]), (box[0] + w / 2 - a, box[3]),
+                   (box[0] + w / 2 - a, box[1] + h / 2 + b),
+                   (box[0], box[1] + h / 2 + b), (box[0], box[1] + h / 2 - b),
+                   (box[0] + w / 2 - a, box[1] + h / 2 - b)], fill=f, outline=l)
     else:
         d.rectangle(box, fill=f, outline=l, width=lw)
 
@@ -300,9 +352,9 @@ for idx, slide in enumerate(prs.slides, start=1):
         elif st == MSO_SHAPE_TYPE.AUTO_SHAPE:
             draw_shape(canvas, shape, img)
             if shape.has_text_frame and shape.text_frame.text.strip():
-                draw_text(canvas, shape)
+                draw_text(canvas, shape, img)
         elif shape.has_text_frame and shape.text_frame.text.strip():
-            draw_text(canvas, shape)
+            draw_text(canvas, shape, img)
     out = os.path.join(OUTDIR, f"slide-{idx:02d}.png")
     img.save(out)
     files.append(out)

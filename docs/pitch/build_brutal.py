@@ -85,7 +85,7 @@ animate(s, cascade(art, 0, 90, "zoom", 650) +
          (brand, "rise", 180, 680), (under, "wipe", 420, 450),
          (lead, "rise", 480, 600), (meta, "fade", 700, 420),
          (foot, "rise", 800, 500), (foot_t, "fade", 900, 450)])
-transition(s, "fade", dur=1000)
+transition(s, "morph", dur=1000, speed="med")
 notes(s, (
     "ABERTURA (30s).\n"
     "• Meu nome é [nome] e o CoreMotion é um marketplace esportivo com lojas "
@@ -94,6 +94,24 @@ notes(s, (
     "confiança em fluxo.\n"
     "• Prometer 15 minutos e seguir a agenda."
 ))
+# --- kit velocidade: bandeira, rastros, chevrons e velocímetro ---
+name_it(kick, "CM!!kick")
+name_it(brand, "CM!!head")
+d_flag = checkered(s, 0.0, 0.0, cols=20, rows=2, cell=0.26)
+d_streak = speed_streaks(s, 5.70, 0.55, 2.30, n=3, gap=0.15, color=INK,
+                         alpha=18, thick=0.055)
+d_chev = chevrons(s, 3.05, 3.24, n=3, size=0.26, gap=0.34, color=PRIMARY)
+d_vghost = ghost(s, 7.52, 6.48, 4.4, 1.0, "VELOCIDADE", size=52, color=INK,
+                 alpha=6)
+d_gauge = speedometer(s, 12.12, 6.30, size=0.95, ring=PRIMARY, bg=WHITE,
+                      needle=INK, angle=42)
+send_to_back(s, [d_vghost] + d_streak)
+animate(s, [(f, "wipe", 40 + i * 18, 420) for i, f in enumerate(d_flag)] +
+        [(st, "speed", 200 + i * 70, 480) for i, st in enumerate(d_streak)] +
+        [(ch, "whip", 420 + i * 70, 380) for i, ch in enumerate(d_chev)] +
+        [(d_vghost, "fade", 620, 700)] +
+        [(g, "zoom", 520 + i * 45, 450) for i, g in enumerate(d_gauge)])
+
 chrome(s, 1, "Capa")
 
 
@@ -141,12 +159,22 @@ animate(s, cascade(head, 60, 100, "rise", 520) +
         [(intro, "fade", 280, 420)] +
         cascade(ag, 340, 45, "rise", 470) +
         [(foot, "fade", 1050, 380)])
-transition(s, "cover", dur=900, direction="l")
+transition(s, "morph", dur=1000, speed="med")
 notes(s, (
     "AGENDA (45s).\n"
     "• Quatro blocos. O primeiro é o mais importante: o problema.\n"
     "• Se o tempo apertar, cortamos o bloco 3 e mantemos problema, solução e pedido."
 ))
+# --- kit velocidade ---
+d_streak = speed_streaks(s, 9.15, 1.02, 3.40, n=3, gap=0.15, color=WHITE,
+                         alpha=14, thick=0.055)
+d_vghost = ghost(s, 9.62, 5.28, 3.2, 2.0, "GO", size=170, color=WHITE, alpha=6)
+d_chev = chevrons(s, 9.55, 2.06, n=3, size=0.22, gap=0.30, color=D_SECOND)
+send_to_back(s, [d_vghost] + d_streak)
+animate(s, [(st, "speed", 150 + i * 70, 500) for i, st in enumerate(d_streak)] +
+        [(ch, "whip", 380 + i * 60, 360) for i, ch in enumerate(d_chev)] +
+        [(d_vghost, "fade", 560, 800)])
+
 chrome(s, 2, "Agenda", dark=True, accent=D_PRIMARY)
 
 
@@ -194,13 +222,24 @@ animate(s, [(ring, "zoom", 0, 900)] + cascade(head, 60, 110, "rise", 540) +
         cascade(pb[2:], 340, 55, "rise", 500) +
         [(band, "wipe", 1040, 620), (bt, "fade", 1180, 460),
          (b2, "fade", 1300, 400)])
-transition(s, "cover", dur=950, direction="l")
+transition(s, "morph", dur=1000, speed="med")
 notes(s, (
     "PROBLEMA (2min).\n"
     "• Conte um caso concreto de compra frustrada, se tiver.\n"
     "• As três dores: falsificação, dinheiro exposto, atleta sem canal.\n"
     "• Fechamento: o problema não é oferta, é confiança."
 ))
+# --- kit velocidade ---
+d_streak = speed_streaks(s, 7.05, 2.46, 1.95, n=3, gap=0.14, color=INK,
+                         alpha=22, thick=0.05)
+d_check = checkered(s, 11.05, 2.24, cols=5, rows=2, cell=0.20)
+d_vghost = ghost(s, 8.05, 5.52, 4.4, 0.9, "ATRITO", size=44, color=WHITE,
+                 alpha=8)
+send_to_back(s, [d_vghost] + d_streak)
+animate(s, [(st, "speed", 200 + i * 70, 480) for i, st in enumerate(d_streak)] +
+        [(ck, "whip", 420 + i * 30, 380) for i, ck in enumerate(d_check)] +
+        [(d_vghost, "fade", 620, 700)])
+
 chrome(s, 3, "O problema", dark=True, accent=D_SECOND)
 
 
@@ -249,13 +288,24 @@ animate(s, cascade(head, 60, 100, "rise", 520) +
         [(chart[0], "wipe", 620, 600)] +
         [(b, "wipeup", 720 + i * 90, 620) for i, b in enumerate(chart[1:])] +
         [(cap, "zoom", 1150, 450)])
-transition(s, "fade", dur=850)
+transition(s, "morph", dur=1000, speed="med")
 notes(s, (
     "POR QUE AGORA (1min30).\n"
     "• Três mudanças estruturais — não é tendência passageira.\n"
     "• Se perguntarem de dados: o deck evita número de mercado sem fonte; "
     "ofereça o recorte do seu nicho."
 ))
+# --- kit velocidade ---
+d_streak = speed_streaks(s, 10.45, 1.24, 2.05, n=3, gap=0.15, color=INK,
+                         alpha=14, thick=0.055)
+d_arrow = box(s, 11.28, 2.32, 1.55, 0.48, fill=SECONDARY, border=INK, lw=2.2,
+              kind="arrow", rot=-32, shadow=True, shadow_px=5)
+d_chev = chevrons(s, 11.55, 6.22, n=3, size=0.22, gap=0.30, color=INK)
+send_to_back(s, d_streak)
+animate(s, [(st, "speed", 180 + i * 70, 500) for i, st in enumerate(d_streak)] +
+        [(d_arrow, "whip", 520, 520)] +
+        [(ch, "whip", 720 + i * 60, 360) for i, ch in enumerate(d_chev)])
+
 chrome(s, 4, "Por que agora")
 
 
@@ -310,7 +360,7 @@ for i, (label, col, fg) in enumerate([("UM CATÁLOGO", WHITE, INK),
 animate(s, cascade(head, 60, 100, "rise", 520) +
         cascade(sl, 300, 45, "rise", 500) +
         cascade(chips, 1050, 80, "fade", 400))
-transition(s, "push", dur=900, direction="u")
+transition(s, "morph", dur=1000, speed="med")
 notes(s, (
     "SOLUÇÃO (2min).\n"
     "• Uma plataforma, uma conta, um checkout.\n"
@@ -318,6 +368,20 @@ notes(s, (
     "protege o dinheiro.\n"
     "• Não venda como 'mais um marketplace'. É infraestrutura de confiança."
 ))
+# --- kit velocidade ---
+d_streak = speed_streaks(s, 10.45, 1.24, 2.05, n=3, gap=0.15, color=INK,
+                         alpha=14, thick=0.055)
+d_chev1 = box(s, 4.51, 4.28, 0.28, 0.30, fill=INK, border=None, kind="chev",
+              shadow=False)
+d_chev2 = box(s, 8.53, 4.28, 0.28, 0.30, fill=INK, border=None, kind="chev",
+              shadow=False)
+d_vghost = ghost(s, 8.62, 6.42, 4.2, 0.9, "TRÊS CAMADAS", size=30, color=INK,
+                 alpha=7)
+send_to_back(s, [d_vghost] + d_streak)
+animate(s, [(st, "speed", 180 + i * 70, 500) for i, st in enumerate(d_streak)] +
+        [(d_chev1, "whip", 620, 380), (d_chev2, "whip", 700, 380)] +
+        [(d_vghost, "fade", 800, 700)])
+
 chrome(s, 5, "A solução")
 
 
@@ -373,13 +437,28 @@ animate(s, cascade(head, 60, 100, "rise", 520) +
         [(cust, "zoom", 900, 600)] +
         [(cl, "fade", 1000, 400), (cs, "fade", 1040, 400)] +
         cascade(fl, 1080, 60, "fade", 380))
-transition(s, "cover", dur=900, direction="u")
+transition(s, "morph", dur=1000, speed="med")
 notes(s, (
     "COMO FUNCIONA (2min).\n"
     "• Passo 4 é o argumento comercial: o vendedor recebe sem risco de calote e "
     "o comprador recebe antes de o dinheiro sair de fato.\n"
     "• A custódia é o que permite vender C2C com segurança."
 ))
+# --- kit velocidade: corrida do pedido até o repasse ---
+d_runner = box(s, 1.02, 2.72, 0.30, 0.30, fill=PRIMARY, border=INK, lw=2.0,
+               kind="oval", shadow=True, shadow_px=4)
+d_check = checkered(s, 12.14, 2.46, cols=3, rows=4, cell=0.155)
+d_chev = []
+for gx in (2.18, 5.16, 8.14):
+    d_chev += chevrons(s, gx, 2.76, n=2, size=0.19, gap=0.25, color=INK,
+                       last_solid=False)
+d_vghost = ghost(s, 10.35, 6.62, 2.6, 0.7, "GO", size=40, color=INK, alpha=7)
+send_to_back(s, d_vghost)
+animate(s, [(d_runner, "race", 620, 1700, "M 0 0 L 0.822 0 E")] +
+        [(ch, "whip", 900 + i * 55, 350) for i, ch in enumerate(d_chev)] +
+        [(ck, "whip", 2320 + i * 25, 380) for i, ck in enumerate(d_check)] +
+        [(d_vghost, "fade", 2500, 600)])
+
 chrome(s, 6, "Como funciona")
 
 
@@ -455,12 +534,23 @@ animate(s, cascade(head, 60, 100, "rise", 520) +
         [(x, "fade", 420 + i * 25, 380) for i, x in enumerate([bbar] + dots + ui)] +
         cascade(ph, 640, 30, "rise", 450) +
         [(bl, "fade", 1150, 350)])
-transition(s, "fade", dur=900)
+transition(s, "morph", dur=1000, speed="med")
 notes(s, (
     "PRODUTO (1min30).\n"
     "• As telas são wireframes: o objetivo é mostrar a lógica, não o visual final.\n"
     "• Destaque a tela de custódia: status do dinheiro e do envio juntos."
 ))
+# --- kit velocidade ---
+d_streak = speed_streaks(s, 10.45, 1.24, 2.05, n=3, gap=0.15, color=INK,
+                         alpha=14, thick=0.055)
+d_check = checkered(s, 6.02, 2.84, cols=4, rows=2, cell=0.13)
+d_vghost = ghost(s, 7.25, 6.98, 5.2, 0.5, "FAST CHECKOUT", size=22, color=INK,
+                 alpha=8)
+send_to_back(s, [d_vghost] + d_streak)
+animate(s, [(st, "speed", 180 + i * 70, 500) for i, st in enumerate(d_streak)] +
+        [(ck, "whip", 480 + i * 30, 380) for i, ck in enumerate(d_check)] +
+        [(d_vghost, "fade", 900, 600)])
+
 chrome(s, 7, "Produto")
 
 
@@ -523,13 +613,26 @@ animate(s, cascade(head, 60, 110, "rise", 540) +
         [(panel, "zoom", 620, 620), (pt, "fade", 740, 400)] +
         cascade(stt[2:], 780, 55, "fade", 400) +
         [(quote, "left", 1120, 560), (qsub, "fade", 1240, 420)])
-transition(s, "cover", dur=900, direction="r")
+transition(s, "morph", dur=1000, speed="med")
 notes(s, (
     "DIFERENCIAL (1min30).\n"
     "• A frase-chave: confiança não é selo, é fluxo de dinheiro e de informação.\n"
     "• Verificação sem custódia não protege o pagamento; custódia sem "
     "verificação não protege o produto."
 ))
+# --- kit velocidade ---
+d_streak = speed_streaks(s, 10.55, 1.26, 2.00, n=3, gap=0.15, color=WHITE,
+                         alpha=16, thick=0.055)
+d_chev = chevrons(s, 6.42, 6.50, n=2, size=0.22, gap=0.28, color=D_SECOND)
+d_check = checkered(s, 12.70, 3.20, cols=2, rows=6, cell=0.16)
+d_vghost = ghost(s, 0.80, 6.98, 5.5, 0.5, "FLUXO", size=24, color=WHITE,
+                 alpha=7)
+send_to_back(s, [d_vghost] + d_streak)
+animate(s, [(st, "speed", 180 + i * 70, 500) for i, st in enumerate(d_streak)] +
+        [(ch, "whip", 520 + i * 60, 360) for i, ch in enumerate(d_chev)] +
+        [(ck, "wipe", 700 + i * 22, 380) for i, ck in enumerate(d_check)] +
+        [(d_vghost, "fade", 880, 600)])
+
 chrome(s, 8, "Diferencial", dark=True, accent=D_PRIMARY)
 
 
@@ -579,13 +682,26 @@ for i, (v, l, col) in enumerate(STATS):
 animate(s, cascade(head, 60, 100, "rise", 520) +
         cascade(rv, 300, 50, "rise", 480) +
         [(stats, "zoom", 850, 600)] + cascade(sl[1:], 950, 50, "fade", 380))
-transition(s, "fade", dur=850)
+transition(s, "morph", dur=1000, speed="med")
 notes(s, (
     "MODELO (1min30).\n"
     "• Receita principal é comissão; assinatura de loja e serviços são alavancas.\n"
     "• Os números do rodapé são exemplo — troque pelos seus antes da banca.\n"
     "• Se perguntarem de margem: custo dominante é pagamento + suporte de disputa."
 ))
+# --- kit velocidade: velocímetro do take rate ---
+d_gauge = speedometer(s, 11.58, 1.18, size=1.28, ring=PRIMARY, bg=WHITE,
+                      needle=INK, angle=44)
+d_glabel = mono(s, 11.35, 0.86, 1.85, 0.22, "TAKE RATE · 8%", size=6.2,
+                color=INK_SOFT, spc=1.2, align="c")
+d_streak = speed_streaks(s, 9.85, 1.22, 1.55, n=3, gap=0.14, color=INK,
+                         alpha=13, thick=0.05)
+send_to_back(s, d_streak)
+animate(s, [(d_gauge[0], "zoom", 220, 520), (d_gauge[1], "zoom", 280, 520),
+            (d_gauge[2], "fade", 300, 400), (d_gauge[3], "spin", 380, 560),
+            (d_gauge[4], "fade", 380, 400), (d_glabel, "fade", 200, 420)] +
+        [(st, "speed", 180 + i * 70, 500) for i, st in enumerate(d_streak)])
+
 chrome(s, 9, "Modelo de negócio")
 
 
@@ -668,13 +784,23 @@ animate(s, cascade(head, 60, 100, "rise", 520) +
         [(tlabel, "drop", 900, 450), (target[0], "zoom", 960, 500),
          (target[1], "fade", 1050, 350)] +
         cascade(sd, 1120, 80, "left", 480))
-transition(s, "push", dur=850, direction="l")
+transition(s, "morph", dur=1000, speed="med")
 notes(s, (
     "POSICIONAMENTO (1min).\n"
     "• O eixo vertical é confiança; o horizontal é alcance.\n"
     "• O quadrante superior direito está vazio — é onde o CoreMotion quer estar.\n"
     "• Não citar concorrentes por nome."
 ))
+# --- kit velocidade: rastro do lançamento ao quadrante ---
+d_trail = speed_streaks(s, 4.92, 3.30, 1.55, n=3, gap=0.13, color=INK,
+                        alpha=15, thick=0.05, rot=-8)
+d_check = checkered(s, 11.42, 1.20, cols=6, rows=2, cell=0.17)
+d_chev = chevrons(s, 8.20, 1.24, n=3, size=0.22, gap=0.30, color=PRIMARY)
+send_to_back(s, d_trail)
+animate(s, [(tr, "speed", 220 + i * 70, 520) for i, tr in enumerate(d_trail)] +
+        [(ck, "whip", 420 + i * 28, 380) for i, ck in enumerate(d_check)] +
+        [(ch, "whip", 640 + i * 60, 360) for i, ch in enumerate(d_chev)])
+
 chrome(s, 10, "Posicionamento")
 
 
@@ -711,12 +837,25 @@ for i, b in enumerate(bars):
 rest = [sh for sh in road[1:] if sh not in bars]
 anim += [(sh, "fade", 800 + i * 30, 380) for i, sh in enumerate(rest)]
 animate(s, anim)
-transition(s, "push", dur=850, direction="u")
+transition(s, "morph", dur=1000, speed="med")
 notes(s, (
     "ROADMAP (1min).\n"
     "• Cada fase responde uma pergunta: dá para vender? dá para confiar? dá para escalar?\n"
     "• A banca quer saber o que você faz nos próximos 90 dias: foque na Fase 1."
 ))
+# --- kit velocidade: chegada do roadmap ---
+d_flag = checkered(s, 12.60, 5.82, cols=2, rows=4, cell=0.165)
+d_chev = chevrons(s, 11.72, 6.30, n=3, size=0.22, gap=0.28, color=INK)
+d_vghost = ghost(s, 0.80, 6.42, 3.2, 0.8, "90 DIAS", size=34, color=INK,
+                 alpha=7)
+d_streak = speed_streaks(s, 10.45, 1.24, 2.05, n=3, gap=0.15, color=INK,
+                         alpha=14, thick=0.055)
+send_to_back(s, [d_vghost] + d_streak)
+animate(s, [(ck, "whip", 260 + i * 26, 380) for i, ck in enumerate(d_flag)] +
+        [(ch, "whip", 720 + i * 55, 350) for i, ch in enumerate(d_chev)] +
+        [(d_vghost, "fade", 900, 650)] +
+        [(st, "speed", 180 + i * 70, 500) for i, st in enumerate(d_streak)])
+
 chrome(s, 11, "Roadmap")
 
 
@@ -762,13 +901,16 @@ pr = text(s, 7.95, 4.02, 4.62, 1.45,
 note = mono(s, 7.95, 6.55, 4.6, 0.22, "// sem vanity metrics", size=7.0,
             color=RGBColor(0x88, 0x88, 0x88), spc=1.2)
 
-# cabeçalho próprio (metade clara + metade escura)
-box(s, 0.78, 0.40, 0.15, 0.15, fill=PRIMARY, border=None, shadow=False)
-mono(s, 1.04, 0.38, 3.4, 0.2, "CoreMotion", size=9.5, color=INK, spc=2.6)
-mono(s, 7.30, 0.38, 5.25, 0.2, "Onde estamos   ·   12/15", size=8,
-     color=D_MUTED, spc=2.0, align="r")
-rule(s, 0, 7.44, 7.40, 0.06, color=INK)
+# cabeçalho próprio (metade clara + metade escura) — nomes casam o morph
+name_it(box(s, 0.78, 0.40, 0.15, 0.15, fill=PRIMARY, border=None,
+            shadow=False), "CM!!dot")
+name_it(mono(s, 1.04, 0.38, 3.4, 0.2, "CoreMotion", size=9.5, color=INK,
+             spc=2.6), "CM!!brand")
+name_it(mono(s, 7.30, 0.38, 5.25, 0.2, "Onde estamos   ·   12/15", size=8,
+             color=D_MUTED, spc=2.0, align="r"), "CM!!count")
+name_it(rule(s, 0, 7.44, 7.40, 0.06, color=INK), "CM!!rule")
 rule(s, 7.40, 7.44, 5.933, 0.06, color=WHITE)
+name_it(big, "CM!!panel")
 
 animate(s, cascade(head, 60, 110, "rise", 540) +
         cascade(stt, 300, 55, "rise", 470) +
@@ -776,13 +918,22 @@ animate(s, cascade(head, 60, 110, "rise", 540) +
          (tagt, "fade", 800, 400),
          (big, "rise", 840, 560), (bigb, "wipe", 980, 420),
          (pr, "fade", 1080, 460), (note, "fade", 1240, 380)])
-transition(s, "cover", dur=900, direction="l")
+transition(s, "morph", dur=1000, speed="med")
 notes(s, (
     "ONDE ESTAMOS (1min).\n"
     "• Seja honesto: ainda não há tração medida.\n"
     "• O ativo é base técnica, produto desenhado e plano de execução.\n"
     "• O piloto existe para transformar isso em evidência."
 ))
+
+# --- kit velocidade (painel preto) ---
+d_streak = speed_streaks(s, 11.18, 1.12, 1.55, n=3, gap=0.14, color=WHITE,
+                         alpha=16, thick=0.05)
+d_vghost = ghost(s, 11.02, 5.52, 2.2, 1.1, "90", size=64, color=WHITE, alpha=6)
+d_check = checkered(s, 12.26, 6.86, cols=5, rows=2, cell=0.16)
+animate(s, [(st, "speed", 180 + i * 70, 500) for i, st in enumerate(d_streak)] +
+        [(d_vghost, "fade", 480, 700)] +
+        [(ck, "whip", 700 + i * 28, 380) for i, ck in enumerate(d_check)])
 
 # =====================================================================
 # 13 — TIME
@@ -814,12 +965,27 @@ note = text(s, 0.78, 5.96, 8.0, 0.22,
 
 animate(s, cascade(head, 60, 100, "rise", 520) +
         cascade(tm, 300, 55, "rise", 500) + [(note, "fade", 1000, 380)])
-transition(s, "fade", dur=850)
+transition(s, "morph", dur=1000, speed="med")
 notes(s, (
     "TIME (45s).\n"
     "• Não é 'somos quatro amigos': são quatro responsabilidades com entregáveis.\n"
     "• Cite rapidamente o que cada um já entregou."
 ))
+# --- kit velocidade: dorsais de corrida ---
+d_streak = speed_streaks(s, 10.45, 1.24, 2.05, n=3, gap=0.15, color=INK,
+                         alpha=14, thick=0.055)
+d_bibs = []
+for _i in range(4):
+    _x = 0.78 + _i * 3.00
+    d_bibs.append(sticker(s, _x + 1.90, 2.86, 0.60, 0.30, f"0{_i + 1}",
+                          TEAM[_i][3], color=INK, size=7.6, spc=1.0,
+                          shadow_px=4))
+d_chev = chevrons(s, 8.95, 5.98, n=3, size=0.22, gap=0.30, color=INK)
+send_to_back(s, d_streak)
+animate(s, [(st, "speed", 180 + i * 70, 500) for i, st in enumerate(d_streak)] +
+        [(b, "drop", 620 + i * 90, 420) for i, b in enumerate(d_bibs)] +
+        [(ch, "whip", 980 + i * 55, 350) for i, ch in enumerate(d_chev)])
+
 chrome(s, 13, "Quem executa")
 
 
@@ -859,13 +1025,25 @@ animate(s, cascade(head, 60, 110, "rise", 540) +
         cascade(ak, 300, 55, "rise", 500) +
         [(goal, "wipe", 980, 620)] +
         [(x, "fade", 1120 + i * 60, 420) for i, x in enumerate(gt)])
-transition(s, "cover", dur=950, direction="l")
+transition(s, "morph", dur=1000, speed="med")
 notes(s, (
     "O PEDIDO (1min30).\n"
     "• Seja direto: 5 lojas, investimento e dois conselheiros.\n"
     "• Ajuste R$ 300 mil ao seu plano antes de apresentar.\n"
     "• Se a banca não puder investir, peça conexão com uma loja."
 ))
+# --- kit velocidade: a meta de 90 dias ---
+name_it(goal, "CM!!band")
+name_it(gk, "CM!!goal")
+d_vghost = ghost(s, 9.85, 2.68, 3.6, 2.4, "90", size=150, color=WHITE, alpha=7)
+d_check = checkered(s, 8.92, 5.78, cols=5, rows=2, cell=0.16)
+d_streak = speed_streaks(s, 10.45, 1.24, 2.05, n=3, gap=0.15, color=WHITE,
+                         alpha=16, thick=0.055)
+send_to_back(s, [d_vghost] + d_streak)
+animate(s, [(d_vghost, "fade", 120, 800)] +
+        [(st, "speed", 200 + i * 70, 500) for i, st in enumerate(d_streak)] +
+        [(ck, "whip", 700 + i * 28, 380) for i, ck in enumerate(d_check)])
+
 chrome(s, 14, "O pedido", dark=True, accent=D_SECOND)
 
 
@@ -903,13 +1081,50 @@ animate(s, cascade(dark_shapes, 0, 90, "zoom", 700) +
         [(kick, "fade", 120, 450), (big, "rise", 200, 700),
          (sub, "rise", 420, 600), (rule2, "wipe", 600, 450),
          (contact, "fade", 720, 450), (bye, "fade", 860, 400)])
-transition(s, "fade", dur=1100)
+transition(s, "morph", dur=1000, speed="med")
 notes(s, (
     "FECHAMENTO (30s).\n"
     "• Pare de falar depois do 'obrigado'. Deixe a banca perguntar.\n"
     "• Tenha à mão: custo de aquisição, plano de 90 dias e a lista de lojas "
     "que já disseram sim."
 ))
+# --- kit velocidade: chegada (a faixa preta toma a tela via morph) ---
+d_band = box(s, 0, 0, 13.333, 7.5, fill=INK, border=None, shadow=False)
+name_it(d_band, "CM!!band")
+name_it(kick, "CM!!kick")
+name_it(big, "CM!!head")
+# equipe — dorsais do grupo
+EQUIPE = [("ALFEU", "N1", PRIMARY, WHITE), ("ANDRÉ", "N2", SECONDARY, INK),
+          ("BRUNO", "N3", GREEN, INK), ("MARCUS", "N18", ACCENT, WHITE),
+          ("MATTHEUS", "N22", MAGENTA, WHITE)]
+eq_kick = mono(s, 0.78, 5.32, 4.6, 0.20, "// EQUIPE · CAMISA DO PROJETO",
+               size=6.8, color=D_SECOND, spc=1.8)
+d_memb = []
+for _i, (_nm, _num, _col, _fg) in enumerate(EQUIPE):
+    _x = 0.78 + _i * 1.42
+    d_memb.append(box(s, _x, 5.56, 1.32, 0.46, fill=_col, border=INK, lw=1.8,
+                      shadow=True, shadow_px=3))
+    d_memb.append(mono(s, _x + 0.10, 5.56, 0.56, 0.46, _num, size=12.5,
+                       color=_fg, spc=0, anchor="m"))
+    d_memb.append(mono(s, _x + 0.62, 5.56, 0.64, 0.46, _nm, size=5.9,
+                       color=_fg, spc=0.6, anchor="m"))
+d_streak = speed_streaks(s, 0.82, 1.02, 3.20, n=3, gap=0.14, color=WHITE,
+                         alpha=18, thick=0.055)
+d_check = checkered(s, 12.05, 0.72, cols=5, rows=2, cell=0.18)
+d_chev = chevrons(s, 7.52, 4.02, n=3, size=0.30, gap=0.40, color=D_PRIMARY)
+d_gauge = speedometer(s, 12.05, 6.28, size=0.95, ring=D_PRIMARY, bg=D_BG,
+                      needle=WHITE, hub=D_SECOND, angle=48)
+d_vghost = ghost(s, 9.35, 5.38, 2.4, 1.0, "GO!", size=56, color=WHITE, alpha=6)
+send_to_back(s, [d_band, d_vghost] + d_streak)
+animate(s, [(st, "speed", 150 + i * 70, 500) for i, st in enumerate(d_streak)] +
+        [(ck, "whip", 420 + i * 30, 380) for i, ck in enumerate(d_check)] +
+        [(ch, "whip", 620 + i * 70, 380) for i, ch in enumerate(d_chev)] +
+        [(d_gauge[0], "zoom", 760, 480), (d_gauge[1], "zoom", 800, 480),
+         (d_gauge[2], "fade", 820, 380), (d_gauge[3], "spin", 880, 520),
+         (d_gauge[4], "fade", 880, 380), (d_vghost, "fade", 980, 700),
+         (eq_kick, "fade", 1040, 420)] +
+        [(m, "drop", 1090 + i * 80, 430) for i, m in enumerate(d_memb)])
+
 chrome(s, 15, "Obrigado", dark=True, accent=D_PRIMARY)
 
 # ------------------------------------------------------------------ metadados

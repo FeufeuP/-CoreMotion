@@ -118,7 +118,7 @@ def box(slide, x, y, w, h, fill=WHITE, border=INK, lw=2.0, kind="rect",
 # ------------------------------------------------------------------ texto
 def text(slide, x, y, w, h, items, size=13, color=INK, bold=False, font=SANS,
          spc=0, align="l", anchor="t", line=1.15, caps=False, italic=False,
-         after=0):
+         after=0, alpha=None):
     tb = slide.shapes.add_textbox(Inches(x), Inches(y), Inches(w), Inches(h))
     tf = tb.text_frame
     tf.word_wrap = True
@@ -156,6 +156,14 @@ def text(slide, x, y, w, h, items, size=13, color=INK, bold=False, font=SANS,
         sp = o.get("spc", spc)
         if sp:
             f._rPr.set("spc", str(int(sp * 100)))
+        al = o.get("alpha", alpha)
+        if al is not None:
+            sf = f._rPr.find(qn("a:solidFill"))
+            if sf is not None:
+                clr = sf.find(qn("a:srgbClr"))
+                if clr is not None:
+                    a = etree.SubElement(clr, qn("a:alpha"))
+                    a.set("val", str(int(al * 1000)))
     return tb
 
 
@@ -193,12 +201,14 @@ def chrome(slide, idx, section, dark=False, total=TOTAL, accent=PRIMARY):
     """Cabeçalho mínimo: marca, seção, contador e fio inferior."""
     fg = D_TEXT if dark else INK
     soft = D_MUTED if dark else INK_SOFT
-    box(slide, 0.78, 0.40, 0.15, 0.15, fill=accent, border=None, shadow=False)
-    mono(slide, 1.04, 0.38, 3.4, 0.2, "CoreMotion", size=9.5, color=fg, spc=2.6)
-    mono(slide, 7.30, 0.38, 5.25, 0.2,
-         f"{section}   ·   {idx:02d}/{total}", size=8, color=soft, spc=2.0,
-         align="r")
-    rule(slide, 0, 7.44, 13.333, 0.06, color=fg)
+    name_it(box(slide, 0.78, 0.40, 0.15, 0.15, fill=accent, border=None,
+                shadow=False), "CM!!dot")
+    name_it(mono(slide, 1.04, 0.38, 3.4, 0.2, "CoreMotion", size=9.5, color=fg,
+                 spc=2.6), "CM!!brand")
+    name_it(mono(slide, 7.30, 0.38, 5.25, 0.2,
+                 f"{section}   ·   {idx:02d}/{total}", size=8, color=soft,
+                 spc=2.0, align="r"), "CM!!count")
+    name_it(rule(slide, 0, 7.44, 13.333, 0.06, color=fg), "CM!!rule")
 
 
 # ------------------------------------------------------------------ título
@@ -210,6 +220,8 @@ def title_block(slide, kicker, headline, sub=None, y=1.12, size=36,
              color=kicker_color, spc=2.4)
     h = text(slide, 0.78, y + 0.30, 11.6, 0.9, headline, size=size,
              color=fg, bold=True, spc=-1.1, line=0.98)
+    name_it(k, "CM!!kick")
+    name_it(h, "CM!!head")
     out = [k, h]
     if sub:
         out.append(text(slide, 0.78, y + 1.14, sub_w, 0.5, sub, size=12.5,
@@ -223,3 +235,108 @@ def notes(slide, txt):
 
 def cascade(shapes, start=0, step=80, effect="rise", dur=520):
     return [(s, effect, start + i * step, dur) for i, s in enumerate(shapes)]
+
+
+# ------------------------------------------------------------------ kit velocidade / esporte
+def name_it(shape, name):
+    """Dá um nome ao shape — nomes iguais com '!!' forçam morph entre slides."""
+    try:
+        shape.name = name
+    except Exception:
+        try:
+            shape._element.nvSpPr.cNvPr.set("name", name)
+        except Exception:
+            pass
+    return shape
+
+
+def send_to_back(slide, shapes):
+    """Move shapes para o fundo do slide (acima do fundo, atrás do conteúdo)."""
+    if not isinstance(shapes, (list, tuple)):
+        shapes = [shapes]
+    spTree = slide._element.find(qn("p:cSld")).find(qn("p:spTree"))
+    anchor = 0
+    for i, child in enumerate(spTree):
+        tag = child.tag
+        if tag.endswith("}nvGrpSpPr") or tag.endswith("}grpSpPr"):
+            anchor = i + 1
+    for sh in reversed(list(shapes)):
+        el = sh._element
+        spTree.remove(el)
+        spTree.insert(anchor, el)
+    return shapes
+
+
+def speed_streaks(slide, x, y, w, n=3, gap=0.15, color=INK, alpha=16,
+                  thick=0.055, taper=0.62, rot=0):
+    """Rastros de movimento: linhas horizontais que encurtam, como blur de velocidade."""
+    out = []
+    for i in range(n):
+        ww = w * (taper ** i)
+        out.append(box(slide, x, y + i * gap, ww, thick, fill=color,
+                       border=None, shadow=False, alpha=alpha, rot=rot))
+    return out
+
+
+def chevrons(slide, x, y, n=3, size=0.26, gap=0.34, color=PRIMARY, lw=2.0,
+             rot=0, last_solid=True):
+    """Fileira de chevrons '>>>' apontando para frente (ritmo, avanço, velocidade)."""
+    out = []
+    for i in range(n):
+        solid = last_solid and i == n - 1
+        out.append(box(slide, x + i * gap, y, size * 0.85, size,
+                       fill=(color if solid else None),
+                       border=(None if solid else color), lw=lw,
+                       kind="chev", shadow=False, rot=rot))
+    return out
+
+
+def checkered(slide, x, y, cols=6, rows=2, cell=0.16, c1=INK, c2=WHITE,
+              border=None, lw=1.0, shadow=False):
+    """Bandeira quadriculada de largada/chegada (F1, atletismo)."""
+    out = []
+    for r in range(rows):
+        for c in range(cols):
+            col = c1 if (r + c) % 2 == 0 else c2
+            out.append(box(slide, x + c * cell, y + r * cell, cell, cell,
+                           fill=col, border=border, lw=lw, shadow=shadow))
+    return out
+
+
+def speedometer(slide, x, y, size=1.25, ring=PRIMARY, bg=WHITE, needle=INK,
+                hub=None, angle=38, lw=2.2):
+    """Velocímetro semicircular: anel + agulha + cubo. bg deve casar com o fundo."""
+    parts = []
+    parts.append(box(slide, x, y, size, size, fill=ring, border=INK, lw=lw,
+                     kind="oval", shadow=True, shadow_px=5))
+    inner = size * 0.62
+    parts.append(box(slide, x + (size - inner) / 2, y + (size - inner) / 2,
+                     inner, inner, fill=bg, border=INK, lw=1.8, kind="oval",
+                     shadow=False))
+    # corta a metade inferior para virar mostrador
+    parts.append(box(slide, x - 0.03, y + size * 0.52, size + 0.06,
+                     size * 0.62, fill=bg, border=None, shadow=False))
+    # agulha com pivô no centro do mostrador
+    from math import sin, cos, radians
+    ln = size * 0.34
+    th = max(0.05, size * 0.075)
+    a = radians(angle)
+    cx, cy = x + size / 2, y + size * 0.52
+    mx = cx + (ln / 2) * sin(a)
+    my = cy - (ln / 2) * cos(a)
+    parts.append(box(slide, mx - th / 2, my - ln / 2, th, ln, fill=needle,
+                     border=None, shadow=False, rot=angle))
+    parts.append(box(slide, cx - size * 0.075, cy - size * 0.075,
+                     size * 0.15, size * 0.15, fill=(hub or needle),
+                     border=INK, lw=1.4, kind="oval", shadow=False))
+    return parts
+
+
+def ghost(slide, x, y, w, h, word, size=90, color=INK, alpha=6, font=SANS,
+          align="l", rot=0):
+    """Palavra gigante quase invisível no fundo — cartaz de estádio."""
+    g = text(slide, x, y, w, h, word, size=size, color=color, bold=True,
+             font=font, align=align, line=0.9, alpha=alpha)
+    if rot:
+        g.rotation = rot
+    return g
