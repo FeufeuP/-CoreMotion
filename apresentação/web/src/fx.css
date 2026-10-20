@@ -65,8 +65,8 @@
 .fx svg{display:block;width:100%;height:100%;overflow:visible;fill:currentColor}
 
 @keyframes fxDrift{
-  from{transform:translate3d(calc(var(--dx,20vw) * -.5),calc(var(--dy,6vh) * -.5),var(--z,0px))}
-  to  {transform:translate3d(calc(var(--dx,20vw) * .5),calc(var(--dy,6vh) * .5),var(--z,0px))}
+  from{transform:translate3d(calc(var(--dx,20cqw) * -.5),calc(var(--dy,6cqh) * -.5),var(--z,0px))}
+  to  {transform:translate3d(calc(var(--dx,20cqw) * .5),calc(var(--dy,6cqh) * .5),var(--z,0px))}
 }
 @keyframes fxBob{
   from{translate:0 calc(var(--bob,8px) * -1)}

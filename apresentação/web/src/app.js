@@ -118,6 +118,48 @@
       Math.min(1, Math.max(.1, (areaW - 40) / baseW), Math.max(.1, (areaH - 32) / baseH));
     document.documentElement.style.setProperty('--editor-scale', k.toFixed(4));
   }
+
+  /* Mantém cada composição dentro da área útil do slide. É um ajuste de
+     segurança proporcional: só reduz quando o conteúdo real excede a página. */
+  function fitScene(scene) {
+    if (!scene || !scene.classList.contains('on')) return;
+    const root = scene.querySelector(':scope > .inner,:scope > .s0__in,:scope > .s12__grid,:scope > .s15__in');
+    if (!root) return;
+    root.style.removeProperty('transform');
+    scene.style.removeProperty('--fit-scale');
+    const sceneRect = scene.getBoundingClientRect();
+    const rootRect = root.getBoundingClientRect();
+    const insetX = Math.max(16, Math.min(32, scene.clientWidth * .025));
+    const insetY = Math.max(16, Math.min(32, scene.clientHeight * .04));
+    let left = rootRect.left, right = rootRect.right;
+    let top = rootRect.top, bottom = rootRect.bottom;
+    root.querySelectorAll('*').forEach((element) => {
+      if (!element.getClientRects().length) return;
+      const rect = element.getBoundingClientRect();
+      left = Math.min(left, rect.left); right = Math.max(right, rect.right);
+      top = Math.min(top, rect.top); bottom = Math.max(bottom, rect.bottom);
+    });
+    const centerX = (rootRect.left + rootRect.right) / 2;
+    const centerY = (rootRect.top + rootRect.bottom) / 2;
+    const halfW = Math.max(centerX - left, right - centerX, 1);
+    const halfH = Math.max(centerY - top, bottom - centerY, 1);
+    const availableW = Math.max(1, sceneRect.width / 2 - insetX);
+    const availableH = Math.max(1, sceneRect.height / 2 - insetY);
+    const scale = Math.min(1, availableW / halfW, availableH / halfH);
+    if (scale < .999) {
+      const fitScale = scale.toFixed(4);
+      scene.style.setProperty('--fit-scale', fitScale);
+      root.style.transformOrigin = 'center center';
+      root.style.transform = `scale(${fitScale})`;
+    } else {
+      root.style.removeProperty('transform-origin');
+    }
+  }
+
+  function fitActiveScene() {
+    fitStage();
+    if (cur >= 0) requestAnimationFrame(() => fitScene(scenes[cur]));
+  }
   fitStage();
 
   /* ---------------------------------------------------------------- navega */
@@ -167,6 +209,7 @@
     });
     if (pptSlideStatus) pptSlideStatus.textContent = 'Slide ' + (i + 1) + ' de ' + N;
     if (pptPageName) pptPageName.textContent = scenes[i].dataset.ch || '';
+    requestAnimationFrame(() => fitScene(scenes[i]));
     if (history.replaceState) history.replaceState(null, '', '#' + scenes[i].id);
   }
 
@@ -330,7 +373,7 @@
     }
     wakeHud();
     wakeCursor();
-    setTimeout(fitStage, 140);
+    setTimeout(fitActiveScene, 140);
   }
 
   function stopPresent() {
@@ -743,9 +786,10 @@
   document.documentElement.classList.add('is-stage');
   paint(fromHash(), false);
 
-  window.addEventListener('resize', fitStage);
-  window.addEventListener('load', fitStage);
-  window.addEventListener('fullscreenchange', () => setTimeout(fitStage, 60));
+  window.addEventListener('resize', fitActiveScene);
+  window.addEventListener('load', fitActiveScene);
+  window.addEventListener('fullscreenchange', () => setTimeout(fitActiveScene, 60));
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitActiveScene);
 
   /* roda do mouse: passagem de slide, um por gesto (como no PowerPoint) */
   let wheelAt = 0;

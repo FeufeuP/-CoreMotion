@@ -28,15 +28,15 @@
 /* ---------- logo -------------------------------------------------------- */
 .s0__lockup{
   display:flex;align-items:center;justify-content:center;
-  gap:clamp(12px,2vw,28px);flex-wrap:wrap;
+  gap:clamp(12px,2cqw,28px);flex-wrap:wrap;
 }
 .s0__mark{
   position:relative;overflow:hidden;
-  width:clamp(58px,7.2vw,98px);aspect-ratio:1;
+  width:clamp(58px,7.2cqw,98px);aspect-ratio:1;
   background:var(--red);color:#fff;
   border:3px solid var(--ink);box-shadow:8px 8px 0 var(--ink);
   display:grid;place-items:center;
-  font-weight:800;font-size:clamp(20px,2.5vw,34px);
+  font-weight:800;font-size:clamp(20px,2.5cqw,34px);
   letter-spacing:-.06em;line-height:1;
 }
 .s0__mark::after{
@@ -45,7 +45,7 @@
   transform:translateX(-135%);
 }
 .s0__word{
-  font-size:clamp(34px,8.4vw,118px);
+  font-size:clamp(34px,8.4cqw,118px);
   font-weight:800;letter-spacing:-.06em;line-height:.86;
   padding-bottom:.06em;margin-bottom:-.06em;
 }
@@ -53,20 +53,20 @@
 
 /* ---------- frase ------------------------------------------------------- */
 .s0__rule{
-  width:clamp(84px,9vw,132px);height:8px;background:var(--ink);
-  margin-top:clamp(28px,3.8vw,46px);
+  width:clamp(84px,9cqw,132px);height:8px;background:var(--ink);
+  margin-top:clamp(28px,3.8cqw,46px);
 }
 .s0__slogan{
-  margin-top:clamp(26px,3.6vw,50px);
-  font-size:clamp(23px,2.9vw,45px);
+  margin-top:clamp(26px,3.6cqw,50px);
+  font-size:clamp(23px,2.9cqw,45px);
   line-height:1.08;letter-spacing:-.035em;font-weight:500;
 }
 .s0__slogan em{font-style:normal;font-weight:800;color:var(--red)}
-.s0__sub{margin-top:clamp(14px,1.7vw,22px);opacity:.55}
+.s0__sub{margin-top:clamp(14px,1.7cqw,22px);opacity:.55}
 
 /* ---------- convite ----------------------------------------------------- */
 .s0__scroll{
-  position:absolute;left:50%;bottom:clamp(26px,5vh,48px);z-index:5;
+  position:absolute;left:50%;bottom:clamp(26px,5cqh,48px);z-index:5;
   transform:translateX(-50%);
 }
 
