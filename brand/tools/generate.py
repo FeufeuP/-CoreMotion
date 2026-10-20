@@ -235,6 +235,8 @@ def svg(w, h, body, p='a', title=''):
             f'{defs(p)}{t}{body}</svg>')
 
 def bg_rect(w, h, color):
+    if not color:
+        return ''
     return f'<rect width="{round(w,2)}" height="{round(h,2)}" fill="{color}"/>'
 
 # 1 — LOGOTIPO ------------------------------------------------------------
@@ -256,7 +258,7 @@ def logotipo(two_tone=True, mono=False, bg=None, rule=False):
         body += f'<path d="{WORD}" fill="{SNOW}" transform="translate({x0},{base})"/>'
     return svg(W, H, body, 'lg', 'CoreMotion — logotipo')
 
-def logotipo_rule(bg=INK):
+def logotipo_rule(bg=None):
     base, x0 = 250, 46
     W, H = x0 + WORD_W + 42, base + 152
     core_d, core_w = text_path('Core', 'mont900', WM_SIZE, WM_TRACK, WM_SKEW)

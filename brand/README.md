@@ -5,6 +5,7 @@ velocidade, com rastro de cometa, corte em cinzel e acabamento metálico.
 
 Abra **[`apresentacao.html`](./apresentacao.html)** para ver o manual completo
 (autocontido: SVGs e fontes embutidos — funciona offline).
+Visão geral rápida: **[`showcase.png`](./showcase.png)**.
 
 ---
 
